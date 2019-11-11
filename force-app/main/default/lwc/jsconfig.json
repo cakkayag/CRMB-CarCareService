@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "c/lwc_CarCareSericeBaseComp": [
+                "lwc_CarCareSericeBaseComp/lwc_CarCareSericeBaseComp.js"
+            ],
+            "c/lwc_CarCareServiceContactInfoComp": [
+                "lwc_CarCareServiceContactInfoComp/lwc_CarCareServiceContactInfoComp.js"
+            ],
+            "c/lwc_CarCareServiceHeaderComp": [
+                "lwc_CarCareServiceHeaderComp/lwc_CarCareServiceHeaderComp.js"
+            ],
+            "c/pubsub": [
+                "pubsub/pubsub.js"
+            ]
+        },
+        "experimentalDecorators": true
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}
