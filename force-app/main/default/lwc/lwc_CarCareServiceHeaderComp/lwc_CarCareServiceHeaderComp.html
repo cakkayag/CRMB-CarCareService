@@ -1,5 +1,27 @@
 <template>
-    <h1>Reserve your Automation Service</h1>
-    <h4>Select Location</h4>
-    <h6>Select by Zipcode or city on map</h6>
+    <div class="slds-align_absolute-center slds-text-heading_large">Reserve your Automation Service</div>
+    <div class="slds-align_absolute-center" if:true={showFirstPage}>
+        <div class="slds-text-heading_medium">Select Location</div>
+        <div class="slds-text-heading_small">Select by Zipcode or city on map</div>
+    </div>
+    <div class="slds-align_absolute-center" style="height: 100px;" if:true={showSecondPage}>
+            <div class="slds-text-heading_medium">Enter Vehicle Information</div><br/>
+            <div class="slds-text-heading_small">Please select your vehicle to ensure everything is in stock and 
+                ready for your appointment. Start by selecting your area
+            </div>
+    </div>
+    <div class="slds-align_absolute-center" style="height: 100px;" if:true={showThirdPage}>
+        <div class="slds-text-heading_medium">Select your service</div><br/>
+        <div class="slds-text-heading_small">NEED TEXT HERE FOR SERVICES<br/>
+            DVI MENTION??
+        </div>
+    </div>
+    <div class="slds-align_absolute-center" style="height: 100px;" if:true={showFourthPage}>
+        <div class="slds-text-heading_medium">Select A Date & Time</div><br/>
+        <div class="slds-text-heading_small">AAA Car Service Centers</div>
+    </div>
+    <div class="slds-align_absolute-center" style="height: 100px;" if:true={showFifthPage}>
+        <div class="slds-text-heading_medium">Confirmation</div><br/>
+        <div class="slds-text-heading_small">Thank You</div>
+    </div>
 </template>

@@ -1,24 +1,53 @@
 <template>
-    <lightning-card title="lwc_CarCareSericeBaseComp" icon-name="custom:custom30">
-        <div class="slds-m-around_medium">
-            <lightning-input
-                type="search"
-                onchange={handleKeyChange}
-                class="slds-m-bottom_small"
-                label="Search"
-            ></lightning-input>
-        </div>
+    
+    <div if:true={showFirstPage}>
+        <c-lwc_-car-care-service-store-locator-comp>
 
-        <c-lwc_-car-care-service-contact-info-comp source="lwc/lwc_CarCareSericeBaseComp" slot="footer">
-            Publish an event that any component can subscribe to, even if the
-            publisher and the subscriber are not in the same DOM branch.
-            <span class="alert"
-                >Only use this approach for intercomponent communication in App
-                Builder.</span
-            >&nbsp; This component publishes the
-            <strong>searchKeyChange</strong> event every time the search key
-            changes. Type a few characters in the search bar to see this recipe
-            in action.
+        </c-lwc_-car-care-service-store-locator-comp>
+    </div>
+    <div if:true={showSecondPage}>
+        <c-lwc_-car-care-service-contact-info-comp>
+
         </c-lwc_-car-care-service-contact-info-comp>
-    </lightning-card>
+    </div>
+    <div if:true={showThirdPage}>
+        <c-lwc_-car-care-service-select-comp>
+
+        </c-lwc_-car-care-service-select-comp>
+    </div>
+    <div if:true={showFourthPage}>
+        <c-lwc_-car-care-service-Appointment-comp>
+
+        </c-lwc_-car-care-service-Appointment-comp>
+    </div>
+    <div if:true={showFifthPage}>
+        <c-lwc_-car-care-service-confirmation-comp>
+
+        </c-lwc_-car-care-service-confirmation-comp>
+    </div>
+
+    <lightning-layout horizontal-align="center">
+        <lightning-layout-item>
+            <div class="slds-form slds-form_horizontal">
+                <lightning-button 
+                    variant="brand" 
+                    label="Previous" 
+                    title="Previous" 
+                    onclick={handlePrevious} 
+                    class="slds-m-left_x-small"
+                    disabled={showPrevious}>
+                </lightning-button>
+                <lightning-button 
+                    variant="brand" 
+                    label="Continue" 
+                    title="Continue" 
+                    onclick={handleContinue} 
+                    class="slds-m-left_x-small"
+                    disabled={showContinue}>
+                </lightning-button>                  
+            </div>
+        </lightning-layout-item>
+    </lightning-layout> 
+    
+
 </template>
