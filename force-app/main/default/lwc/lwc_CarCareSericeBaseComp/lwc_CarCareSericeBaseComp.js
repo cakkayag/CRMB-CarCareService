@@ -12,13 +12,18 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
     handleContinue(event) {
         //console.log("nextPage"+this.nextPage);
-        if(this.CurrentPage == 2){
-            this.template.querySelector('c-lwc_-car-care-service-contact-info-comp').ValidateContactInfo(event);
+        const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+        let validationStatus = this.CurrentPage === 2 ? contactComp.ValidateContactInfo(event) : true ;
+        
+            //validationStatus = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp').;
+        
+        if(validationStatus){
+            this.previousPage = this.CurrentPage;
+            this.CurrentPage = this.nextPage ;
+            this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
+            fireEvent(this.pageRef, 'buttonClickedEvent', this);
         }
-        this.previousPage = this.CurrentPage;
-        this.CurrentPage = this.nextPage ;
-        this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
-        fireEvent(this.pageRef, 'buttonClickedEvent', this);
+        
     }
 
     handlePrevious(event) {

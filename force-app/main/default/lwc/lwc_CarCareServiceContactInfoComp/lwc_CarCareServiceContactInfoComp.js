@@ -51,6 +51,7 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
             evt.preventDefault();
             evt.stopPropagation();
         }
+        return allValid;
     }
 
 }
