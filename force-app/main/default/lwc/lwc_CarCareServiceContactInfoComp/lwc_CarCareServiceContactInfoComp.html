@@ -1,5 +1,77 @@
 <template>
-    <div class="slds-align_absolute-center" style="height: 200px;">
-        This is Contact Info component
+    <div class="slds-form slds-align_absolute-center maxWidth600px displayBlock">
+        <div class="slds-form__row contactFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement">First Name*</label>
+                    <div class="slds-form-element__control contactFormInput">
+                        <lightning-input type="text" value={firstName} required
+                            message-when-value-missing="Please Enter First Name"></lightning-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form__row contactFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement">Last Name*</label>
+                    <div class="slds-form-element__control contactFormInput">
+                        <lightning-input type="text" value={lastName} required
+                            message-when-value-missing="Please Enter Last Name">
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form__row contactFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement" for="email">Email*</label>
+                    <div class="slds-form-element__control contactFormInput">
+                        <lightning-input type="email" value={email} required
+                            message-when-value-missing="Please Enter Email">
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form__row contactFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement" for="mobile">Mobile*</label>
+                    <div class="slds-form-element__control contactFormInput">
+                        <lightning-input type="tel" value={mobile} required
+                            message-when-value-missing="Please Enter Mobile Number">
+                        </lightning-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fieldset class="slds-form-element">
+            <div class="slds-form-element__control">
+                <div class="slds-checkbox">
+                    <input type="checkbox" name="options" id="chkbox1" value="chkbox1" checked="" />
+                    <label class="slds-checkbox__label" for="chkbox1">
+                        <span class="slds-checkbox_faux contactsCheckBox"></span>
+                        <span class="slds-form-element__label contactsCheckBoxLabels">Please text me appointment reminders to my mobile
+                            device</span>
+                    </label>
+                </div>
+            </div>
+            <div class="slds-form-element__control">
+                <div class="slds-checkbox">
+                    <input type="checkbox" name="options" id="chkbox2" value="chkbox2" checked="" />
+                    <label class="slds-checkbox__label" for="chkbox2">
+                        <span class="slds-checkbox_faux contactsCheckBox"></span>
+                        <span class="slds-form-element__label contactsCheckBoxLabels">I would like to recieve coupons and promotions via
+                            email</span>
+                    </label>
+                </div>
+            </div>
+        </fieldset>
     </div>
 </template>

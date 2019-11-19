@@ -7,11 +7,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @track nextPage = 2;
     @track previousPage = 1 ;
     @track CurrentPage = 1;
-    maxPages = 5;
+    maxPages = 6;
     minPages = 1;
 
     handleContinue(event) {
         //console.log("nextPage"+this.nextPage);
+        if(this.CurrentPage == 2){
+            this.template.querySelector('c-lwc_-car-care-service-contact-info-comp').ValidateContactInfo(event);
+        }
         this.previousPage = this.CurrentPage;
         this.CurrentPage = this.nextPage ;
         this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
@@ -45,6 +48,11 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     get showFifthPage() {
         return this.CurrentPage === 5 ? true : false;
     }
+
+    get showSixthPage() {
+        return this.CurrentPage === 6 ? true : false;
+    }
+    
 
     get showPrevious() {
         return (this.CurrentPage > this.minPages) ? false : true;

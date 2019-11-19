@@ -1,5 +1,25 @@
 <template>
-    <div class="slds-align_absolute-center" style="height: 200px;">
-        This is Service Selector component
+    <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
+        <!--<legend class="slds-form-element__legend slds-form-element__label">Checkbox Group Label</legend>-->
+        <template class="slds-form-element__control" for:each={services} for:item='service'>
+            <div class="slds-checkbox serviceElement" key={service}>
+                <input type="checkbox" name="options" id={service} value={service} checked="" />
+                <label class="slds-checkbox__label" for={service}>
+                    <span class="slds-checkbox_faux servicesCheckBox"></span>
+                    <span class="slds-form-element__label formElement">{service}</span>
+                </label>
+            </div>
+        </template>
+    </fieldset>
+
+    <div class="Additional_Info__optional_ slds-align_absolute-center maxWidth600px">
+        <span>Additional Info (optional)</span>
+    </div>
+    <div class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px">
+        <span>Please describe the service that you are requesting. Put as much detail as possible so the technician
+            can be more prepared. Describe any and all symptoms such as smells, noises, tremors, etc.</span>
+    </div>
+    <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
+            <textarea placeholder="Input Text" rows="5" cols="150"></textarea>
     </div>
 </template>

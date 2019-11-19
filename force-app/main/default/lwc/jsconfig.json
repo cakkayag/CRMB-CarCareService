@@ -23,11 +23,11 @@
             "c/lwc_CarCareServiceStoreLocatorComp": [
                 "lwc_CarCareServiceStoreLocatorComp/lwc_CarCareServiceStoreLocatorComp.js"
             ],
+            "c/lwc_CarCareServiceVehicleInfoComp": [
+                "lwc_CarCareServiceVehicleInfoComp/lwc_CarCareServiceVehicleInfoComp.js"
+            ],
             "c/pubsub": [
                 "pubsub/pubsub.js"
-            ],
-            "c/lwc_CarCareServiceTrailComp": [
-                "lwc_CarCareServiceTrailComp/lwc_CarCareServiceTrailComp.js"
             ]
         },
         "experimentalDecorators": true

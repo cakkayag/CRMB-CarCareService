@@ -1,13 +1,50 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { registerListener, unregisterAllListeners } from 'c/pubsub';
+
+//import css from static resource
+import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
+import { loadStyle, loadScript } from 'lightning/platformResourceLoader';
+
 export default class lwc_CarCareServiceHeaderComp extends LightningElement {
+
+    renderedCallback() {
+        Promise.all([
+            //loadScript(this, D3 + '/d3.v5.min.js'),
+            loadStyle(this, carCareResources + '/css/reserveService.css'),
+        ])
+            .then(() => {
+                
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.log('--error--'+error);
+            });
+    }
+
     @wire(CurrentPageReference) pageRef;
-    //@track nextPage = 2;
-    //@track previousPage = 1 ;
     @track CurrentPage = 1;
-    //maxPages = 5;
-    //minPages = 1;
+    
+    //Exposed Variables
+    @api storeLocatorHeader = '';
+    @api storeLocatorSubHeader = '';
+    @api storeLocatorDescription = '';
+    @api contactInfoHeader = '';
+    @api contactInfoSubHeader = '';
+    @api contactInfoDescription = '';
+    @api vehicleInfoHeader = '';
+    @api vehicleInfoSubHeader = '';
+    @api vehicleInfoDescription = '';
+    @api selectServiceHeader = '';
+    @api selectServiceSubHeader = '';
+    @api selectServiceDescription = '';
+    @api appointmentHeader = '';
+    @api appointmentSubHeader = '';
+    @api appointmentDescription = '';
+    @api confirmationHeader = '';
+    @api confirmationSubHeader = '';
+    @api confirmationDescription = '';
+
 
     connectedCallback() {
         // subscribe to searchKeyChange event
@@ -45,5 +82,9 @@ export default class lwc_CarCareServiceHeaderComp extends LightningElement {
 
     get showFifthPage() {
         return this.CurrentPage === 5 ? true : false;
+    }
+
+    get showSixthPage() {
+        return this.CurrentPage === 6 ? true : false;
     }
 }

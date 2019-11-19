@@ -6,4 +6,28 @@
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="storeLocatorHeader" type="String" label="Store Locator Header" placeholder="Enter Text Here" description="Enter Store Locator Header"/>
+            <property name="storeLocatorSubHeader" type="String" label="Store Locator Sub-Header" placeholder="Enter Text Here" description="Enter HeadStore Locator Sub-Headering"/>
+            <property name="storeLocatorDescription" type="String" label="Store Locator Description" placeholder="Enter Text Here" description="Enter Store Locator Description"/>
+            <property name="contactInfoHeader" type="String" label="Contact Info Header" placeholder="Enter Text Here" description="Enter Contact Info Header"/>
+            <property name="contactInfoSubHeader" type="String" label="Contact Info Sub-Header" placeholder="Enter Text Here" description="Enter Contact Info Sub-Header"/>
+            <property name="contactInfoDescription" type="String" label="Contact Info Description" placeholder="Enter Text Here" description="Enter Contact Info Description"/>
+
+            <property name="vehicleInfoHeader" type="String" label="Vehicle Info Header" placeholder="Enter Text Here" description="Enter Vehicle Info Header"/>
+            <property name="vehicleInfoSubHeader" type="String" label="Vehicle Info Sub-Header" placeholder="Enter Text Here" description="Enter Vehicle Info Sub-Header"/>
+            <property name="vehicleInfoDescription" type="String" label="Vehicle Info Description" placeholder="Enter Text Here" description="Enter Vehicle Info Description"/>
+            <property name="selectServiceHeader" type="String" label="Select Service Header" placeholder="Enter Text Here" description="Enter Select Service Header"/>
+            <property name="selectServiceSubHeader" type="String" label="Select Service Sub-Header" placeholder="Enter Text Here" description="Enter Select Service Sub-Header"/>
+            <property name="selectServiceDescription" type="String" label="Select Service Description" placeholder="Enter Text Here" description="Enter Select Service Description"/>
+            <property name="appointmentHeader" type="String" label="Appointment Header" placeholder="Enter Text Here" description="Enter Appointment Header"/>
+            <property name="appointmentSubHeader" type="String" label="Appointment Sub-Header" placeholder="Enter Text Here" description="Enter Appointment Sub-Header"/>
+            <property name="appointmentDescription" type="String" label="Appointment Description" placeholder="Enter Text Here" description="Enter Appointment Description"/>
+            <property name="confirmationHeader" type="String" label="Confirmation Header" placeholder="Enter Text Here" description="Enter Confirmation Header"/>
+            <property name="confirmationSubHeader" type="String" label="Confirmation Sub-Header" placeholder="Enter Text Here" description="Enter Confirmation Sub-Header"/>
+            <property name="confirmationDescription" type="String" label="Confirmation Description" placeholder="Enter Text Here" description="Enter Confirmation Description"/>
+
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>
