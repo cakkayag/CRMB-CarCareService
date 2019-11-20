@@ -28,15 +28,23 @@
             </c-lwc_-car-care-service-confirmation-comp>
         </div>
 
-        <lightning-layout horizontal-align="center">
-            <lightning-layout-item>
+        <lightning-layout horizontal-align="center" multiple-rows="true">
+            <lightning-layout-item size="12" class="slds-align_absolute-center">
+                <div class="slds-form slds-form_horizontal navButtons">
+                    <div class="slds-form__row">
+                        <lightning-button label="CONTINUE" title="Continue" onclick={handleContinue}
+                            class="slds-m-left_x-small continueBtn" disabled={showContinue}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" class="slds-align_absolute-center">
                 <div class="slds-form slds-form_horizontal">
-                    <lightning-button variant="brand" label="Previous" title="Previous" onclick={handlePrevious}
-                        class="slds-m-left_x-small" disabled={showPrevious}>
-                    </lightning-button>
-                    <lightning-button variant="brand" label="Continue" title="Continue" onclick={handleContinue}
-                        class="slds-m-left_x-small" disabled={showContinue}>
-                    </lightning-button>
+                    <div class="slds-form__row">
+                        <lightning-button variant="base" label="PREVIOUS" title="Previous" onclick={handlePrevious}
+                            class="slds-m-left_x-small previousBtn" disabled={showPrevious}>
+                        </lightning-button>
+                    </div>
                 </div>
             </lightning-layout-item>
         </lightning-layout>
