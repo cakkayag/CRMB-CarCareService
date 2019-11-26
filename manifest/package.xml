@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>lwc_CarCareServiceStoreLocatorComp</members>
+        <members>lwc_CarCareServiceAppointmentComp</members>
+        <members>lwc_CarCareServiceContactInfoComp</members>
+        <members>lwc_CarCareServiceConfirmationComp</members>
+        <members>lwc_ProgressBarComp</members>
+        <members>lwc_CarCareServiceHeaderComp</members>
+        <members>lwc_CarCareServiceVehicleInfoComp</members>
+        <members>lwc_CarCareSericeBaseComp</members>
+        <members>lwc_CarCareServiceSelectComp</members>
+        <members>lwc_CarCareNavigationComp</members>
+        <members>pubsub</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <version>47.0</version>
+</Package>

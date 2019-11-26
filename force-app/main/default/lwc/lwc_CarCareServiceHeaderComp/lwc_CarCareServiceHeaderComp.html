@@ -1,0 +1,85 @@
+<template>
+    <div class="wrapperDiv">
+        <div class="RESERVE_YOUR_AUTOMOTIVE_SERVIC">
+            <!--<span>RESERVE YOUR AUTOMOTIVE SERVICE</span>-->
+            <span>{storeLocatorHeader}</span>
+        </div>
+        <div if:true={showFirstPage}>
+            <div class="MainHeader">
+                <!--<span>Select Location</span>-->
+                <span>{storeLocatorSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>Search by zip code or city on map.</span>-->
+                <span>{storeLocatorDescription}</span>
+            </div>
+        </div>
+
+        <div if:true={showSecondPage}>
+            <div class="MainHeader">
+                <!--<span>Enter Vehicle Information</span>-->
+                <span>{contactInfoSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>Please select your vehicle to ensure everything is in stock and ready for your appointment. Start by selecting your area.</span>
+                -->
+                <span>{contactInfoDescription}</span><br/>
+                <span style="color:rgba(7,47,135,1);">*Required Field</span>
+            </div>
+        </div>
+
+        <div if:true={showThirdPage}>
+            <div class="MainHeader">
+                <!--<span>Select your service</span>-->
+                <span>{vehicleInfoSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>NEED TEXT HERE FOR SERVICES DVI MENTION??</span>-->
+                <span>{vehicleInfoDescription}</span><br/>
+                <span style="color:rgba(7,47,135,1);">*Required Field</span>
+            </div>
+        </div>
+
+        <div if:true={showFourthPage}>
+            <div class="MainHeader">
+                <!--<span>Select A Date & Time</span>-->
+                <span>{selectServiceSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>AAA Car Service Centers</span>-->
+                <span>{selectServiceDescription}</span>
+            </div>
+        </div>
+
+        <div if:true={showFifthPage}>
+            <div class="MainHeader">
+                <!--<span>Confirmation</span>-->
+                <span>{appointmentSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>Thank You. Someone from our Customer Care Team will be in touch shortly to confirm your appointment request.</span>-->
+                <span>{appointmentDescription}</span>
+            </div>
+        </div>
+        
+        <div if:true={showSixthPage}>
+            <div class="MainHeader">
+                <!--<span>Confirmation</span>-->
+                <span>{confirmationSubHeader}</span>
+            </div>
+            <div class="SubHeader">
+                <!--<span>Thank You. Someone from our Customer Care Team will be in touch shortly to confirm your appointment request.</span>-->
+                <span>{confirmationDescription}</span>
+            </div>
+        </div>
+        <!--<lightning-progress-indicator current-step={currentStep} type="base" variant="base">
+            <lightning-progress-step label="Select Store" value="1">Select Store</lightning-progress-step>
+            <lightning-progress-step label="Contact Info" value="2">Contact Info</lightning-progress-step>
+            <lightning-progress-step label="Vehicle Info" value="3">Vehicle Info</lightning-progress-step>
+            <lightning-progress-step label="Select Service" value="4">Select Service</lightning-progress-step>
+            <lightning-progress-step label="Date & Time" value="5">Date & Time</lightning-progress-step>
+            <lightning-progress-step label="Review and Confirm" value="6">Review and Confirm</lightning-progress-step>
+        </lightning-progress-indicator>-->
+    </div>
+    
+</template>

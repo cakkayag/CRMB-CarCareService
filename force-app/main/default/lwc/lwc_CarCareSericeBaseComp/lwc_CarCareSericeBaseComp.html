@@ -1,0 +1,53 @@
+<template>
+    <div class="baseContainerDiv">
+        <div if:true={showFirstPage}>
+            <c-lwc_-car-care-service-store-locator-comp>
+
+            </c-lwc_-car-care-service-store-locator-comp>
+        </div>
+        <div if:true={showSecondPage}>
+            <c-lwc_-car-care-service-contact-info-comp contact-rec={contactInfo}>
+
+            </c-lwc_-car-care-service-contact-info-comp>
+        </div>
+        <div if:true={showThirdPage}>
+            <c-lwc_-car-care-service-vehicle-info-comp>
+
+            </c-lwc_-car-care-service-vehicle-info-comp>
+        </div>
+        <div if:true={showFourthPage}>
+            <c-lwc_-car-care-service-select-comp>
+            </c-lwc_-car-care-service-select-comp>
+        </div>
+        <div if:true={showFifthPage}>
+            <c-lwc_-car-care-service-Appointment-comp>
+            </c-lwc_-car-care-service-Appointment-comp>
+        </div>
+        <div if:true={showSixthPage}>
+            <c-lwc_-car-care-service-confirmation-comp>
+            </c-lwc_-car-care-service-confirmation-comp>
+        </div>
+
+        <lightning-layout horizontal-align="center" multiple-rows="true">
+            <lightning-layout-item size="12" class="slds-align_absolute-center">
+                <div class="slds-form slds-form_horizontal navButtons">
+                    <div class="slds-form__row">
+                        <lightning-button label="CONTINUE" title="Continue" onclick={handleContinue}
+                            class="slds-m-left_x-small continueBtn" disabled={showContinue}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" class="slds-align_absolute-center">
+                <div class="slds-form slds-form_horizontal">
+                    <div class="slds-form__row">
+                        <lightning-button variant="base" label="PREVIOUS" title="Previous" onclick={handlePrevious}
+                            class="slds-m-left_x-small previousBtn" disabled={showPrevious}>
+                        </lightning-button>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+
+</template>

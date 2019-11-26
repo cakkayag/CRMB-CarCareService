@@ -1,0 +1,175 @@
+<template>
+    <!--<div>
+        <lightning-progress-indicator current-step={currentStep} type="base" variant="base">
+            <lightning-progress-step label="Select Store" value="1">Select Store</lightning-progress-step>
+            <lightning-progress-step label="Contact Info" value="2">Contact Info</lightning-progress-step>
+            <lightning-progress-step label="Vehicle Info" value="3">Vehicle Info</lightning-progress-step>
+            <lightning-progress-step label="Select Service" value="4">Select Service</lightning-progress-step>
+            <lightning-progress-step label="Date & Time" value="5">Date & Time</lightning-progress-step>
+            <lightning-progress-step label="Review and Confirm" value="6">Review and Confirm</lightning-progress-step>
+        </lightning-progress-indicator>
+    </div>-->
+    <div class="container">
+        <div class="navigationDiv" style="width: 100% ">
+            <!--<svg class="navBar">
+                <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0">
+                </rect>
+            </svg>-->
+            <div data-target-id="1" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showFirstPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel">Select Store</div>
+                </div>
+                <div if:true={showFirstPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Select Store</div>
+                </div>
+            </div>
+            <div data-target-id="2" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showSecondPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel">Contact Info</div>
+                </div>
+                <div if:true={showSecondPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Contact Info</div>
+                </div>
+            </div>
+            <div data-target-id="3" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showThirdPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel" >Vehicle Info</div>
+                </div>
+                <div if:true={showThirdPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Vehicle Info</div>
+                </div>
+            </div>
+            <div data-target-id="4" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showFourthPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel">Select Service</div>
+                </div>
+                <div if:true={showFourthPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Select Service</div>
+                </div>
+            </div>
+            <div data-target-id="5" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showFifthPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel">Date & Time</div>
+                </div>
+                <div if:true={showFifthPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="27%" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Date & Time</div>
+                </div>
+            </div>
+            <div data-target-id="6" class="navElement" style="width: 10%" onclick={navigateToScreen}>
+                <div if:true={showSixthPage_Normal}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="auto" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2"></ellipse>
+                    </svg>
+                    <div class="navLabel">Review & Confirm</div>
+                </div>
+                <div if:true={showSixthPage_Highlighted}>
+                    <svg class="navBar" style="height: 15px;">
+                        <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="auto" height="5px"></rect>
+                        <ellipse fill="rgba(7,47,135,1)" rx="4" ry="4" cx="4" cy="4"></ellipse>
+                    </svg>
+                    <div class="navLabel" style="font-weight: bold;">Review & Confirm</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div class="Group_2550">
+        <svg class="Rectangle_3817">
+            <rect fill="rgba(241,249,255,1)" rx="4" ry="4" x="0" y="0" width="387.968" height="8">
+            </rect>
+        </svg>
+        <svg class="Ellipse_437">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <svg class="Ellipse_438">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <svg class="Ellipse_439">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <svg class="Ellipse_443">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <svg class="Ellipse_440">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <svg class="Ellipse_441">
+            <ellipse fill="rgba(7,47,135,1)" rx="2" ry="2" cx="2" cy="2">
+            </ellipse>
+        </svg>
+        <div class="dateTimeNav">
+            <span>Date & Time</span>
+        </div>
+        <div class="reviewConfirmNav">
+            <span>Review & Confirm</span>
+        </div>
+        <div class="selectServiceNav">
+            <span>Select Service</span>
+        </div>
+        <div class="selectStoreNav">
+            <span>Select Store</span>
+        </div>
+        <div class="vehicleInfoNav">
+            <span>Vehicle Info </span>
+        </div>
+        <div class="contactInfoNav">
+            <span>Contact Info </span>
+        </div>
+        <svg class="Rectangle_3818">
+            <rect fill="rgba(7,47,135,1)" rx="4" ry="4" x="0" y="0" width="84.968" height="8">
+            </rect>
+        </svg>
+        <svg class="Path_1660" viewBox="0 0 14 14">
+            <path fill="rgba(7,47,135,1)" stroke="rgba(255,255,255,1)" stroke-width="2px" stroke-linejoin="miter"
+                stroke-linecap="butt" stroke-miterlimit="4" shape-rendering="auto" id="Path_1660"
+                d="M 7 0 C 10.86599254608154 0 14 3.134007215499878 14 7 C 14 10.86599254608154 10.86599254608154 14 7 14 C 3.134007215499878 14 0 10.86599254608154 0 7 C 0 3.134007215499878 3.134007215499878 0 7 0 Z">
+            </path>
+        </svg>
+    </div>-->
+</template>
