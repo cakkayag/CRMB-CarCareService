@@ -59,9 +59,9 @@ export default class lwc_CarCareServiceHeaderComp extends LightningElement {
         unregisterAllListeners(this);
     }
 
-    handleNavigationEvent(detail){
-        console.log('##handleNavigationEvent --  CurrentPage :'+detail);
-        this.CurrentPage = detail;
+    handleNavigationEvent(navWrap){
+        console.log('##handleNavigationEvent --  CurrentPage :'+navWrap);
+        this.CurrentPage = navWrap.cSelection;
     }
 
     handleButtonPressedEvent(detail) {

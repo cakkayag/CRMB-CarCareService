@@ -10,28 +10,30 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     maxPages = 6;
     minPages = 1;
     @track contactInfo = {};
-    //contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+    
+    connectedCallback() {
+        // subscribe to searchKeyChange event
+        registerListener('navigationClickedEvent', this.handleNavigationEvent, this);
+    }
+
+    disconnectedCallback() {
+        // unsubscribe from searchKeyChange event
+        unregisterAllListeners(this);
+    }
+
 
     handleContinue(event) {
-        //console.log("nextPage"+this.nextPage);
         const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-        //console.log('contactComp');
-        //console.log(contactComp);
         let validationStatus =  true;
         if(this.CurrentPage === 2){
-            
-            //validationStatus = contactComp.ValidateContactInfo(event) ;
-            /*if(this.contactInfo !== {}){
-                contactComp.setContactInfo(this.contactInfo);
-            }*/
+            validationStatus = contactComp.ValidateContactInfo(event) ;
         }
-        //console.log(" validationStatus : "+validationStatus);
+        console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
             if(this.CurrentPage === 2){
+                
                 const contactTemp = contactComp.getContactInfo();
                 this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
-                //console.log(" Base contactInfo : ");
-                //console.log(this.contactInfo);
             }
 
             this.previousPage = this.CurrentPage;
@@ -43,37 +45,43 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     handlePrevious(event) {
-        //console.log("nextPage"+this.previousPage);
-        //console.log(this.contactInfo);
+        
+        
+        if(this.CurrentPage === 2){
+            const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+            const contactTemp = contactComp.getContactInfo();
+            this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
+        }
         this.nextPage = this.CurrentPage ;
         this.CurrentPage = this.previousPage;
         this.previousPage = this.previousPage > this.minPages ? this.previousPage - 1 : this.previousPage ;
-        /*if(this.CurrentPage === 2){
-            //const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-            //console.log('contactComp');
-            //console.log(contactComp);
-            //contactComp.setContactInfo(this.contactInfo);
-        }*/
+        
         fireEvent(this.pageRef, 'buttonClickedEvent', this);
     }
 
-    connectedCallback() {
-        // subscribe to searchKeyChange event
-        //console.log("buttonPressed registerListener done !!");
-        registerListener('navigationClickedEvent', this.handleNavigationEvent, this);
-        
-    }
+    
+    handleNavigationEvent(navWrap){
+        const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+        let validationStatus =  true;
+        if(navWrap.pSelection === 2 && navWrap.cSelection > 2){
+            validationStatus = contactComp.ValidateContactInfo(null) ;
+        }
+        console.log(" validationStatus : "+validationStatus);
+        if(validationStatus){
+            if(navWrap.pSelection === 2){
+                const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+                const contactTemp = contactComp.getContactInfo();
+                this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
+            }
 
-    disconnectedCallback() {
-        // unsubscribe from searchKeyChange event
-        unregisterAllListeners(this);
-    }
+            this.CurrentPage = navWrap.cSelection;
+            this.previousPage = this.CurrentPage > this.minPages ? this.CurrentPage - 1 : this.CurrentPage ;
+            this.nextPage = this.CurrentPage < this.maxPages ? this.CurrentPage + 1 : this.CurrentPage ;
+        }
+        else{
+            fireEvent(this.pageRef, 'buttonClickedEvent', this);    
+        }
 
-    handleNavigationEvent(detail){
-        //console.log('## Base Comp : handleNavigationEvent --  CurrentPage :'+detail);
-        this.CurrentPage = detail;
-        this.previousPage = this.CurrentPage > this.minPages ? this.CurrentPage - 1 : this.CurrentPage ;
-        this.nextPage = this.CurrentPage < this.maxPages ? this.CurrentPage + 1 : this.CurrentPage ;
     }
 
     get showFirstPage() {

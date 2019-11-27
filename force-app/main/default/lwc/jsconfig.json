@@ -6,32 +6,32 @@
             "c/lwc_CarCareNavigationComp": [
                 "lwc_CarCareNavigationComp/lwc_CarCareNavigationComp.js"
             ],
-            "c/lwc_CarCareServiceStoreLocatorComp": [
-                "lwc_CarCareServiceStoreLocatorComp/lwc_CarCareServiceStoreLocatorComp.js"
+            "c/lwc_CarCareSericeBaseComp": [
+                "lwc_CarCareSericeBaseComp/lwc_CarCareSericeBaseComp.js"
             ],
             "c/lwc_CarCareServiceAppointmentComp": [
                 "lwc_CarCareServiceAppointmentComp/lwc_CarCareServiceAppointmentComp.js"
             ],
-            "c/lwc_CarCareServiceContactInfoComp": [
-                "lwc_CarCareServiceContactInfoComp/lwc_CarCareServiceContactInfoComp.js"
-            ],
             "c/lwc_CarCareServiceConfirmationComp": [
                 "lwc_CarCareServiceConfirmationComp/lwc_CarCareServiceConfirmationComp.js"
             ],
-            "c/lwc_ProgressBarComp": [
-                "lwc_ProgressBarComp/lwc_ProgressBarComp.js"
+            "c/lwc_CarCareServiceContactInfoComp": [
+                "lwc_CarCareServiceContactInfoComp/lwc_CarCareServiceContactInfoComp.js"
             ],
             "c/lwc_CarCareServiceHeaderComp": [
                 "lwc_CarCareServiceHeaderComp/lwc_CarCareServiceHeaderComp.js"
             ],
+            "c/lwc_CarCareServiceSelectComp": [
+                "lwc_CarCareServiceSelectComp/lwc_CarCareServiceSelectComp.js"
+            ],
+            "c/lwc_CarCareServiceStoreLocatorComp": [
+                "lwc_CarCareServiceStoreLocatorComp/lwc_CarCareServiceStoreLocatorComp.js"
+            ],
             "c/lwc_CarCareServiceVehicleInfoComp": [
                 "lwc_CarCareServiceVehicleInfoComp/lwc_CarCareServiceVehicleInfoComp.js"
             ],
-            "c/lwc_CarCareSericeBaseComp": [
-                "lwc_CarCareSericeBaseComp/lwc_CarCareSericeBaseComp.js"
-            ],
-            "c/lwc_CarCareServiceSelectComp": [
-                "lwc_CarCareServiceSelectComp/lwc_CarCareServiceSelectComp.js"
+            "c/lwc_ProgressBarComp": [
+                "lwc_ProgressBarComp/lwc_ProgressBarComp.js"
             ],
             "c/pubsub": [
                 "pubsub/pubsub.js"

@@ -1,41 +1,38 @@
 import { LightningElement, wire, track } from 'lwc';
-import { fireEvent } from 'c/pubsub';
+import { fireEvent, registerListener, unregisterAllListeners } from 'c/pubsub';
 import { CurrentPageReference } from 'lightning/navigation';
 
 export default class lwc_CarCareNavigationComp extends LightningElement {
     @wire(CurrentPageReference) pageRef;
     @track currentSelection = 1;
+    previousSelection = 1;
+
+    connectedCallback() {
+        // subscribe to searchKeyChange event
+        registerListener('buttonClickedEvent', this.handleButtonPressedEvent, this);
+    }
+
+    disconnectedCallback() {
+        // unsubscribe from searchKeyChange event
+        unregisterAllListeners(this);
+    }
+
+    handleButtonPressedEvent(detail) {
+        this.currentSelection = detail.CurrentPage;
+    }
 
     navigateToScreen(event){
-        //console.log("event currentTarget   :    "+event.currentTarget.dataset.targetId);
-        //console.log("event detail   :    "+event.detail);
-        /*const naviageTo = event.currentTarget.dataset.targetId;
-        console.log("naviageTo   :    "+naviageTo);
-        if(naviageTo === "1"){
-            fireEvent(this.pageRef, 'navigationClickedEvent', 1);
-        }
-        else if(naviageTo === "2"){
-            fireEvent(this.pageRef, 'navigationClickedEvent', 2);
-        }
-        else if(naviageTo === "3"){
-            fireEvent(this.pageRef, 'navigationClickedEvent', 3);
-        }
-        else if(naviageTo === "4"){
-            fireEvent(this.pageRef, 'navigationClickedEvent', 4);
-        }
-        else if(naviageTo === "5"){
-            fireEvent(this.pageRef, 'navigationClickedEvent', 5);
-        }
-        else if(naviageTo === "6"){
-            
-        }*/
+        this.previousSelection = this.currentSelection
         const targetId = event.currentTarget.dataset.targetId;
         this.currentSelection = parseInt(targetId, 0);
-        //console.log("this.currentSelection : "+this.currentSelection);
-        //console.log("isNaN(this.currentSelection) : "+isNaN(this.currentSelection));
-        //console.log("(this.currentSelection !== undefined && isNaN(this.currentSelection) ) : "+(this.currentSelection !== undefined && isNaN(this.currentSelection) ));
+
+        let navWrap = {
+            cSelection : this.currentSelection ,
+            pSelection : this.previousSelection
+        };
+
         if(this.currentSelection !== undefined && isNaN(this.currentSelection) === false ){
-            fireEvent(this.pageRef, 'navigationClickedEvent', this.currentSelection);
+            fireEvent(this.pageRef, 'navigationClickedEvent', navWrap);
         }
         else{
             //console.log("An error has Occured, please contact you Admin");

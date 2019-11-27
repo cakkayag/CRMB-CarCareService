@@ -116,8 +116,13 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
             //continue;
         } else {
             //stop;
-            evt.preventDefault();
-            evt.stopPropagation();
+            //Some scenarios i need to run this method 
+            //by passing null as event so filterig out those.
+            if(evt != null){
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+            
         }
         return allValid;
     }
