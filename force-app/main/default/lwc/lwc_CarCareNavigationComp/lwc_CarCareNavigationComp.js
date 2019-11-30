@@ -20,7 +20,7 @@ export default class lwc_CarCareNavigationComp extends LightningElement {
     handleButtonPressedEvent(detail) {
         this.currentSelection = detail.CurrentPage;
     }
-
+    /*
     navigateToScreen(event){
         this.previousSelection = this.currentSelection
         const targetId = event.currentTarget.dataset.targetId;
@@ -32,12 +32,12 @@ export default class lwc_CarCareNavigationComp extends LightningElement {
         };
 
         if(this.currentSelection !== undefined && isNaN(this.currentSelection) === false ){
-            fireEvent(this.pageRef, 'navigationClickedEvent', navWrap);
+            //fireEvent(this.pageRef, 'navigationClickedEvent', navWrap);
         }
         else{
             //console.log("An error has Occured, please contact you Admin");
         }
-    }
+    }*/
 
     get showFirstPage_Normal() {
         return this.currentSelection !== 1 ? true : false;
