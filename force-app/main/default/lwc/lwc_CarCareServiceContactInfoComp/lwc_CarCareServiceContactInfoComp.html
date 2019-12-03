@@ -53,24 +53,32 @@
 
         <fieldset class="slds-form-element contactFormChckBoxes">
             <div class="slds-form-element__control">
-                <div class="slds-checkbox">
-                    <input type="checkbox" name="options" id="chkbox1" value="chkbox1" checked="" />
+                <!--<div class="slds-checkbox">
+                    <input type="checkbox" name="acceptedReminders" id="chkbox1" value="acceptedReminders" checked={acceptedReminders}/>
                     <label class="slds-checkbox__label" for="chkbox1">
                         <span class="slds-checkbox_faux contactsCheckBox"></span>
                         <span class="slds-form-element__label contactsCheckBoxLabels">Please text me appointment reminders to my mobile
                             device</span>
                     </label>
-                </div>
+                </div>-->
+                <lightning-input type="checkbox" name="acceptedReminders"
+                     label="Please text me appointment reminders to my mobile"
+                        checked={acceptedReminders}>
+                </lightning-input>
             </div>
             <div class="slds-form-element__control">
-                <div class="slds-checkbox">
-                    <input type="checkbox" name="options" id="chkbox2" value="chkbox2" checked="" />
+                <!--<div class="slds-checkbox">
+                    <input type="checkbox" name="acceptedPromotions" id="chkbox2" value="acceptedPromotions" checked={acceptedPromotions}/>
                     <label class="slds-checkbox__label" for="chkbox2">
                         <span class="slds-checkbox_faux contactsCheckBox"></span>
                         <span class="slds-form-element__label contactsCheckBoxLabels">I would like to recieve coupons and promotions via
                             email</span>
                     </label>
-                </div>
+                </div>-->
+                <lightning-input type="checkbox" name="acceptedPromotions"
+                     label="I would like to recieve coupons and promotions via email"
+                        checked={acceptedPromotions}>
+                </lightning-input>
             </div>
         </fieldset>
     </div>

@@ -6,4 +6,9 @@
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="storeIdUrlKey" type="String" label="Store key Url Param" placeholder="Enter Url Param Here" description="Enter Key pf param which is presnet in URL to reference selected Store"/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>
