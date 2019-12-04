@@ -20,15 +20,17 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     connectedCallback() {
         /*Handling Changes related to pages when clicked specific tile of Navigation  
         registerListener('navigationClickedEvent', this.handleNavigationEvent, this);*/
-        
+        console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
+        console.log(" this.storeIdVal : "+this.storeIdVal);
         if(this.storeIdUrlKey !== undefined && this.storeIdUrlKey !== ''){
             this.storeIdVal = this.getUrlParamValue(window.location.href, this.storeIdUrlKey);
             if(this.storeIdVal  === undefined || this.storeIdVal === '' || this.storeIdVal === null ){
-                this.storeIdVal = 1;
+                //this.storeIdVal = 1;
+                this.showToast('Error' , 'Missing valid Store Id key, Please contact Support team' , 'Error', 'sticky'  );
             }
         }
         else{
-            this.showToast('Configuration Error' , 'Please enter valid key which stores the Store Id' , 'Error', 'dismissable'  );
+            this.showToast('Configuration Error' , 'Please enter valid key which stores the Store Id' , 'Error', 'sticky'  );
         }
     }
 
@@ -47,7 +49,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             validationStatus = contactComp.ValidateContactInfo(event) ;
         }
         else if(this.CurrentPage === 4){
-            validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
+            //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
         }
         console.log(" validationStatus : "+validationStatus);
         if(validationStatus){

@@ -51,7 +51,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         //console.log('getAvailableServicesByStore');
         //console.log(JSON.parse(JSON.stringify(this.availableServices)));
         console.log('this.serviceSelect : '+this.serviceSelect);
-        
+        console.log(' this.storeId : '+this.storeId); 
         if( this.serviceSelect === undefined || this.serviceSelect !== {} ){
             this.availableServices = this.serviceSelect._availableServices;
             this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
@@ -138,7 +138,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
     onTextAreaChange(event){
         this.serviceAdditionalInfo = event.target.value;
     }
-
+    /*
     @api
     ValidateServiceSelection(){
         let isValid = false;
@@ -154,7 +154,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         this.hasError = isValid ? false : true;
         return isValid;
     }
-
+    */
     @api
     getServiceInfo(){
         
