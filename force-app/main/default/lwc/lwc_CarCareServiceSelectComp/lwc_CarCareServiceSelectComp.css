@@ -1,6 +1,6 @@
 .spins::after {
     position: absolute;
-    content: 'Fetching relavent services...';
+    /*content: 'Fetching relavent services...';*/
     width: 100%;
     text-align: center;
     top: calc(50% + 3em);
