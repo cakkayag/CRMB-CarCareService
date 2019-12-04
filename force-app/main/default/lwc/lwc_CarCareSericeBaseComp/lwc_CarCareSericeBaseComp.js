@@ -1,7 +1,7 @@
-import { LightningElement, wire, track } from 'lwc';
+import { LightningElement, wire, track, api } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { fireEvent, registerListener, unregisterAllListeners } from 'c/pubsub';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @wire(CurrentPageReference) pageRef;
     @track nextPage = 2;
@@ -10,72 +10,121 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     maxPages = 6;
     minPages = 1;
     @track contactInfo = {};
-    //contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+    @track serviceSelectInfo = [];
+    @api storeIdUrlKey = '';
+    @track storeIdVal = '';
+    
+    //@track isChildLoading = false;
+    
+
+    connectedCallback() {
+        /*Handling Changes related to pages when clicked specific tile of Navigation  
+        registerListener('navigationClickedEvent', this.handleNavigationEvent, this);*/
+        console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
+        console.log(" this.storeIdVal : "+this.storeIdVal);
+        if(this.storeIdUrlKey !== undefined && this.storeIdUrlKey !== ''){
+            this.storeIdVal = this.getUrlParamValue(window.location.href, this.storeIdUrlKey);
+            if(this.storeIdVal  === undefined || this.storeIdVal === '' || this.storeIdVal === null ){
+                //this.storeIdVal = 1;
+                this.showToast('Error' , 'Missing valid Store Id key, Please contact Support team' , 'Error', 'sticky'  );
+            }
+        }
+        else{
+            this.showToast('Configuration Error' , 'Please enter valid key which stores the Store Id' , 'Error', 'sticky'  );
+        }
+    }
+
+    disconnectedCallback() {
+        // unsubscribe from searchKeyChange event
+        //unregisterAllListeners(this);
+    }
+
 
     handleContinue(event) {
-        //console.log("nextPage"+this.nextPage);
         const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-        //console.log('contactComp');
-        //console.log(contactComp);
+        const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
+
         let validationStatus =  true;
         if(this.CurrentPage === 2){
-            
-            //validationStatus = contactComp.ValidateContactInfo(event) ;
-            /*if(this.contactInfo !== {}){
-                contactComp.setContactInfo(this.contactInfo);
-            }*/
+            validationStatus = contactComp.ValidateContactInfo(event) ;
         }
-        //console.log(" validationStatus : "+validationStatus);
+        else if(this.CurrentPage === 4){
+            //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
+        }
+        console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
             if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
-                this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
-                //console.log(" Base contactInfo : ");
-                //console.log(this.contactInfo);
+                this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
+                console.log(JSON.parse(JSON.stringify(this.contactInfo)));
+            }
+            else if(this.CurrentPage === 4){
+                
+                const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
+                this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
+                console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
             }
 
             this.previousPage = this.CurrentPage;
             this.CurrentPage = this.nextPage ;
             this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
+            
+            /*if(this.CurrentPage === 4){
+                this.isChildLoading = true;
+            }*/
             fireEvent(this.pageRef, 'buttonClickedEvent', this);
         }
         
     }
 
     handlePrevious(event) {
-        //console.log("nextPage"+this.previousPage);
-        //console.log(this.contactInfo);
+        
+        
+        if(this.CurrentPage === 2){
+            const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+            const contactTemp = contactComp.getContactInfo();
+            this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
+        }
+        else if(this.CurrentPage === 4){
+            const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
+            const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
+            this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
+            console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo)));
+        }
+        //console.log("handlePrevious");
+        // 
         this.nextPage = this.CurrentPage ;
         this.CurrentPage = this.previousPage;
         this.previousPage = this.previousPage > this.minPages ? this.previousPage - 1 : this.previousPage ;
-        /*if(this.CurrentPage === 2){
-            //const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-            //console.log('contactComp');
-            //console.log(contactComp);
-            //contactComp.setContactInfo(this.contactInfo);
-        }*/
+        
         fireEvent(this.pageRef, 'buttonClickedEvent', this);
     }
 
-    connectedCallback() {
-        // subscribe to searchKeyChange event
-        //console.log("buttonPressed registerListener done !!");
-        registerListener('navigationClickedEvent', this.handleNavigationEvent, this);
-        
-    }
+    /*
+    handleNavigationEvent(navWrap){
+        const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+        let validationStatus =  true;
+        if(navWrap.pSelection === 2 && navWrap.cSelection > 2){
+            validationStatus = contactComp.ValidateContactInfo(null) ;
+        }
+        //console.log(" validationStatus : "+validationStatus);
+        if(validationStatus){
+            if(navWrap.pSelection === 2){
+                const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
+                const contactTemp = contactComp.getContactInfo();
+                this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
+            }
 
-    disconnectedCallback() {
-        // unsubscribe from searchKeyChange event
-        unregisterAllListeners(this);
-    }
+            this.CurrentPage = navWrap.cSelection;
+            this.previousPage = this.CurrentPage > this.minPages ? this.CurrentPage - 1 : this.CurrentPage ;
+            this.nextPage = this.CurrentPage < this.maxPages ? this.CurrentPage + 1 : this.CurrentPage ;
+        }
+        else{
+            fireEvent(this.pageRef, 'buttonClickedEvent', this);    
+        }
 
-    handleNavigationEvent(detail){
-        //console.log('## Base Comp : handleNavigationEvent --  CurrentPage :'+detail);
-        this.CurrentPage = detail;
-        this.previousPage = this.CurrentPage > this.minPages ? this.CurrentPage - 1 : this.CurrentPage ;
-        this.nextPage = this.CurrentPage < this.maxPages ? this.CurrentPage + 1 : this.CurrentPage ;
     }
-
+    */
     get showFirstPage() {
         return this.CurrentPage === 1 ? true : false;
     }
@@ -107,6 +156,22 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
     get showContinue() {
         return (this.CurrentPage < this.maxPages) ? false : true;
+    }
+
+    
+
+    showToast(title , message , variant , mode){
+        const evt = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+            mode: mode
+        });
+        this.dispatchEvent(evt);
+    }
+
+    getUrlParamValue(url, key) {
+        return new URL(url).searchParams.get(key);
     }
 
 }

@@ -20,6 +20,8 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
     @track lastNameVar;
     @track emailVar;
     @track mobileVar;
+    @track acceptedPromotions ;
+    @track acceptedReminders ;
     //@track contactDetails = new this.contact('' , '' , '' , '');
 
     hasRendered = false;
@@ -32,12 +34,12 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
         if(!this.hasRendered){
             //console.log('   this.hasRendered '+this.hasRendered);
             this.contactRec = JSON.parse(JSON.stringify(this.contactRec))
-            //console.log('   this.contactRec');
-            //console.log(this.contactRec);
+            console.log('   renderedCallback contactRec ');
+            console.log(this.contactRec);
             //console.log('this.contactRec !== {} '+(this.contactRec !== {}));
             if(this.contactRec !== undefined && this.contactRec !== {}){
                 
-                this.contactRecord(this.contactRec);
+                this.setContactRecord(this.contactRec);
             }
             
             Promise.all([
@@ -75,19 +77,50 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
         this.email = email;
         this.mobile = mobile;
     }*/
-    
+    handleSelection(event){
+        //console.log("event.target.name : "+event.target.name);
+        //console.log("event.target.value : "+event.target.checked );
+        this[event.target.name] = event.target.checked ;
+        //console.log(" handleOnChange acceptedPromotions "+this.acceptedPromotions);
+        //console.log(" handleOnChange acceptedReminders "+this.acceptedReminders);
+        //this.getContactInfo();
+    }
+
     @api
     getContactInfo(){
         const inputComponents = this.template.querySelectorAll('lightning-input');
         inputComponents.forEach(element => {
-            this[element.name] = element.value
+            console.log(" element "+element.name);
+            console.log(" element "+element.type);
+            //console.log(" element.checked "+element.checked);
+            if(element.type === 'checkbox'){
+                this[element.name] = element.checked;
+            }
+            else{
+                this[element.name] = element.value;
+            }
+            
         });
+
         
+        /*
+        const checkBoxComponents = this.template.querySelectorAll('input');
+        //console.log(" checkBoxComponents "+checkBoxComponents);
+        checkBoxComponents.forEach(element => {
+            //console.log(" element "+element.name);
+            //console.log(" element.checked "+element.checked);
+            this[element.name] = element.checked
+        });
+        */
+        //console.log(" handleOnChange acceptedPromotions "+this.acceptedPromotions);
+        //console.log(" handleOnChange acceptedReminders "+this.acceptedReminders);
         let contact = {
             firstName : this.firstNameVar ,
             lastName : this.lastNameVar,
             email : this.emailVar,
-            mobile : this.mobileVar
+            mobile : this.mobileVar,
+            _acceptedPromotions : this.acceptedPromotions,
+            _acceptedReminders : this.acceptedReminders
         }; 
         
         //console.log(" getContactInfo : ");
@@ -97,11 +130,16 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
         
     }
 
-    contactRecord(Obj) {
+    setContactRecord(Obj) {
         this.firstNameVar = Obj.firstName !== undefined ? Obj.firstName : '';
         this.lastNameVar = Obj.lastName!== undefined ? Obj.lastName : '';
         this.emailVar = Obj.email!== undefined ? Obj.email : '';
         this.mobileVar = Obj.mobile !== undefined ? Obj.mobile : '';
+        console.log(" setContactRecord _acceptedPromotions"+Obj._acceptedPromotions);
+        console.log(" setContactRecord _acceptedReminders "+Obj._acceptedReminders);
+
+        this.acceptedPromotions = Obj._acceptedPromotions !== undefined ? Obj._acceptedPromotions : false;
+        this.acceptedReminders = Obj._acceptedReminders !== undefined ? Obj._acceptedReminders : false;
         //console.log(' contactRecord : this.mobileVar : '+this.mobileVar);
     }
 
@@ -116,8 +154,13 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
             //continue;
         } else {
             //stop;
-            evt.preventDefault();
-            evt.stopPropagation();
+            //Some scenarios i need to run this method 
+            //by passing null as event so filterig out those.
+            if(evt != null){
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+            
         }
         return allValid;
     }

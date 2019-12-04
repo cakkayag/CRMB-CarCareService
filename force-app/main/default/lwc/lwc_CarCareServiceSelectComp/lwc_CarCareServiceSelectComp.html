@@ -1,25 +1,38 @@
 <template>
-    <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
-        <!--<legend class="slds-form-element__legend slds-form-element__label">Checkbox Group Label</legend>-->
-        <template class="slds-form-element__control" for:each={services} for:item='service'>
-            <div class="slds-checkbox serviceElement" key={service}>
-                <input type="checkbox" name="options" id={service} value={service} checked="" />
-                <label class="slds-checkbox__label" for={service}>
-                    <span class="slds-checkbox_faux servicesCheckBox"></span>
-                    <span class="slds-form-element__label formElement">{service}</span>
-                </label>
-            </div>
-        </template>
-    </fieldset>
+    <div if:true={isLoaded}>
+        <div if:true={hasError} class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px" style="color:red">
+            <span>Please select a service</span>
+        </div>
+        <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
+            <!--<legend class="slds-form-element__legend slds-form-element__label">Checkbox Group Label</legend>-->
+            <template class="slds-form-element__control" for:each={availableServices} for:item='service'>
+                <div class="slds-checkbox serviceElement" key={service.id}>
+                    <input type="checkbox" name="options" id={service.id} value={service.name} checked={service.isSelected} onclick={handleSelection}/>
+                    <label class="slds-checkbox__label" for={service.id}>
+                        <span class="slds-checkbox_faux servicesCheckBox"></span>
+                        <span class="slds-form-element__label formElement">{service.name}</span>
+                    </label>
+                </div>
+            </template>
+        </fieldset>
 
-    <div class="Additional_Info__optional_ slds-align_absolute-center maxWidth600px">
-        <span>Additional Info (optional)</span>
+        <div class="Additional_Info__optional_ slds-align_absolute-center maxWidth600px">
+            <span>Additional Info (optional)</span>
+        </div>
+        <div class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px">
+            <span>Please describe the service that you are requesting. Put as much detail as possible so the technician
+                can be more prepared. Describe any and all symptoms such as smells, noises, tremors, etc.</span>
+        </div>
+        <!--<div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
+                <textarea placeholder="Input Text" rows="5" cols="150"></textarea>
+                
+        </div>-->
+        <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px" >
+            <lightning-textarea name="serviceAdditionalInfo" value={serviceAdditionalInfo} style="width: 100%; height:100%" onchange={onTextAreaChange}></lightning-textarea>
+        </div>
     </div>
-    <div class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px">
-        <span>Please describe the service that you are requesting. Put as much detail as possible so the technician
-            can be more prepared. Describe any and all symptoms such as smells, noises, tremors, etc.</span>
+    <div if:true={isLoading} class="maxWidth600px">
+        <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
     </div>
-    <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
-            <textarea placeholder="Input Text" rows="5" cols="150"></textarea>
-    </div>
+    
 </template>
