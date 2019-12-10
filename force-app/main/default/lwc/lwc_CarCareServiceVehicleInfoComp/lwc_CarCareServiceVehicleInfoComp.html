@@ -1,5 +1,39 @@
 <template>
-    <div class="slds-align_absolute-center" style="height: 200px;">
-        This is Vehicle Information Component.
+    <div class="slds-form slds-align_absolute-center maxWidth600px displayBlock">
+        <div class="slds-form__row vehicleFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement">Year*</label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox name="year" value={selectedYear} placeholder="Select Year"
+                            options={yearOptions} onchange={handleYearChange} required></lightning-combobox>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form__row vehicleFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement">Make*</label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox name="make" value={selectedMake} placeholder="Select Make"
+                            options={makeOptions} onchange={handleMakeChange} required></lightning-combobox>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-form__row vehicleFormElement">
+            <div class="slds-form__item" role="listitem">
+                <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                    <label class="slds-form-element__label formElement">Model*</label>
+                    <div class="slds-form-element__control">
+                        <lightning-combobox name="model" value={selectedModel} placeholder="Select Model"
+                            options={modelOptions} onchange={handleModelChange} required></lightning-combobox>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>

@@ -1,4 +1,3 @@
-
 public with sharing class AppointmentIntegrationServices {
 
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
@@ -118,7 +117,9 @@ public with sharing class AppointmentIntegrationServices {
         Http http = new Http();
         HTTPResponse res = null;
         try{
+            system.debug('Started : '+System.now());
             res = http.send(req);
+            system.debug('Ended : '+System.now());
         }
         catch(exception e){
             exceptionStr = e.getMessage();

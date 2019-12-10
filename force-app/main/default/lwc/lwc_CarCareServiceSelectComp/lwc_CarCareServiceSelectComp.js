@@ -1,23 +1,23 @@
-import { LightningElement, wire, track , api} from 'lwc';
-import getAvailableServices from '@salesforce/apex/AppointmentIntegrationServices.getAllAvailableServices';
+import { LightningElement, wire, track, api } from "lwc";
+import getAvailableServices from "@salesforce/apex/AppointmentIntegrationServices.getAllAvailableServices";
 
 export default class lwc_CarCareServiceSelectComp extends LightningElement {
-    //@api availableServicesObj = [];
-    @api serviceSelect = {};
-    @api storeId;
+  //@api availableServicesObj = [];
+  @api serviceSelect = {};
+  @api storeId;
 
-    @track availableServices = [];
-    @track error;
-    @track isLoading = true; 
-    @track serviceAdditionalInfo = '';
-    @track hasError = false;
+  @track availableServices = [];
+  @track error;
+  @track isLoading = true;
+  @track serviceAdditionalInfo = "";
+  @track hasError = false;
 
-    connectedCallback() {
-        //const param = 'storeId';
-        //this.storeId = 1; //this.getUrlParamValue(window.location.href, param);
-        this.getAvailableServicesByStore();
-    }
-    /*
+  connectedCallback() {
+    //const param = 'storeId';
+    //this.storeId = 1; //this.getUrlParamValue(window.location.href, param);
+    this.getAvailableServicesByStore();
+  }
+  /*
     @wire(getAvailableServices, {storeId : '$storeId'})
     wiredAvailableServices({ error, data }) {
         if (data) {
@@ -46,54 +46,61 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         }
     }*/
 
-
-    getAvailableServicesByStore() {
-        //console.log('getAvailableServicesByStore');
-        //console.log(JSON.parse(JSON.stringify(this.availableServices)));
-        console.log('this.serviceSelect : '+this.serviceSelect);
-        console.log(' this.storeId : '+this.storeId); 
-        if( this.serviceSelect === undefined || this.serviceSelect !== {} ){
-            this.availableServices = this.serviceSelect._availableServices;
-            this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
-            if( this.availableServices === undefined || this.availableServices.length === 0){
-                getAvailableServices({ storeId : this.storeId })
-                .then(result => {
-                    //console.log(JSON.parse(JSON.stringify(result))); 
-                    const availableServicesTemp = [];
-                    if(result.items !== undefined){
-                        result.items.forEach(element => {
-                            let selectOption = {
-                                id : element.id,
-                                name : element.name ,
-                                isSelected : false
-                            }; 
-
-                            availableServicesTemp.push(selectOption);
-                            //console.log(JSON.parse(JSON.stringify(this.availableServices)));    
-                        });
-                    }
-                    this.availableServices = availableServicesTemp;
-                    this.isLoading = false;
-                    this.error = undefined;
-                })
-                .catch(error => {
-                    this.error = error;
-                    this.availableServices = undefined;
-                    this.isLoading = false;
-                });
+  getAvailableServicesByStore() {
+    //console.log('getAvailableServicesByStore');
+    //console.log(JSON.parse(JSON.stringify(this.availableServices)));
+    var t0 = new Date().getTime();//performance.now();
+    var t1; var diffTime;
+    console.log("Started on : " + t0);
+    console.log("this.serviceSelect : " + this.serviceSelect);
+    console.log(" this.storeId : " + this.storeId);
+    if (this.serviceSelect === undefined || this.serviceSelect !== {}) {
+      this.availableServices = this.serviceSelect._availableServices;
+      this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
+      if (
+        this.availableServices === undefined ||
+        this.availableServices.length === 0
+      ) {
+        getAvailableServices({ storeId: this.storeId })
+          .then(result => {
+            //console.log(JSON.parse(JSON.stringify(result)));
+            const availableServicesTemp = [];
+            if (result.items !== undefined) {
+              result.items.forEach(element => {
+                if (element.isPackage !== true) {
+                  let selectOption = {
+                    id: element.id,
+                    name: element.name,
+                    isSelected: false
+                  };
+                  availableServicesTemp.push(selectOption);
+                }
+                //console.log(JSON.parse(JSON.stringify(this.availableServices)));
+              });
             }
-            else{
-                this.isLoading = false;
-            }
-        }
-        else{
-            //this.availableServices = this.availableServicesObj; 
+            this.availableServices = availableServicesTemp;
             this.isLoading = false;
-        }
-        
+            this.error = undefined;
+            t1 = new Date().getTime();//performance.now();
+            var diffTime = t1-t0;
+            console.log("Ended on : " + t1);
+            console.log("diff : " + diffTime);
+          })
+          .catch(error => {
+            this.error = error;
+            this.availableServices = undefined;
+            this.isLoading = false;
+          });
+      } else {
+        this.isLoading = false;
+      }
+    } else {
+      //this.availableServices = this.availableServicesObj;
+      this.isLoading = false;
     }
+  }
 
-    /*
+  /*
     get services() {
         return [
             'Oil Change',
@@ -108,37 +115,35 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         //return this.availableServices;
     }*/
 
-    get isLoaded() {
-        return this.isLoading ? false : true ;
-    }
+  get isLoaded() {
+    return this.isLoading ? false : true;
+  }
 
-    
-
-    handleSelection(event){
-        //console.log(JSON.parse(JSON.stringify(event.target.value))); 
-        //console.log(JSON.parse(JSON.stringify(event.target.id)));
-        const availableServicesTemp = JSON.parse(JSON.stringify(this.availableServices)); 
-        for (let serviceRec of availableServicesTemp) {
-            if(serviceRec.name === event.target.value ){
-                if(serviceRec.isSelected === false){
-                    serviceRec.isSelected = true;
-                }
-                else{
-                    serviceRec.isSelected = false;
-                }
-                break;
-            }
-            //console.log(JSON.parse(JSON.stringify(serviceRec)));
+  handleSelection(event) {
+    //console.log(JSON.parse(JSON.stringify(event.target.value)));
+    //console.log(JSON.parse(JSON.stringify(event.target.id)));
+    const availableServicesTemp = JSON.parse(
+      JSON.stringify(this.availableServices)
+    );
+    for (let serviceRec of availableServicesTemp) {
+      if (serviceRec.name === event.target.value) {
+        if (serviceRec.isSelected === false) {
+          serviceRec.isSelected = true;
+        } else {
+          serviceRec.isSelected = false;
         }
-        this.availableServices = availableServicesTemp;
-        //console.log(JSON.parse(JSON.stringify(this.availableServices)));
-
+        break;
+      }
+      //console.log(JSON.parse(JSON.stringify(serviceRec)));
     }
+    this.availableServices = availableServicesTemp;
+    //console.log(JSON.parse(JSON.stringify(this.availableServices)));
+  }
 
-    onTextAreaChange(event){
-        this.serviceAdditionalInfo = event.target.value;
-    }
-    /*
+  onTextAreaChange(event) {
+    this.serviceAdditionalInfo = event.target.value;
+  }
+  /*
     @api
     ValidateServiceSelection(){
         let isValid = false;
@@ -155,15 +160,13 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         return isValid;
     }
     */
-    @api
-    getServiceInfo(){
-        
-        let serviceSelectInfo = {
-            _availableServices : this.availableServices ,
-            _serviceAdditionalInfo : this.serviceAdditionalInfo
-        }; 
+  @api
+  getServiceInfo() {
+    let serviceSelectInfo = {
+      _availableServices: this.availableServices,
+      _serviceAdditionalInfo: this.serviceAdditionalInfo
+    };
 
-        return serviceSelectInfo; 
-        
-    }
+    return serviceSelectInfo;
+  }
 }
