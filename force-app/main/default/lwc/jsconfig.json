@@ -3,6 +3,9 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
+            "c/lwc_AutoCompletePicklistComp": [
+                "lwc_AutoCompletePicklistComp/lwc_AutoCompletePicklistComp.js"
+            ],
             "c/lwc_CarCareNavigationComp": [
                 "lwc_CarCareNavigationComp/lwc_CarCareNavigationComp.js"
             ],
@@ -27,17 +30,14 @@
             "c/lwc_CarCareServiceStoreLocatorComp": [
                 "lwc_CarCareServiceStoreLocatorComp/lwc_CarCareServiceStoreLocatorComp.js"
             ],
+            "c/lwc_CarCareServiceVehicleInfoComp": [
+                "lwc_CarCareServiceVehicleInfoComp/lwc_CarCareServiceVehicleInfoComp.js"
+            ],
             "c/lwc_ProgressBarComp": [
                 "lwc_ProgressBarComp/lwc_ProgressBarComp.js"
             ],
             "c/pubsub": [
                 "pubsub/pubsub.js"
-            ],
-            "c/lwc_AutoCompletePicklistComp": [
-                "lwc_AutoCompletePicklistComp/lwc_AutoCompletePicklistComp.js"
-            ],
-            "c/lwc_CarCareServiceVehicleInfoComp": [
-                "lwc_CarCareServiceVehicleInfoComp/lwc_CarCareServiceVehicleInfoComp.js"
             ]
         }
     },

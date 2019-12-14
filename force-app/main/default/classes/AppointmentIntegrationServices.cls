@@ -39,15 +39,17 @@ public with sharing class AppointmentIntegrationServices {
             String endPoint = vehicleMakeEndPoint.replace('{VehicleMake}',  vehicleMakeStr);
             //String jsonBody = callAppointmentServiceAPI(endPoint );
             HTTPResponse res = callAppointmentServiceAPI(endPoint );
+            system.debug(' ## res.getStatusCode() : '+res.getStatusCode());
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
+                system.debug(' ## vehicleMakeList : '+jsonBody);
                 vehicleMake = (ItemsWrap) System.JSON.deserialize(jsonBody, ItemsWrap.class);
             }
             else{
                 vehicleMake.hasException = true;
                 vehicleMake.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
             }
-            //system.debug(' ## vehicleMakeList : '+jsonBody);
+            //
             
             
         }
