@@ -1,12 +1,33 @@
 <template>
+    <!--<div class="slds-form-element__control">
+        <input id="input" name="input" list="valueList" placeholder="Years" required class="slds-input" type="text" />
+        <datalist id="valueList" class="">
+            <template for:each={availableYearOptions} for:item='item'>
+                <option key={item.value} value={item.value}>{item.value}</option>
+            </template>
+        </datalist>
+    </div>
+    <input id="yearsInput" name="yearsInput" list="yearsValueList" placeholder="Years" required class="slds-input"
+                            type="text" />
+                        <datalist id="yearsValueList" class="">
+                            <template for:each={availableYearOptions} for:item='item'>
+                                <option key={item.value} value={item.value}>{item.value}</option>
+                            </template>
+                        </datalist>-->
     <div class="slds-form slds-align_absolute-center maxWidth600px displayBlock">
         <div class="slds-form__row vehicleFormElement">
             <div class="slds-form__item" role="listitem">
                 <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                     <label class="slds-form-element__label formElement">Year*</label>
                     <div class="slds-form-element__control">
-                        <lightning-combobox name="year" value={selectedYear} placeholder="Select Year"
-                            options={availableYearOptions} onchange={handleYearChange} required></lightning-combobox>
+                        <!--<lightning-combobox name="year" value={selectedYear} placeholder="Select Year"
+                            options={availableYearOptions} onchange={handleYearChange} required></lightning-combobox>-->
+                            <input id="input" name="input" list="valueList" placeholder="Years" required class="slds-input" type="text" />
+                            <datalist id="valueList" class="">
+                                <template for:each={availableYearOptions} for:item='item'>
+                                    <option key={item.value} value={item.value}>{item.value}</option>
+                                </template>
+                            </datalist>
                     </div>
                 </div>
             </div>

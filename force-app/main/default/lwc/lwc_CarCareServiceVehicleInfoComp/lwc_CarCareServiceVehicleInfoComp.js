@@ -13,6 +13,17 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     @track isLoading;
     @track error;
 
+    initialized = false;
+
+    renderedCallback() {
+        if (this.initialized) {
+            return;
+        }
+        this.initialized = true;
+        let listId = this.template.querySelector('datalist').id;
+        this.template.querySelector("input").setAttribute("list", listId);
+    }
+
     @wire(getAllYears)
     getAllAvailableYears({ error, data }) {
       if (data) {
