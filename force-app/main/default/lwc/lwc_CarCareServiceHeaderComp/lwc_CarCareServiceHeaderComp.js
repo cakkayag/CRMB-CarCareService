@@ -60,12 +60,12 @@ export default class lwc_CarCareServiceHeaderComp extends LightningElement {
     }
 
     handleNavigationEvent(navWrap){
-        console.log('##handleNavigationEvent --  CurrentPage :'+navWrap);
+        //console.log('##handleNavigationEvent --  CurrentPage :'+navWrap);
         this.CurrentPage = navWrap.cSelection;
     }
 
     handleButtonPressedEvent(detail) {
-        console.log('##handleButtonPressedEvent --  CurrentPage :'+detail.CurrentPage);
+        //console.log('##handleButtonPressedEvent --  CurrentPage :'+detail.CurrentPage);
         this.CurrentPage = detail.CurrentPage;
                 //this.searchKey = searchKey;
     }

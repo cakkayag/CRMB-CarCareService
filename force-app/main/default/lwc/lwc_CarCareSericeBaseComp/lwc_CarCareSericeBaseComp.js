@@ -20,8 +20,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     connectedCallback() {
         /*Handling Changes related to pages when clicked specific tile of Navigation  
         registerListener('navigationClickedEvent', this.handleNavigationEvent, this);*/
-        console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
-        console.log(" this.storeIdVal : "+this.storeIdVal);
+        //console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
+        //console.log(" this.storeIdVal : "+this.storeIdVal);
         if(this.storeIdUrlKey !== undefined && this.storeIdUrlKey !== ''){
             this.storeIdVal = this.getUrlParamValue(window.location.href, this.storeIdUrlKey);
             if(this.storeIdVal  === undefined || this.storeIdVal === '' || this.storeIdVal === null ){
@@ -51,18 +51,18 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         else if(this.CurrentPage === 4){
             //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
         }
-        console.log(" validationStatus : "+validationStatus);
+        //console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
             if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
                 this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
-                console.log(JSON.parse(JSON.stringify(this.contactInfo)));
+                //console.log(JSON.parse(JSON.stringify(this.contactInfo)));
             }
             else if(this.CurrentPage === 4){
                 
                 const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
                 this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
-                console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
+                //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
             }
 
             this.previousPage = this.CurrentPage;
@@ -89,7 +89,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
             const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
             this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
-            console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo)));
+            //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo)));
         }
         //console.log("handlePrevious");
         // 

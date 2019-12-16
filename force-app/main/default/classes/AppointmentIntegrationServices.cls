@@ -3,7 +3,7 @@ public with sharing class AppointmentIntegrationServices {
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
     private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';
     private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}/Services';
-    private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes?searchText={VehicleMake}';
+    private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
     private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
     private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
     private static string exceptionStr = '';
@@ -32,11 +32,11 @@ public with sharing class AppointmentIntegrationServices {
     }
 
     @AuraEnabled(cacheable=true)
-    public static ItemsWrap getAllVehicleMakes(String vehicleMakeStr){
+    public static ItemsWrap getAllVehicleMakes(){
         ItemsWrap vehicleMake = new ItemsWrap();
-        if(String.isNotBlank(vehicleMakeStr)){
+        //if(String.isNotBlank(vehicleMakeStr)){
             
-            String endPoint = vehicleMakeEndPoint.replace('{VehicleMake}',  vehicleMakeStr);
+            String endPoint = vehicleMakeEndPoint; //.replace('{VehicleMake}',  vehicleMakeStr);
             //String jsonBody = callAppointmentServiceAPI(endPoint );
             HTTPResponse res = callAppointmentServiceAPI(endPoint );
             system.debug(' ## res.getStatusCode() : '+res.getStatusCode());
@@ -52,7 +52,7 @@ public with sharing class AppointmentIntegrationServices {
             //
             
             
-        }
+        //}
         //system.debug(' before Return vehicleMake : '+vehicleMake);
         return vehicleMake;
     }

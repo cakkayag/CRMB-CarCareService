@@ -49,11 +49,12 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
   getAvailableServicesByStore() {
     //console.log('getAvailableServicesByStore');
     //console.log(JSON.parse(JSON.stringify(this.availableServices)));
-    var t0 = new Date().getTime();//performance.now();
-    var t1; var diffTime;
-    console.log("Started on : " + t0);
-    console.log("this.serviceSelect : " + this.serviceSelect);
-    console.log(" this.storeId : " + this.storeId);
+    let t0 = new Date().getTime();//performance.now();
+    let t1; 
+    let diffTime;
+    //console.log("Started on : " + t0);
+    //console.log("this.serviceSelect : " + this.serviceSelect);
+    //console.log(" this.storeId : " + this.storeId);
     if (this.serviceSelect === undefined || this.serviceSelect !== {}) {
       this.availableServices = this.serviceSelect._availableServices;
       this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
@@ -82,9 +83,9 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
             this.isLoading = false;
             this.error = undefined;
             t1 = new Date().getTime();//performance.now();
-            var diffTime = t1-t0;
-            console.log("Ended on : " + t1);
-            console.log("diff : " + diffTime);
+            diffTime = t1-t0;
+            //console.log("Ended on : " + t1);
+            //console.log("diff : " + diffTime);
           })
           .catch(error => {
             this.error = error;

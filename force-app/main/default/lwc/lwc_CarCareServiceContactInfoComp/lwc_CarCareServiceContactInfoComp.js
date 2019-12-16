@@ -34,8 +34,8 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
         if(!this.hasRendered){
             //console.log('   this.hasRendered '+this.hasRendered);
             this.contactRec = JSON.parse(JSON.stringify(this.contactRec))
-            console.log('   renderedCallback contactRec ');
-            console.log(this.contactRec);
+            //console.log('   renderedCallback contactRec ');
+            //console.log(this.contactRec);
             //console.log('this.contactRec !== {} '+(this.contactRec !== {}));
             if(this.contactRec !== undefined && this.contactRec !== {}){
                 
@@ -90,8 +90,8 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
     getContactInfo(){
         const inputComponents = this.template.querySelectorAll('lightning-input');
         inputComponents.forEach(element => {
-            console.log(" element "+element.name);
-            console.log(" element "+element.type);
+            //console.log(" element "+element.name);
+            //console.log(" element "+element.type);
             //console.log(" element.checked "+element.checked);
             if(element.type === 'checkbox'){
                 this[element.name] = element.checked;
@@ -135,8 +135,8 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
         this.lastNameVar = Obj.lastName!== undefined ? Obj.lastName : '';
         this.emailVar = Obj.email!== undefined ? Obj.email : '';
         this.mobileVar = Obj.mobile !== undefined ? Obj.mobile : '';
-        console.log(" setContactRecord _acceptedPromotions"+Obj._acceptedPromotions);
-        console.log(" setContactRecord _acceptedReminders "+Obj._acceptedReminders);
+        //console.log(" setContactRecord _acceptedPromotions"+Obj._acceptedPromotions);
+        //console.log(" setContactRecord _acceptedReminders "+Obj._acceptedReminders);
 
         this.acceptedPromotions = Obj._acceptedPromotions !== undefined ? Obj._acceptedPromotions : false;
         this.acceptedReminders = Obj._acceptedReminders !== undefined ? Obj._acceptedReminders : false;
