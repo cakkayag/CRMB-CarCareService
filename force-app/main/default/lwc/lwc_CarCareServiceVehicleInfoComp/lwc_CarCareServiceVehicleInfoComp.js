@@ -19,10 +19,21 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     renderedCallback() {
       console.log('this.hasRendered : '+this.hasRendered);  
       if (this.hasRendered) {
-          
-          //let listId = this.template.querySelector('datalist').id;
-          //this.template.querySelector("input").setAttribute("list", listId);
-          let datalistHtmlTagList = this.template.querySelectorAll('datalist');
+
+        if(this.template.querySelector('.yearsValueList') != null) {
+          console.log('--availableYearOptions--'+JSON.stringify(this.availableYearOptions));
+          console.log('--availableMakeOptions--'+JSON.stringify(this.availableMakeOptions));
+          console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
+        let yearsListId = this.template.querySelector('.yearsValueList').id;
+        this.template.querySelector(".yearsInput").setAttribute("list", yearsListId);
+
+        let makeListId = this.template.querySelector('.makeValueList').id;
+        this.template.querySelector(".makeInput").setAttribute("list", makeListId);
+
+        let modelListId = this.template.querySelector('.modelValueList').id;
+        this.template.querySelector(".modelInput").setAttribute("list", modelListId);
+      }
+          /*let datalistHtmlTagList = this.template.querySelectorAll('datalist');
           let inputHTMLTagList = this.template.querySelectorAll('lightning-input');
           console.log('datalistHtmlTagList : '+datalistHtmlTagList);
           console.log('datalistHtmlTagList.length : '+datalistHtmlTagList.length);
@@ -52,7 +63,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
               }
               
           });
-        }
+        }*/
       }
     }
 
@@ -142,15 +153,18 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     }
     */
     handleYearChange(event) {
-        this.selectedYear = event.detail.value;
-        console.log('this.selectedYear : '+this.selectedYear);
+      console.log('--year changed--'+event.target.value);
+        this.selectedYear = event.target.value;//event.detail.value;
+        //console.log('this.selectedYear : '+this.selectedYear);
         //this.getAllYearsOnSearch();
     }
 
     handleMakeChange(event) {
-        this.selectedMake = event.detail.value;
-        console.log('this.selectedYear : '+this.selectedMake);
+      console.log('--Make changed--'+event.target.value);
+        this.selectedMake = event.target.value;//event.detail.value;
+        console.log('this.selectedMake : '+this.selectedMake);
         //this.getAllVehicleMakeInfoOnSearch();
+        this.getAllVehicleModelByMakeInfoOnSearch();
         
     }
 
@@ -193,14 +207,19 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
           this.isLoading = false;
         }
     }*/
-  
+    /*handleModelkeyup(event) {
+      console.log('this.selectedMake : '+this.selectedMake);
+      this.selectedModel = event.target.value;
+      console.log('this.selectedModel : '+this.selectedModel);
+      this.getAllVehicleModelByMakeInfoOnSearch();
+    }
     handleModelChange(event) {
       console.log('this.selectedModel'+this.selectedModel);
       console.log('event.detail.value'+event.detail.value);
       this.selectedModel = event.detail.value;
       console.log('this.selectedModel'+this.selectedModel);
       this.getAllVehicleModelByMakeInfoOnSearch();
-    }
+    }*/
 
     getAllVehicleModelByMakeInfoOnSearch() {
         console.log('getAllVehicleModelByMakeInfoOnSearch');
@@ -212,9 +231,10 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         //console.log("Started on : " + t0);
         console.log("this.selectedMake : " + this.selectedMake);
         console.log(" this.selectedModel : " + this.selectedModel);
-        if (this.selectedModel !== undefined && this.selectedModel !== '' && this.selectedModel.length > 2)   {
+        //if (this.selectedModel !== undefined && this.selectedModel !== '' && this.selectedModel.length > 2)   {
+          if (this.selectedMake !== undefined && this.selectedMake !== '')   {
                 //this.isLoading = true;
-            getAllVehicleModelsByMakeSelectedInfo({ makeSelectedStr: this.selectedMake , modelStr : this.selectedModel })
+            getAllVehicleModelsByMakeSelectedInfo({ makeSelectedStr: this.selectedMake , modelStr : '' })
                 .then(result => {
                   console.log(JSON.parse(JSON.stringify(result)));
                   const _availableModelOptions = [];

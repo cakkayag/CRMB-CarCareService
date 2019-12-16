@@ -21,16 +21,23 @@
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Year*</label>
                         <div class="slds-form-element__control">
+                            <input id="yearsInput" name="yearsInput" list="yearsValueList" placeholder="Years" required
+                                class="slds-input yearsInput" type="text" onchange={handleYearChange} />
+                            <datalist id="yearsValueList" class="yearsValueList">
+                                <template for:each={availableYearOptions} for:item='item'>
+                                    <option key={item.value} value={item.value}>{item.value}</option>
+                                </template>
+                            </datalist>
                             <!--<lightning-combobox name="year" value={selectedYear} placeholder="Select Year"
                                 options={availableYearOptions} onchange={handleYearChange} required></lightning-combobox>-->
-                                <!--<input id="availableYear" name="availableYear" data-name="availableYearOptions" list="availableYearOptions" placeholder="Year" required class="slds-input" type="text" value={selectedYear}/>
-                                -->
+                            <!--<input id="availableYear" name="availableYear" data-name="availableYearOptions" list="availableYearOptions" placeholder="Year" required class="slds-input" type="text" value={selectedYear}/>
+                                
                                 <lightning-input  id="availableYear" name="availableYearOptions" data-name="availableYearOptions" list="availableYearOptions" placeholder="Year" required type="text" value={selectedYear} onchange={handleYearChange}></lightning-input>
                                 <datalist id="availableYearOptions" data-name="availableYearOptions" class="">
                                     <template for:each={availableYearOptions} for:item='year'>
                                         <option key={year.value} value={year.value}>{year.value}</option>
                                     </template>
-                                </datalist>
+                                </datalist>-->
                         </div>
                     </div>
                 </div>
@@ -45,13 +52,20 @@
                                 options={availableMakeOptions} onchange={handleMakeChange} required></lightning-combobox>
                             -->
                             <!--<input id="availableMake" name="availableMake" data-name="availableMakeOptions" list="availableMakeOptions" placeholder="Make" required class="slds-input" type="text" value={selectedMake} />
-                        -->
+                        
                             <lightning-input id="availableMake" name="availableMakeOptions" data-name="availableMakeOptions" list="availableMakeOptions" placeholder="Make" required type="text" value={selectedMake} onchange={handleMakeChange}></lightning-input>
                                 <datalist id="availableMakeOptions" data-name="availableMakeOptions" class="">
                                     <template for:each={availableMakeOptions} for:item='vehicleMake'>
                                         <option key={vehicleMake.value} value={vehicleMake.value}>{vehicleMake.value}</option>
                                     </template>
-                                </datalist>
+                                </datalist>-->
+                            <input id="makeInput" name="makeInput" list="makeValueList" placeholder="Makes" required
+                                class="slds-input makeInput" type="text" onchange={handleMakeChange} />
+                            <datalist id="makeValueList" class="makeValueList">
+                                <template for:each={availableMakeOptions} for:item='item'>
+                                    <option key={item.value} value={item.value}>{item.value}</option>
+                                </template>
+                            </datalist>
                         </div>
                     </div>
                 </div>
@@ -64,17 +78,29 @@
                         <div class="slds-form-element__control">
                             <!--<lightning-combobox name="model" value={selectedModel} placeholder="Select Model"
                                 options={modelOptions} onchange={handleModelChange} required></lightning-combobox>-->
-                                <!--<input type="text" value={selectedModel} onchange={handleModelChange} />
+                            <!--<input type="text" value={selectedModel} onchange={handleModelChange} />
                                 <input type="text" value={selectedModel} onchange={handleModelChange} ></input>
                                 
                                 <input id="availableModel" name="availableModel" data-name="availableModelOptions" list="availableModelOptions" placeholder="Select Model" required class="slds-input" type="text" value={selectedModel} onkeypress={handleModelChange}/>-->
-                            
-                            <lightning-input id="availableModel" name="availableModelOptions" data-name="availableModelOptions" list="availableModelOptions" placeholder="Select Model" required type="text" value={selectedModel} onchange={handleModelChange}></lightning-input>
+
+                            <!--<lightning-input id="availableModel" name="availableModelOptions"
+                                data-name="availableModelOptions" list="availableModelOptions"
+                                placeholder="Select Model" required type="text" value={selectedModel}
+                                onchange={handleModelChange}></lightning-input>
                             <datalist id="availableModelOptions" data-name="availableModelOptions" class="">
                                 <template for:each={availableModelOptions} for:item='vehicleModel'>
-                                    <option key={vehicleModel.value} value={vehicleModel.value}>{vehicleModel.value}</option>
+                                    <option key={vehicleModel.value} value={vehicleModel.value}>{vehicleModel.value}
+                                    </option>
                                 </template>
-                            </datalist>    
+                            </datalist>-->
+
+                            <input id="modelInput" name="modelInput" list="modelValueList" placeholder="Models" required
+                                class="slds-input modelInput" type="text" onkeyup={handleModelkeyup} />
+                            <datalist id="modelValueList" class="modelValueList">
+                                <template for:each={availableModelOptions} for:item='item'>
+                                    <option key={item.value} value={item.value}>{item.value}</option>
+                                </template>
+                            </datalist>
                         </div>
                     </div>
                 </div>

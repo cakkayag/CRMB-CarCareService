@@ -60,7 +60,7 @@ public with sharing class AppointmentIntegrationServices {
     @AuraEnabled(cacheable=true)
     public static ItemsWrap getAllVehicleModelsByMakeSelected(String makeSelectedStr, String modelStr){
         ItemsWrap vehicleModel = new ItemsWrap();
-        if(String.isNotBlank(makeSelectedStr) && String.isNotBlank(modelStr) ){
+        if(String.isNotBlank(makeSelectedStr) ){
             makeSelectedStr =  EncodingUtil.urlEncode(makeSelectedStr, 'UTF-8').replace('+', '%20') ;
             String endPoint = vehicleModelEndPoint.replace('{VehicleMake}',  makeSelectedStr).replace('{vehicleModel}',  modelStr);
             //String jsonBody = callAppointmentServiceAPI(endPoint );
