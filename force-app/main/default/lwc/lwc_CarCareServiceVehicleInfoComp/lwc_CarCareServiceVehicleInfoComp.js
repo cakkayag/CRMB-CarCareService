@@ -4,6 +4,9 @@ import getAllVehicleModelsByMakeSelectedInfo from "@salesforce/apex/AppointmentI
 import getAllYears from "@salesforce/apex/AppointmentIntegrationServices.getYears";
 
 export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement {
+    
+    @api vehicleInfoRec={}
+
     @track selectedYear = '';
     @track selectedMake = '';
     @track selectedModel = '';
@@ -19,11 +22,13 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     renderedCallback() {
       console.log('this.hasRendered : '+this.hasRendered);  
       if (this.hasRendered) {
-
+        
+        
         if(this.template.querySelector('.yearsValueList') != null) {
-          console.log('--availableYearOptions--'+JSON.stringify(this.availableYearOptions));
-          console.log('--availableMakeOptions--'+JSON.stringify(this.availableMakeOptions));
-          console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
+          //console.log('--availableYearOptions--'+JSON.stringify(this.availableYearOptions));
+          //console.log('--availableMakeOptions--'+JSON.stringify(this.availableMakeOptions));
+          //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
+          //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
         let yearsListId = this.template.querySelector('.yearsValueList').id;
         this.template.querySelector(".yearsInput").setAttribute("list", yearsListId);
 
@@ -32,6 +37,15 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
 
         let modelListId = this.template.querySelector('.modelValueList').id;
         this.template.querySelector(".modelInput").setAttribute("list", modelListId);
+
+        console.log('   renderedCallback vehicleInfoRec ');
+        console.log(JSON.parse(JSON.stringify(this.vehicleInfoRec)));
+        console.log('this.vehicleInfoRec !== {} '+(this.vehicleInfoRec !== {}));
+        if(this.vehicleInfoRec !== undefined && this.vehicleInfoRec !== {}){
+          this.vehicleInfoRec = JSON.parse(JSON.stringify(this.vehicleInfoRec))
+            this.setVehicleInfoRecord(this.vehicleInfoRec);
+        }
+        this.hasRendered = false;
       }
           /*let datalistHtmlTagList = this.template.querySelectorAll('datalist');
           let inputHTMLTagList = this.template.querySelectorAll('lightning-input');
@@ -65,6 +79,34 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
           });
         }*/
       }
+    }
+
+    get isLoaded() {
+      return this.isLoading ? false : true;
+    }
+
+    @api
+    getVehicleDetailsInfo() {
+      let vehicleDetailsInfo = {
+        _selectedYear: this.selectedYear,
+        _selectedMake: this.selectedMake,
+        _selectedModel : this.selectedModel
+      };
+      console.log("diff : " ); 
+      console.log('getVehicleDetailsInfo : '+JSON.parse(JSON.stringify(vehicleDetailsInfo)));
+      return vehicleDetailsInfo;
+    }
+
+    setVehicleInfoRecord(Obj) {
+      console.log('   setVehicleInfoRecord vehicleInfoRec _selectedYear '+ Obj._selectedYear);
+      this.selectedYear = Obj._selectedYear !== undefined  ? Obj._selectedYear : '';
+      console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedYear '+ this.selectedYear);
+      console.log('   setVehicleInfoRecord vehicleInfoRec _selectedMake '+ Obj._selectedMake);
+      this.selectedMake = Obj._selectedMake!== undefined ? Obj._selectedMake : '';
+      console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedMake  '+this.selectedMake );
+      console.log('   setVehicleInfoRecord vehicleInfoRec _selectedModel '+ Obj._selectedModel);
+      this.selectedModel = Obj._selectedModel !== undefined ? Obj._selectedModel : '';
+      console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
     }
 
     @wire(getAllYears)
@@ -153,19 +195,29 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     }
     */
     handleYearChange(event) {
-      console.log('--year changed--'+event.target.value);
+        console.log('--year changed--'+event.target.value);
         this.selectedYear = event.target.value;//event.detail.value;
         //console.log('this.selectedYear : '+this.selectedYear);
         //this.getAllYearsOnSearch();
     }
 
     handleMakeChange(event) {
-      console.log('--Make changed--'+event.target.value);
+        console.log('--Make changed--'+event.target.value);
         this.selectedMake = event.target.value;//event.detail.value;
-        console.log('this.selectedMake : '+this.selectedMake);
+        //console.log('this.selectedMake : '+this.selectedMake);
         //this.getAllVehicleMakeInfoOnSearch();
-        this.getAllVehicleModelByMakeInfoOnSearch();
+        this.selectedModel = '';
+        if(this.selectedMake !== undefined && this.selectedMake !== '' ){
+          this.getAllVehicleModelByMakeInfoOnSearch();
+        }
         
+        
+        
+    }
+
+    handleModeChange(event) {
+      console.log('--Model changed--'+event.target.value);
+      this.selectedModel = event.target.value;//event.detail.value;
     }
 
     
@@ -229,14 +281,14 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         //let t1; 
         //let diffTime;
         //console.log("Started on : " + t0);
-        console.log("this.selectedMake : " + this.selectedMake);
-        console.log(" this.selectedModel : " + this.selectedModel);
+        //console.log("this.selectedMake : " + this.selectedMake);
+        //console.log(" this.selectedModel : " + this.selectedModel);
         //if (this.selectedModel !== undefined && this.selectedModel !== '' && this.selectedModel.length > 2)   {
           if (this.selectedMake !== undefined && this.selectedMake !== '')   {
                 //this.isLoading = true;
             getAllVehicleModelsByMakeSelectedInfo({ makeSelectedStr: this.selectedMake , modelStr : '' })
                 .then(result => {
-                  console.log(JSON.parse(JSON.stringify(result)));
+                  //console.log(JSON.parse(JSON.stringify(result)));
                   const _availableModelOptions = [];
                   if(result.items !== undefined){
                     result.items.forEach(element => {
@@ -325,18 +377,5 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         }
     }*/
 
-    get isLoaded() {
-      return this.isLoading ? false : true;
-    }
-
-    @api
-    getVehicleDetailsInfo() {
-      let vehicleDetailsInfo = {
-        _selectedYear: this.selectedYear,
-        _selectedMake: this.selectedMake,
-        _selectedModel : this.selectedModel
-      };
-
-      return vehicleDetailsInfo;
-    }
+    
 }

@@ -13,6 +13,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @track serviceSelectInfo = [];
     @api storeIdUrlKey = '';
     @track storeIdVal = '';
+    @track vehicleInfo = {};
     
     //@track isChildLoading = false;
     
@@ -43,6 +44,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     handleContinue(event) {
         const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
         const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
+        const vehicleInfoComp = this.template.querySelector('c-lwc_-car-care-service-vehicle-info-comp');
 
         let validationStatus =  true;
         if(this.CurrentPage === 2){
@@ -57,6 +59,11 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 const contactTemp = contactComp.getContactInfo();
                 this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
                 //console.log(JSON.parse(JSON.stringify(this.contactInfo)));
+            }
+            else if(this.CurrentPage === 3){
+                const vehicleTemp= vehicleInfoComp.getVehicleDetailsInfo();
+                this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
+                console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
             }
             else if(this.CurrentPage === 4){
                 
@@ -84,6 +91,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
             const contactTemp = contactComp.getContactInfo();
             this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
+        }
+        else if(this.CurrentPage === 3){
+            const vehicleInfoComp = this.template.querySelector('c-lwc_-car-care-service-vehicle-info-comp');
+            const vehicleTemp= vehicleInfoComp.getVehicleDetailsInfo();
+            console.log(JSON.parse(JSON.stringify(vehicleTemp)));
+            this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
+            console.log(' this.vehicleInfo : ');
+            console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
         }
         else if(this.CurrentPage === 4){
             const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');

@@ -22,7 +22,7 @@
                         <label class="slds-form-element__label formElement">Year*</label>
                         <div class="slds-form-element__control">
                             <input id="yearsInput" name="yearsInput" list="yearsValueList" placeholder="Years" required
-                                class="slds-input yearsInput" type="text" onchange={handleYearChange} />
+                                class="slds-input yearsInput" type="text" value={selectedYear} onchange={handleYearChange} />
                             <datalist id="yearsValueList" class="yearsValueList">
                                 <template for:each={availableYearOptions} for:item='item'>
                                     <option key={item.value} value={item.value}>{item.value}</option>
@@ -60,7 +60,7 @@
                                     </template>
                                 </datalist>-->
                             <input id="makeInput" name="makeInput" list="makeValueList" placeholder="Makes" required
-                                class="slds-input makeInput" type="text" onchange={handleMakeChange} />
+                                class="slds-input makeInput" type="text" value={selectedMake} onchange={handleMakeChange} />
                             <datalist id="makeValueList" class="makeValueList">
                                 <template for:each={availableMakeOptions} for:item='item'>
                                     <option key={item.value} value={item.value}>{item.value}</option>
@@ -95,7 +95,7 @@
                             </datalist>-->
 
                             <input id="modelInput" name="modelInput" list="modelValueList" placeholder="Models" required
-                                class="slds-input modelInput" type="text" onkeyup={handleModelkeyup} />
+                                class="slds-input modelInput" type="text" value={selectedModel} onchange={handleModeChange} />
                             <datalist id="modelValueList" class="modelValueList">
                                 <template for:each={availableModelOptions} for:item='item'>
                                     <option key={item.value} value={item.value}>{item.value}</option>
