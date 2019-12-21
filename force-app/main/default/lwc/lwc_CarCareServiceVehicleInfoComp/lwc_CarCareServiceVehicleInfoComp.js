@@ -215,7 +215,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         
     }
 
-    handleModeChange(event) {
+    handleModelChange(event) {
       console.log('--Model changed--'+event.target.value);
       this.selectedModel = event.target.value;//event.detail.value;
     }
