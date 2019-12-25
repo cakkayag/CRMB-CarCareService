@@ -1,17 +1,21 @@
 <template>
     <div if:true={isLoaded}>
-        <div if:true={hasError} class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px" style="color:red">
+        <div if:true={hasError} class="Please_describe_the_service_th slds-align_absolute-center maxWidth600px"
+            style="color:red">
             <span>Please select a service</span>
         </div>
-        <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
+        <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
             <!--<legend class="slds-form-element__legend slds-form-element__label">Checkbox Group Label</legend>-->
-            <template class="slds-form-element__control" for:each={availableServices} for:item='service'>
-                <div class="slds-checkbox serviceElement" key={service.id}>
-                    <input type="checkbox" name="options" id={service.id} value={service.name} checked={service.isSelected} onclick={handleSelection}/>
-                    <label class="slds-checkbox__label" for={service.id}>
-                        <span class="slds-checkbox_faux servicesCheckBox"></span>
-                        <span class="slds-form-element__label formElement">{service.name}</span>
-                    </label>
+            <template class="slds-form-element" for:each={availableServices} for:item='service'>
+                <div class="slds-form-element__control" key={service.id}>
+                    <div class="slds-checkbox serviceElement" key={service.id}>
+                        <input type="checkbox" name="options" id={service.id} value={service.name}
+                            checked={service.isSelected} onclick={handleSelection} />
+                        <label class="slds-checkbox__label" for={service.id}>
+                            <span class="slds-checkbox_faux servicesCheckBox"></span>
+                            <span class="slds-form-element__label formElement">{service.name}</span>
+                        </label>
+                    </div>
                 </div>
             </template>
         </fieldset>
@@ -27,12 +31,13 @@
                 <textarea placeholder="Input Text" rows="5" cols="150"></textarea>
                 
         </div>-->
-        <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px" >
-            <lightning-textarea name="serviceAdditionalInfo" value={serviceAdditionalInfo} style="width: 100%; height:100%" onchange={onTextAreaChange}></lightning-textarea>
+        <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
+            <lightning-textarea name="serviceAdditionalInfo" value={serviceAdditionalInfo}
+                style="width: 100%; height:100%" onchange={onTextAreaChange}></lightning-textarea>
         </div>
     </div>
     <div if:true={isLoading} class="maxWidth600px">
         <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
     </div>
-    
+
 </template>

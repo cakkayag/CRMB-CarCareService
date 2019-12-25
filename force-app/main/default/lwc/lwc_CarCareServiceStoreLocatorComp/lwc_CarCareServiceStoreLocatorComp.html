@@ -1,7 +1,7 @@
 <template>
     <!--<div class="slds-align_absolute-center" style="height: 200px;">-->
         <div if:true={isLoaded} >
-            <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
+            <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
                 <template for:each={storeWrapperList} for:item="storeInfo">
                     <div key={storeInfo.id} class="slds-form-element">
                         <div class="slds-form-element__control" >
@@ -10,14 +10,14 @@
                                 <label class="slds-checkbox__label" for={storeInfo.id}>
                                     <span class="slds-checkbox_faux"></span>
                                     <span class="slds-form-element__label">
-                                        {storeInfo.name}<br/>
+                                        <span class="storeInfo">{storeInfo.name}</span><br/>
                                         <!--{storeInfo.openingTimings}<br/>-->
-                                        {storeInfo.phone}<br/>
+                                        <span class="storePhone">{storeInfo.phone}</span><br/>
                                     </span>
                                 </label>
-                                <div class="slds-p-around_medium lgc-bg">
+                                <!--<div class="slds-p-around_medium lgc-bg">
                                     <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>

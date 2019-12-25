@@ -17,10 +17,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     
 
     connectedCallback() {
-        if(this.storeWrapperList === undefined || this.storeWrapperList === []){
-            this.getSelectedStoreInfo();
-        }
-        
+        this.getSelectedStoreInfo();
     }
 
     getDayNameList(){
@@ -99,7 +96,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         
     }
 
-    /*
     getNearByStoreList() {
         
         getNearByStoreInfoList({ branchId : this.storeIdOfStoreLocator })
@@ -128,17 +124,23 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 this.isLoading = false;
             });
         
-    }*/
+    }
 
     get isLoaded() {
         return this.isLoading ? false : true;
     }
 
+    handleSelection(event) {
     
+    }
     
     @api
     getSelectedStoreObjInfo() {
-        return this.storeWrapperList;
+        let selectedStoreObj = {
+            
+        };
+
+        return selectedStoreObj;
     }
 
     onStoreSelection(event){
