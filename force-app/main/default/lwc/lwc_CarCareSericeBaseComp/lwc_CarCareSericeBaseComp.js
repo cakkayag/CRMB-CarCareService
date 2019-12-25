@@ -14,6 +14,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @api storeIdUrlKey = '';
     @track storeIdVal = '';
     @track vehicleInfo = {};
+    @track storeInfoWrapperList = [];
     
     //@track isChildLoading = false;
     

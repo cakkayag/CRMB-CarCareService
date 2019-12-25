@@ -1,5 +1,58 @@
 <template>
-    <div class="slds-align_absolute-center" style="height: 200px;">
-        This is Store Locator component
+    <!--<div class="slds-align_absolute-center" style="height: 200px;">-->
+        <div if:true={isLoaded} >
+            <fieldset class="slds-form-element slds-align_absolute-center maxWidth600px">
+                <template for:each={storeWrapperList} for:item="storeInfo">
+                    <div key={storeInfo.id} class="slds-form-element">
+                        <div class="slds-form-element__control" >
+                            <div class="slds-checkbox">
+                                <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
+                                <label class="slds-checkbox__label" for={storeInfo.id}>
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label">
+                                        {storeInfo.name}<br/>
+                                        <!--{storeInfo.openingTimings}<br/>-->
+                                        {storeInfo.phone}<br/>
+                                    </span>
+                                </label>
+                                <div class="slds-p-around_medium lgc-bg">
+                                    <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </fieldset>
+        <!--</div>-->
+    
+        <div if:true={isLoading} class="maxWidth600px">
+            <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
+        </div>
+        <template if:true={isOpenModal}>
+            <div style="height: 500px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                                <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="Close" size="medium">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">LWC Modal Example</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <div class="slds-text-heading_small slds-text-align_center">
+                                Are you sure you would like to change your location? Your Appointment information will be lost.
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>
+                            <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal}></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
     </div>
 </template>

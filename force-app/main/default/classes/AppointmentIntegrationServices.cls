@@ -1,12 +1,63 @@
 public with sharing class AppointmentIntegrationServices {
 
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
-    private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';
+    private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}';
     private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}/Services';
     private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
     private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
     private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
     private static string exceptionStr = '';
+
+    @AuraEnabled(cacheable=true)
+    public static AppointmentStoreObj getNearByStoreList(String branchId){
+        AppointmentStoreObj nearByStoresObj = new AppointmentStoreObj();
+        if(String.isNotBlank(branchId)){
+            
+            String endPoint = storeEndPoint.replace('/{StoreId}',  '');
+            
+            HTTPResponse res = callAppointmentServiceAPI(endPoint );
+            if(res != null && res.getStatusCode() == 200 ){
+                String jsonBody = res.getBody();
+                system.debug(' getNearByStoreList : jsonBody : '+jsonBody);
+                nearByStoresObj = AppointmentStoreObj.parseList(jsonBody);
+            }
+            else{
+                //availableServices.hasException = true;
+                //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
+            }
+        }
+        //system.debug(' before Return : '+availableServices.items);
+        return nearByStoresObj;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<AppointmentStoreObj.Items> getStoreInfo(String storeId){
+        List<AppointmentStoreObj.Items> selectedAndNearbystoreList = new List<AppointmentStoreObj.Items>();
+        if(String.isNotBlank(storeId)){
+            AppointmentStoreObj.Items selectedStoreInfo = new AppointmentStoreObj.Items();
+            String endPoint = storeEndPoint.replace('{StoreId}',  storeId);
+            
+            HTTPResponse res = callAppointmentServiceAPI(endPoint );
+            if(res != null && res.getStatusCode() == 200 ){
+                String jsonBody = res.getBody();
+                selectedStoreInfo = AppointmentStoreObj.parse(jsonBody);
+                selectedAndNearbystoreList.add(selectedStoreInfo);
+                //TODO : Need to update this logic to bring near by Stores
+                AppointmentStoreObj selectedAndNearbystoreTemp = getNearByStoreList(''+selectedStoreInfo.branchId);
+                if(selectedAndNearbystoreTemp != null && selectedAndNearbystoreTemp.items != null && 
+                    selectedAndNearbystoreTemp.items.isEmpty() == false){
+                    selectedAndNearbystoreList.addAll(selectedAndNearbystoreTemp.items);
+                }
+                //TODO : Need to update this logic to bring near by Stores
+            }
+            else{
+                //availableServices.hasException = true;
+                //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
+            }
+        }
+        //system.debug(' before Return : '+availableServices.items);
+        return selectedAndNearbystoreList;
+    }
 
     @AuraEnabled(cacheable=true)
     public static AppointmentServiceObj getAllAvailableServices(String storeId){
