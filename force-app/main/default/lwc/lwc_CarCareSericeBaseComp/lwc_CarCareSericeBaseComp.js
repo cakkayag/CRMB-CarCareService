@@ -11,27 +11,23 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     minPages = 1;
     @track contactInfo = {};
     @track serviceSelectInfo = [];
-    @api storeIdUrlKey = '';
-    @track storeIdVal = '';
+    @track uniqueUrlKey = 'branchId';
+    @track branchIdVal = '';
     @track vehicleInfo = {};
-    
+    @track storeId = '';
+    @track availableStoreList = [];
     //@track isChildLoading = false;
     
 
     connectedCallback() {
         /*Handling Changes related to pages when clicked specific tile of Navigation  
         registerListener('navigationClickedEvent', this.handleNavigationEvent, this);*/
+        //registerListener('storeChangeRequested', this.handleStoreChange, this);
         //console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
         //console.log(" this.storeIdVal : "+this.storeIdVal);
-        if(this.storeIdUrlKey !== undefined && this.storeIdUrlKey !== ''){
-            this.storeIdVal = this.getUrlParamValue(window.location.href, this.storeIdUrlKey);
-            if(this.storeIdVal  === undefined || this.storeIdVal === '' || this.storeIdVal === null ){
-                //this.storeIdVal = 1;
-                this.showToast('Error' , 'Missing valid Store Id key, Please contact Support team' , 'Error', 'sticky'  );
-            }
-        }
-        else{
-            this.showToast('Configuration Error' , 'Please enter valid key which stores the Store Id' , 'Error', 'sticky'  );
+        this.branchIdVal = this.getUrlParamValue(window.location.href, this.uniqueUrlKey);
+        if(this.branchIdVal  === undefined || this.branchIdVal === '' || this.branchIdVal === null ){
+            this.showToast('Error' , 'Missing valid '+this.uniqueUrlKey+' key in url, Please contact Support team' , 'Error', 'sticky'  );
         }
     }
 
@@ -40,11 +36,23 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         //unregisterAllListeners(this);
     }
 
+    handleStoreChange(event){
+        console.log(JSON.parse(JSON.stringify(event)));
+        console.log('handleStoreChange'+event.detail._branchId+'   detail._storeRecordId  '+event.detail._storeRecordId);
+        this.branchIdVal = event.detail._branchId;
+        this.storeId = event.detail._storeRecordId;
+        const storeInfoComp = this.template.querySelector('c-lwc_-car-care-service-store-locator-comp');
+        const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(true);
+        this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
+        
+    }
+
 
     handleContinue(event) {
         const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
         const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
         const vehicleInfoComp = this.template.querySelector('c-lwc_-car-care-service-vehicle-info-comp');
+        const storeInfoComp = this.template.querySelector('c-lwc_-car-care-service-store-locator-comp');
 
         let validationStatus =  true;
         if(this.CurrentPage === 2){
@@ -55,7 +63,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         }
         //console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
-            if(this.CurrentPage === 2){
+            if(this.CurrentPage === 1){
+                const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(false);
+                this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
+                this.storeId = storeInfoComp.getSelectedStoreId();
+                console.log("handleContinue "+this.storeId);
+                console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
+            }
+            else if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
                 this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
                 //console.log(JSON.parse(JSON.stringify(this.contactInfo)));

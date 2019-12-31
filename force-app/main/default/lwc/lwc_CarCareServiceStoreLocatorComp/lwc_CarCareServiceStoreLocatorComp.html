@@ -6,7 +6,7 @@
                     <div key={storeInfo.id} class="slds-form-element">
                         <div class="slds-form-element__control" >
                             <div class="slds-checkbox">
-                                <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
+                                <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
                                 <label class="slds-checkbox__label" for={storeInfo.id}>
                                     <span class="slds-checkbox_faux"></span>
                                     <span class="slds-form-element__label">
@@ -23,10 +23,10 @@
                     </div>
                 </template>
             </fieldset>
-        <!--</div>-->
+        </div>
     
         <div if:true={isLoading} class="maxWidth600px">
-            <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
+            <lightning-spinner alternative-text="Loading.." class="spins" size="small"></lightning-spinner>
         </div>
         <template if:true={isOpenModal}>
             <div style="height: 500px;">
@@ -38,7 +38,7 @@
                                 </lightning-icon>
                                 <span class="slds-assistive-text">Close</span>
                             </button>
-                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">LWC Modal Example</h2>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                             <div class="slds-text-heading_small slds-text-align_center">
@@ -54,5 +54,5 @@
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </div>
         </template>
-    </div>
+    
 </template>

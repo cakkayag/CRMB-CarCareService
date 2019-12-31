@@ -1,11 +1,12 @@
 import { LightningElement, track, api } from 'lwc';
-import getNearByStoreInfoList from "@salesforce/apex/AppointmentIntegrationServices.getNearByStoreList";
-import getStoreDetailsInfo from "@salesforce/apex/AppointmentIntegrationServices.getStoreInfo";
+import { fireEvent } from 'c/pubsub';
+import getSelectedAndNearbyStoresInfo from "@salesforce/apex/AppointmentIntegrationServices.getSelectedAndNearbyStoresList";
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
-    @api storeId = '';
-    newStoreId = '';
+    @api branchId = '';
+    newBranchId = '';
+    storeRecordId = '';
 
     @track newStoreSelection = '';
     @track isLoading = true;
@@ -17,76 +18,73 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     
 
     connectedCallback() {
-        this.getSelectedStoreInfo();
+        console.log('this.storeWrapperList '+(this.storeWrapperList === []));
+        console.log('this.storeWrapperList '+(this.storeWrapperList === undefined));
+        console.log('this.storeWrapperList '+(this.storeWrapperList.length === 0));
+        console.log('this.storeWrapperList '+(this.storeWrapperList === ''));
+        console.log('this.storeWrapperList '+(this.storeWrapperList === null));
+        if(this.storeWrapperList === undefined || this.storeWrapperList === [] || this.storeWrapperList.length === 0){
+            console.log('branchId'+this.storeWrapperList.length);
+            this.getStoreInfo();
+        }
+        else{
+            this.isLoading = false;
+        }
     }
 
     getDayNameList(){
         return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     }
 
-    getSelectedStoreInfo() {
+    getStoreInfo() {
         this.isLoading = true;
-        getStoreDetailsInfo({ storeId: this.storeId })
+        getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
             .then(result => {
                 console.log(JSON.parse(JSON.stringify(result)));
                 const storeInfoTemp = [];
-                
-
-                let deleteElementId = '';
                 if (result !== undefined) {
                     result.forEach(element => {
                         let storeOpeningTimings = '';
-                        console.log('deleteElementId'+deleteElementId);
-                            console.log(' element.id '+ element.id);
-                        if(deleteElementId !== element.id){
+                        //TODO : Need to work this at later part - Start
+                        /*if(element.storeHours !== undefined){
+                            let now = new Date();
+                            let dayName = this.getDayNameList()[now.getDay()];
                             
-                            if(element.storeHours !== undefined){
-                                let now = new Date();
-                                //console.log('now : '+now);
-                                //console.log(JSON.parse(JSON.stringify(this.getDayNameList())));
-                                //console.log('now.getDay() : '+now.getDay());
-                                let dayName = this.getDayNameList()[now.getDay()];
-                                
-                                //console.log('dayName : '+dayName);
-                                for(let i = 0 ; i < element.storeHours.length  ; i++){
-                                    //console.log('element.storeHours[i] : ')
-                                    //console.log(JSON.parse(JSON.stringify(element.storeHours[i].day)));
-                                    /*
-                                    if(dayName === element.storeHours[i].day){
-                                        //console.log(' element.storeHours[i].hours '+ element.storeHours[i].hours);
-                                        storeOpeningTimings = element.storeHours[i].day + ' open ' + element.storeHours[i].hours; 
-                                        break;
-                                    }*/
-                                    storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
+                            for(let i = 0 ; i < element.storeHours.length  ; i++){
+                                if(dayName === element.storeHours[i].day){
+                                    storeOpeningTimings = element.storeHours[i].day + ' open ' + element.storeHours[i].hours; 
+                                    break;
                                 }
+                                storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
                             }
-                            //console.log('storeOpeningTimings : '+storeOpeningTimings);
-                            //console.log('element.id : '+element.id);
-                            //console.log('this.storeId : '+this.storeId);
-                            //console.log('this.storeId : '+(element.id === this.storeId));
-                            let isEqualCheck = isNaN(element.id) === false && isNaN(this.storeId) === false 
-                                                ? Number(element.id) === Number(this.storeId) 
-                                                : false;
-
-                            console.log('isEqualCheck : '+isEqualCheck);                    
-                            let selectOption = {
-                                id: element.id,
-                                name: element.street1 +', '+ element.city +', '+ element.state +' '+ element.zip ,
-                                phone : element.phone,
-                                isSelected: isEqualCheck,
-                                isDisabled : isEqualCheck,
-                                openingTimings : storeOpeningTimings 
-                            };
-                            deleteElementId = element.id;
-                            storeInfoTemp.push(selectOption);
-                            
+                        }*/
+                        //TODO : Need to work this at later part - END
+                        console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
+                        let isEqualCheck = isNaN(element.branchId) === false && isNaN(this.branchId) === false 
+                                            ? Number(element.branchId) === Number(this.branchId) 
+                                            : false;
+                        console.log('isEqualCheck '+isEqualCheck);
+                        let selectOption = {
+                            id: element.id,
+                            branchId : element.branchId,
+                            name: element.street1 +', '+ element.city +', '+ element.state +' '+ element.zip ,
+                            phone : element.phone,
+                            isSelected: isEqualCheck,
+                            isDisabled : isEqualCheck,
+                            openingTimings : storeOpeningTimings 
+                        };
+                        storeInfoTemp.push(selectOption);
+                        
+                        if(isEqualCheck){
+                            this.storeRecordId =  element.id;
                         }
+                    
                     });
                 }
                 this.storeWrapperList = storeInfoTemp;
                 this.isLoading = false;
                 this.error = undefined;
-                console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
+                //console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
             })
             .catch(error => {
                 this.error = error;
@@ -96,57 +94,33 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         
     }
 
-    getNearByStoreList() {
-        
-        getNearByStoreInfoList({ branchId : this.storeIdOfStoreLocator })
-            .then(result => {
-                console.log(JSON.parse(JSON.stringify(result)));
-                const availableServicesTemp = [];
-                if (result.items !== undefined) {
-                    result.items.forEach(element => {
-                        if (element.isPackage !== true) {
-                            let selectOption = {
-                                id: element.id,
-                                name: element.name,
-                                isSelected: false
-                            };
-                            availableServicesTemp.push(selectOption);
-                        }
-                    });
-                }
-                this.availableServices = availableServicesTemp;
-                this.isLoading = false;
-                this.error = undefined;
-            })
-            .catch(error => {
-                this.error = error;
-                this.availableServices = undefined;
-                this.isLoading = false;
-            });
-        
-    }
+   
 
     get isLoaded() {
         return this.isLoading ? false : true;
     }
 
-    handleSelection(event) {
-    
-    }
-    
     @api
-    getSelectedStoreObjInfo() {
-        let selectedStoreObj = {
-            
-        };
+    getSelectedStoreObjInfo(reload) {
+        console.log('getSelectedStoreObjInfo   : '+reload);
+        if(reload){
+            console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
+            this.getStoreInfo();
+        }
+        return this.storeWrapperList;
+    }
 
-        return selectedStoreObj;
+    @api
+    getSelectedStoreId() {
+        return this.storeRecordId;
     }
 
     onStoreSelection(event){
-        console.log(event.target.dataset.id);
+        console.log('onStoreSelection Id : '+event.target.dataset.id);
+        console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
         this.isOpenModal = true;
-        this.newStoreId = event.target.dataset.id;
+        this.newBranchId = event.target.dataset.branchId;
+        this.storeRecordId = event.target.dataset.id;
     }
 
     handleCloseModal() {
@@ -154,9 +128,18 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     }
 
     handleContinueModal(event){
-        console.log( this.newStoreId);
-        let newUrl = window.location.href.replace('StoreIdKey='+this.storeId, 'StoreIdKey='+this.newStoreId );
-        window.location = newUrl; 
-        //window.location.reload();
+        console.log( 'handleContinueModal this.newBranchId : '+this.newBranchId);
+        console.log( 'handleContinueModal this.storeRecordId : '+this.storeRecordId);
+        this.branchId = this.newBranchId;
+        this.handleCloseModal();
+        let selectedStore = {
+            _branchId : this.branchId,
+            _storeRecordId : this.storeRecordId 
+        };
+        //fireEvent(this.pageRef, 'storeChangeRequested', selectedStore);
+        // Creates the event with the contact ID data.
+        const selectedEvent = new CustomEvent('storechange', { detail: selectedStore });
+        // Dispatches the event.
+        this.dispatchEvent(selectedEvent);
     }
 }

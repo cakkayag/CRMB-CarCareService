@@ -1,8 +1,9 @@
 <template>
     <div class="baseContainerDiv">
         <div if:true={showFirstPage}>
-            <c-lwc_-car-care-service-store-locator-comp store-id={storeIdVal}>
-
+            <c-lwc_-car-care-service-store-locator-comp 
+                branch-id={branchIdVal} store-wrapper-list={availableStoreList} 
+                onstorechange={handleStoreChange} >
             </c-lwc_-car-care-service-store-locator-comp>
         </div>
         <div if:true={showSecondPage}>
@@ -16,7 +17,7 @@
             </c-lwc_-car-care-service-vehicle-info-comp>
         </div>
         <div if:true={showFourthPage}>
-            <c-lwc_-car-care-service-select-comp service-select={serviceSelectInfo} store-id={storeIdVal}>
+            <c-lwc_-car-care-service-select-comp service-select={serviceSelectInfo} store-id={storeId}>
             </c-lwc_-car-care-service-select-comp>
         </div>
         <div if:true={showFifthPage}>

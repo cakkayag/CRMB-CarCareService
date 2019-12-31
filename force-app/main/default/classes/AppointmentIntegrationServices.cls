@@ -1,62 +1,92 @@
 public with sharing class AppointmentIntegrationServices {
 
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
-    private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}';
-    private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}/Services';
+    private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';
+    private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{branchId}/Services';
     private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
     private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
     private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
+    private static Integer withInMiles = 10000;
     private static string exceptionStr = '';
+    
+
+    private static List<AAA_Location__c> getNearbyLocation(String branchId){
+        // To fetch lat long values of selected store
+        AAA_Location__c selectedLoc = [select name,Geocode__Latitude__s,Geocode__Longitude__s from AAA_Location__c where Car_Care_Location_Number__c =: branchId and Car_Care__c = true limit 1] ;
+        Decimal latitude = selectedLoc.Geocode__Latitude__s;  // This will be our selected store lat value
+        Decimal longitude = selectedLoc.Geocode__Longitude__s; // This will be our selected store long value
+
+        //To get nearby locations within 10 miles…
+        List<AAA_Location__c> Locations = new List<AAA_Location__c >([SELECT Car_Care_Location_Number__c ,
+                                                                                Geocode__Latitude__s, 
+                                                                                Geocode__Longitude__s,
+                                                                                DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') dist
+                                                                                FROM AAA_Location__c
+                                                                                where (DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') > 0 
+                                                                                and DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') < withInMiles ) 
+                                                                                and Car_Care__c = true
+                                                                                ORDER BY
+                                                                                DISTANCE( Geocode__c, GEOLOCATION( :latitude, :longitude ), 'mi' )   
+                                                                                ]);
+        
+       
+        return Locations;
+    }
 
     @AuraEnabled(cacheable=true)
-    public static AppointmentStoreObj getNearByStoreList(String branchId){
+    public static List<AppointmentStoreObj.Items> getSelectedAndNearbyStoresList(String branchId){
+        Map<Decimal , AppointmentStoreObj.Items> distanceToStoreMap = new Map<Decimal, AppointmentStoreObj.Items>();
         AppointmentStoreObj nearByStoresObj = new AppointmentStoreObj();
         if(String.isNotBlank(branchId)){
+            AppointmentStoreObj.Items selectedStoreInfo = new AppointmentStoreObj.Items();
             
-            String endPoint = storeEndPoint.replace('/{StoreId}',  '');
-            
-            HTTPResponse res = callAppointmentServiceAPI(endPoint );
+            HTTPResponse res = callAppointmentServiceAPI(storeEndPoint );
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
                 system.debug(' getNearByStoreList : jsonBody : '+jsonBody);
                 nearByStoresObj = AppointmentStoreObj.parseList(jsonBody);
+                if(nearByStoresObj != null && nearByStoresObj.items != null){
+                    Map<Integer , AppointmentStoreObj.Items> branchIdToStoreObjMap = new Map<Integer , AppointmentStoreObj.Items>();
+                    for(AppointmentStoreObj.Items items : nearByStoresObj.items){
+                        system.debug(' items   : '+items);
+                        system.debug(' items.branchId   : '+items.branchId);
+                        system.debug(' branchId.isNumeric()   : '+branchId.isNumeric());
+                        if(items.branchId != null && branchId.isNumeric() ){
+                            branchIdToStoreObjMap.put(items.branchId , items );
+                            system.debug(' branchIdToStoreObjMap   : '+branchIdToStoreObjMap);
+                            if(items.branchId ==  Integer.valueOf(branchId) ){
+                                distanceToStoreMap.put(0.0 , items);
+                            }
+                        }
+                    }
+                    system.debug(' distanceToStoreMap 1st   : '+distanceToStoreMap);
+                    List<AAA_Location__c> Locations = getNearbyLocation(branchId);
+                    system.debug(' Locations    : '+Locations);
+                    for(AAA_Location__c locationObj : Locations){
+                        Integer carCareLocationNumber = String.isNotBlank(locationObj.Car_Care_Location_Number__c) &&
+                                                        locationObj.Car_Care_Location_Number__c.isNumeric() 
+                                                        ? Integer.valueOf(locationObj.Car_Care_Location_Number__c)
+                                                        : null;
+                        system.debug(' carCareLocationNumber    : '+carCareLocationNumber);
+                        system.debug(' branchIdToStoreObjMap.containsKey(carCareLocationNumber)   : '+branchIdToStoreObjMap.containsKey(carCareLocationNumber));
+                        system.debug(' branchIdToStoreObjMap.get(carCareLocationNumber)    : '+branchIdToStoreObjMap.get(carCareLocationNumber));
+                        system.debug(' (Decimal)locationObj.get(\'dist\')    : '+(Decimal)locationObj.get('dist') );
+                        if( carCareLocationNumber != null && branchIdToStoreObjMap.containsKey(carCareLocationNumber)){
+                            system.debug(' locationObj    : '+locationObj);
+                            distanceToStoreMap.put((Decimal)locationObj.get('dist') , branchIdToStoreObjMap.get(carCareLocationNumber));
+                        }
+                    }
+                } 
+                
             }
             else{
                 //availableServices.hasException = true;
                 //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
             }
-        }
-        //system.debug(' before Return : '+availableServices.items);
-        return nearByStoresObj;
-    }
-
-    @AuraEnabled(cacheable=true)
-    public static List<AppointmentStoreObj.Items> getStoreInfo(String storeId){
-        List<AppointmentStoreObj.Items> selectedAndNearbystoreList = new List<AppointmentStoreObj.Items>();
-        if(String.isNotBlank(storeId)){
-            AppointmentStoreObj.Items selectedStoreInfo = new AppointmentStoreObj.Items();
-            String endPoint = storeEndPoint.replace('{StoreId}',  storeId);
             
-            HTTPResponse res = callAppointmentServiceAPI(endPoint );
-            if(res != null && res.getStatusCode() == 200 ){
-                String jsonBody = res.getBody();
-                selectedStoreInfo = AppointmentStoreObj.parse(jsonBody);
-                selectedAndNearbystoreList.add(selectedStoreInfo);
-                //TODO : Need to update this logic to bring near by Stores
-                AppointmentStoreObj selectedAndNearbystoreTemp = getNearByStoreList(''+selectedStoreInfo.branchId);
-                if(selectedAndNearbystoreTemp != null && selectedAndNearbystoreTemp.items != null && 
-                    selectedAndNearbystoreTemp.items.isEmpty() == false){
-                    selectedAndNearbystoreList.addAll(selectedAndNearbystoreTemp.items);
-                }
-                //TODO : Need to update this logic to bring near by Stores
-            }
-            else{
-                //availableServices.hasException = true;
-                //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
-            }
         }
-        //system.debug(' before Return : '+availableServices.items);
-        return selectedAndNearbystoreList;
+        system.debug(' before Return : '+distanceToStoreMap.values());
+        return distanceToStoreMap != null && distanceToStoreMap.isEmpty() == false ? distanceToStoreMap.values() : new List<AppointmentStoreObj.Items>() ;
     }
 
     @AuraEnabled(cacheable=true)
