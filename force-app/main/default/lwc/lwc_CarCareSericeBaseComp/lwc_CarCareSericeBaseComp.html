@@ -47,6 +47,15 @@
                     </div>
                 </div>
             </lightning-layout-item>
+            <lightning-layout-item size="12" class="slds-align_absolute-center" if:true={showFirstPage}>
+                <div class="slds-form slds-form_horizontal">
+                    <div class="slds-form__row">
+                        <lightning-button variant="base" label="START NEW SEARCH" title="Start New Search"
+                            class="slds-m-left_x-small previousBtn">
+                        </lightning-button>
+                    </div>
+                </div>
+            </lightning-layout-item>
         </lightning-layout>
     </div>
 </template>

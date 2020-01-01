@@ -6,7 +6,6 @@ public with sharing class AppointmentIntegrationServices {
     private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
     private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
     private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
-    private static Integer withInMiles = 10000;
     private static string exceptionStr = '';
     
 
@@ -23,7 +22,7 @@ public with sharing class AppointmentIntegrationServices {
                                                                                 DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') dist
                                                                                 FROM AAA_Location__c
                                                                                 where (DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') > 0 
-                                                                                and DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') < withInMiles ) 
+                                                                                and DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') < 10000 ) 
                                                                                 and Car_Care__c = true
                                                                                 ORDER BY
                                                                                 DISTANCE( Geocode__c, GEOLOCATION( :latitude, :longitude ), 'mi' )   

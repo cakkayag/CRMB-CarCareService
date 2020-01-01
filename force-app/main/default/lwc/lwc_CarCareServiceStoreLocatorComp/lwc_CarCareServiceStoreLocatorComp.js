@@ -69,6 +69,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                             branchId : element.branchId,
                             name: element.street1 +', '+ element.city +', '+ element.state +' '+ element.zip ,
                             phone : element.phone,
+                            phoneHref : 'tel:'+element.phone,
                             isSelected: isEqualCheck,
                             isDisabled : isEqualCheck,
                             openingTimings : storeOpeningTimings 

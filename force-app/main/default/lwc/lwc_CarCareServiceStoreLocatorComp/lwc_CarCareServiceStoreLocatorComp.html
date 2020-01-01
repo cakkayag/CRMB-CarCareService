@@ -12,7 +12,7 @@
                                     <span class="slds-form-element__label">
                                         <span class="storeInfo">{storeInfo.name}</span><br/>
                                         <!--{storeInfo.openingTimings}<br/>-->
-                                        <span class="storePhone">{storeInfo.phone}</span><br/>
+                                        <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
                                     </span>
                                 </label>
                                 <!--<div class="slds-p-around_medium lgc-bg">
@@ -31,22 +31,24 @@
         <template if:true={isOpenModal}>
             <div style="height: 500px;">
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
-                    <div class="slds-modal__container">
+                    <div class="slds-modal__container storeCompModal">
                         <header class="slds-modal__header">
                             <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
                                 <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="Close" size="medium">
                                 </lightning-icon>
                                 <span class="slds-assistive-text">Close</span>
                             </button>
-                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>
+                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
+                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                            <div class="slds-text-heading_small slds-text-align_center">
+                            <div class="slds-text-align_center">
                                 Are you sure you would like to change your location? Your Appointment information will be lost.
                             </div>
                         </div>
                         <footer class="slds-modal__footer">
-                            <lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>
+                            <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
+                            <lightning-button variant="brand" label="I Understand" onclick={handleContinueModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
                             <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal}></lightning-button>
                         </footer>
                     </div>
