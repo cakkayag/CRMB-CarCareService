@@ -108,9 +108,15 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
           this.isLoading = false;
         }
     }
-    else{
+    else if(this.serviceSelect !== undefined){
+      this.availableServices = this.serviceSelect._availableServices;
+      this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
       this.isLoading = false;
       console.log('Else');
+    }
+    else{
+      this.isLoading = false;
+      console.log('Else 2' );
     }
   }
 
