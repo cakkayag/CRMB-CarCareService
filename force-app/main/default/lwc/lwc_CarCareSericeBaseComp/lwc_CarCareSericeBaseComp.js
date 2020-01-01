@@ -10,7 +10,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     maxPages = 6;
     minPages = 1;
     @track contactInfo = {};
-    @track serviceSelectInfo = [];
+    @track serviceSelectInfo = {};
     @track uniqueUrlKey = 'branchId';
     @track branchIdVal = '';
     @track vehicleInfo = {};
@@ -44,7 +44,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         const storeInfoComp = this.template.querySelector('c-lwc_-car-care-service-store-locator-comp');
         const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(true);
         this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
-        
+        this.serviceSelectInfo = {};
     }
 
 
@@ -67,6 +67,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(false);
                 this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
                 this.storeId = storeInfoComp.getSelectedStoreId();
+                
                 console.log("handleContinue "+this.storeId);
                 console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
             }

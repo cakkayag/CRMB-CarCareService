@@ -1,4 +1,4 @@
-import { LightningElement, wire, track, api } from "lwc";
+import { LightningElement, track, api } from "lwc";
 import getAvailableServices from "@salesforce/apex/AppointmentIntegrationServices.getAllAvailableServices";
 
 export default class lwc_CarCareServiceSelectComp extends LightningElement {
@@ -47,57 +47,70 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
     }*/
 
   getAvailableServicesByStore() {
-    //console.log('getAvailableServicesByStore');
-    //console.log(JSON.parse(JSON.stringify(this.availableServices)));
+    console.log('getAvailableServicesByStore');
+    console.log(JSON.parse(JSON.stringify(this.availableServices)));
     let t0 = new Date().getTime();//performance.now();
     let t1; 
     let diffTime;
     //console.log("Started on : " + t0);
-    //console.log("this.serviceSelect : " + this.serviceSelect);
-    //console.log(" this.storeId : " + this.storeId);
-    if (this.serviceSelect === undefined || this.serviceSelect !== {}) {
-      this.availableServices = this.serviceSelect._availableServices;
-      this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
-      if (
-        this.availableServices === undefined ||
-        this.availableServices.length === 0
-      ) {
-        getAvailableServices({ storeId: this.storeId })
-          .then(result => {
-            //console.log(JSON.parse(JSON.stringify(result)));
-            const availableServicesTemp = [];
-            if (result.items !== undefined) {
-              result.items.forEach(element => {
-                if (element.isPackage !== true) {
-                  let selectOption = {
-                    id: element.id,
-                    name: element.name,
-                    isSelected: false
-                  };
-                  availableServicesTemp.push(selectOption);
-                }
-                //console.log(JSON.parse(JSON.stringify(this.availableServices)));
-              });
-            }
-            this.availableServices = availableServicesTemp;
-            this.isLoading = false;
-            this.error = undefined;
-            t1 = new Date().getTime();//performance.now();
-            diffTime = t1-t0;
-            //console.log("Ended on : " + t1);
-            //console.log("diff : " + diffTime);
-          })
-          .catch(error => {
-            this.error = error;
-            this.availableServices = undefined;
-            this.isLoading = false;
-          });
-      } else {
-        this.isLoading = false;
-      }
-    } else {
-      //this.availableServices = this.availableServicesObj;
+    console.log("this.serviceSelect : " + this.serviceSelect);
+    console.log(JSON.parse(JSON.stringify(this.serviceSelect)));
+    console.log(" this.storeId : " + this.storeId);
+
+    this.serviceSelect = JSON.parse(JSON.stringify(this.serviceSelect));
+    console.log("this.serviceSelect 2: " + this.serviceSelect);
+    console.log("this.serviceSelect  check : " + (this.serviceSelect === {} ));
+    console.log("this.serviceSelect  check : " + (JSON.stringify(this.serviceSelect) === JSON.stringify({})));
+    if (this.serviceSelect === undefined || JSON.stringify(this.serviceSelect) === JSON.stringify({})) {
+        console.log('In side');
+        this.availableServices = this.serviceSelect._availableServices;
+        this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
+        if(this.availableServices === undefined || this.availableServices.length <= 0){
+
+        
+          getAvailableServices({ storeId : this.storeId })
+            .then(result => {
+              console.log(JSON.parse(JSON.stringify(result)));
+              const availableServicesTemp = [];
+              if (result.items !== undefined) {
+                console.log(JSON.parse(JSON.stringify(result.items)));
+                result.items.forEach(element => {
+                  console.log(JSON.parse(JSON.stringify(element)));
+                  if (element.isPackage === undefined || element.isPackage !== true) {
+                    console.log(element.isPackage);
+                    let selectOption = {
+                      id: element.id,
+                      name: element.name,
+                      isSelected: false
+                    };
+                    availableServicesTemp.push(selectOption);
+                  }
+                  //console.log(JSON.parse(JSON.stringify(availableServicesTemp)));
+                });
+              }
+              this.availableServices = availableServicesTemp;
+              this.isLoading = false;
+              this.error = undefined;
+              t1 = new Date().getTime();//performance.now();
+              diffTime = t1-t0;
+              console.log(JSON.parse(JSON.stringify(this.availableServices)));
+              //console.log("Ended on : " + t1);
+              //console.log("diff : " + diffTime);
+            })
+            .catch(error => {
+              this.error = error;
+              this.availableServices = undefined;
+              this.isLoading = false;
+              console.log('Error'+error);
+            });
+        }else{
+          console.log('Inside Error');
+          this.isLoading = false;
+        }
+    }
+    else{
       this.isLoading = false;
+      console.log('Else');
     }
   }
 

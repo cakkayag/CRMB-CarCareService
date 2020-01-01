@@ -2,7 +2,7 @@ public with sharing class AppointmentIntegrationServices {
 
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
     private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';
-    private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{branchId}/Services';
+    private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}/Services';
     private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
     private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
     private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
@@ -107,7 +107,7 @@ public with sharing class AppointmentIntegrationServices {
                 //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
             }
         }
-        //system.debug(' before Return : '+availableServices.items);
+        system.debug(' before Return : '+availableServices.items);
         return availableServices;
     }
 
