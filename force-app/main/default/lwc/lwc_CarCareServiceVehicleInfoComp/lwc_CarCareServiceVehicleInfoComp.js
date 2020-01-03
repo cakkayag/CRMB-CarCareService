@@ -109,65 +109,6 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
       console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
     }
 
-    connectedCallback() {
-      this.getAllAvailableYearsHelper();
-      this.getAllAvailableVehicleMakeHelper();
-    }
-
-    getAllAvailableYearsHelper() {
-      getAllYears().then(result => {
-        console.log(JSON.parse(JSON.stringify(result)));
-        const _availableYearOptions = [];
-        if(data.items !== undefined){
-            data.items.forEach(element => {
-                let selectOption = {
-                  label : element,
-                  value : element
-                }; 
-                _availableYearOptions.push(selectOption);
-                  
-            });
-            //console.log('_availableYearOptions : ');
-            //console.log(JSON.parse(JSON.stringify(_availableYearOptions)));  
-        }
-        this.availableYearOptions = _availableYearOptions;
-        this.isLoading = false;
-        this.error = undefined;  
-      })
-      .catch(error => {
-        this.error = error;
-        this.availableYearOptions = undefined;
-        this.isLoading = false;
-      });
-    }
-
-    getAllAvailableVehicleMakeHelper() {
-      getAllVehicleMakeInfo().then(result => {
-        console.log(JSON.parse(JSON.stringify(result)));
-        const _availableVehicleMakeOptions = [];
-          if(data.items !== undefined){
-              data.items.forEach(element => {
-                  let selectOption = {
-                    label : element,
-                    value : element
-                  }; 
-                  _availableVehicleMakeOptions.push(selectOption);
-                    
-              });
-              //console.log(JSON.parse(JSON.stringify(_availableVehicleMakeOptions)));  
-          }
-          this.availableMakeOptions = _availableVehicleMakeOptions;
-          this.isLoading = false;
-          this.error = undefined;
-      })
-      .catch(error => {
-        this.error = error;
-          this.availableMakeOptions = [];
-          this.isLoading = false;
-      });
-    }
-
-    /*
     @wire(getAllYears)
     getAllAvailableYears({ error, data }) {
       if (data) {
@@ -225,7 +166,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
           this.availableMakeOptions = [];
           this.isLoading = false;
       }
-    }*/
+    }
 
   
     /*

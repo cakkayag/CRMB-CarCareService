@@ -14,6 +14,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @track error = '';
 
     @track isOpenModal = false;
+    @track showNearbyStore = false;
  
    
     
@@ -47,7 +48,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                     result.forEach(element => {
                         let storeOpeningTimings = '';
                         //TODO : Need to work this at later part - Start
-                        /*if(element.storeHours !== undefined){
+                        if(element.storeHours !== undefined){
                             let now = new Date();
                             let dayName = this.getDayNameList()[now.getDay()];
                             
@@ -56,9 +57,9 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                                     storeOpeningTimings = element.storeHours[i].day + ' open ' + element.storeHours[i].hours; 
                                     break;
                                 }
-                                storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
+                                //storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
                             }
-                        }*/
+                        }
                         //TODO : Need to work this at later part - END
                         //console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
                         let isEqualCheck = isNaN(element.branchId) === false && isNaN(this.branchId) === false 
@@ -72,6 +73,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                             phone : element.phone,
                             phoneHref : 'tel:'+element.phone,
                             isSelected: isEqualCheck,
+                            isNotSelected: isEqualCheck !== true,
                             isDisabled : isEqualCheck,
                             openingTimings : storeOpeningTimings 
                         };
@@ -84,6 +86,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                     });
                 }
                 this.storeWrapperList = storeInfoTemp;
+                //this.showNearbyStore = true;
                 this.isLoading = false;
                 this.error = undefined;
                 //console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
@@ -152,4 +155,9 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         // Dispatches the event.
         this.dispatchEvent(selectedEvent);
     }
+/*
+    get displayNearbyStore(){
+        //this.showNearbyStore = this.showNearbyStore === true ? true : this.showNearbyStore; 
+        return this.showNearbyStore;
+    }*/
 }
