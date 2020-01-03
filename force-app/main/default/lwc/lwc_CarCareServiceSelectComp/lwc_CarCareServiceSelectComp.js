@@ -11,6 +11,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
   @track isLoading = true;
   @track serviceAdditionalInfo = "";
   @track hasError = false;
+  isUpdated = false;
 
   connectedCallback() {
     //const param = 'storeId';
@@ -157,11 +158,13 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
       //console.log(JSON.parse(JSON.stringify(serviceRec)));
     }
     this.availableServices = availableServicesTemp;
+    this.isUpdated = true;
     //console.log(JSON.parse(JSON.stringify(this.availableServices)));
   }
 
   onTextAreaChange(event) {
     this.serviceAdditionalInfo = event.target.value;
+    this.isUpdated = true;
   }
   /*
     @api
@@ -184,7 +187,8 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
   getServiceInfo() {
     let serviceSelectInfo = {
       _availableServices: this.availableServices,
-      _serviceAdditionalInfo: this.serviceAdditionalInfo
+      _serviceAdditionalInfo: this.serviceAdditionalInfo,
+      _isUpdated : this.isUpdated 
     };
 
     return serviceSelectInfo;

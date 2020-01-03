@@ -5,6 +5,7 @@ import getSelectedAndNearbyStoresInfo from "@salesforce/apex/AppointmentIntegrat
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
     @api branchId = '';
+    @api displayStoreChangeAlert = false;
     newBranchId = '';
     storeRecordId = '';
 
@@ -40,7 +41,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         this.isLoading = true;
         getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
             .then(result => {
-                console.log(JSON.parse(JSON.stringify(result)));
+                //console.log(JSON.parse(JSON.stringify(result)));
                 const storeInfoTemp = [];
                 if (result !== undefined) {
                     result.forEach(element => {
@@ -59,11 +60,11 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                             }
                         }*/
                         //TODO : Need to work this at later part - END
-                        console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
+                        //console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
                         let isEqualCheck = isNaN(element.branchId) === false && isNaN(this.branchId) === false 
                                             ? Number(element.branchId) === Number(this.branchId) 
                                             : false;
-                        console.log('isEqualCheck '+isEqualCheck);
+                        //console.log('isEqualCheck '+isEqualCheck);
                         let selectOption = {
                             id: element.id,
                             branchId : element.branchId,
@@ -105,7 +106,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     getSelectedStoreObjInfo(reload) {
         console.log('getSelectedStoreObjInfo   : '+reload);
         if(reload){
-            console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
+            //console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
             this.getStoreInfo();
         }
         return this.storeWrapperList;
@@ -117,11 +118,19 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     }
 
     onStoreSelection(event){
-        console.log('onStoreSelection Id : '+event.target.dataset.id);
-        console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
-        this.isOpenModal = true;
+        //console.log('onStoreSelection Id : '+event.target.dataset.id);
+       // console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
+        console.log('displayStoreChangeAlert : '+this.displayStoreChangeAlert);
         this.newBranchId = event.target.dataset.branchId;
         this.storeRecordId = event.target.dataset.id;
+        
+        if(this.displayStoreChangeAlert){
+            this.isOpenModal = true;
+        }
+        else{
+            this.handleContinueModal(event);
+        }
+        
     }
 
     handleCloseModal() {
@@ -129,8 +138,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     }
 
     handleContinueModal(event){
-        console.log( 'handleContinueModal this.newBranchId : '+this.newBranchId);
-        console.log( 'handleContinueModal this.storeRecordId : '+this.storeRecordId);
+        //console.log( 'handleContinueModal this.newBranchId : '+this.newBranchId);
+        //console.log( 'handleContinueModal this.storeRecordId : '+this.storeRecordId);
         this.branchId = this.newBranchId;
         this.handleCloseModal();
         let selectedStore = {

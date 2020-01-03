@@ -68,8 +68,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
                 this.storeId = storeInfoComp.getSelectedStoreId();
                 
-                console.log("handleContinue "+this.storeId);
-                console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
+                //console.log("handleContinue "+this.storeId);
+                //console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
             }
             else if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
@@ -79,7 +79,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             else if(this.CurrentPage === 3){
                 const vehicleTemp= vehicleInfoComp.getVehicleDetailsInfo();
                 this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
-                console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
+                //console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
             }
             else if(this.CurrentPage === 4){
                 
@@ -111,10 +111,10 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         else if(this.CurrentPage === 3){
             const vehicleInfoComp = this.template.querySelector('c-lwc_-car-care-service-vehicle-info-comp');
             const vehicleTemp= vehicleInfoComp.getVehicleDetailsInfo();
-            console.log(JSON.parse(JSON.stringify(vehicleTemp)));
+            //console.log(JSON.parse(JSON.stringify(vehicleTemp)));
             this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
-            console.log(' this.vehicleInfo : ');
-            console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
+            //console.log(' this.vehicleInfo : ');
+            //console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
         }
         else if(this.CurrentPage === 4){
             const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
@@ -189,7 +189,12 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         return (this.CurrentPage < this.maxPages) ? false : true;
     }
 
-    
+    get showStoreChangeAlert(){
+        console.log('showStoreChangeAlert ');
+        console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
+        console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
+        return (this.serviceSelectInfo !== undefined && (JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}) || this.serviceSelectInfo._isUpdated !== true ) ) ? false : true ;
+    }
 
     showToast(title , message , variant , mode){
         const evt = new ShowToastEvent({
