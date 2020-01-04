@@ -1,6 +1,6 @@
 import { LightningElement, wire, track, api } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
-import { fireEvent, registerListener, unregisterAllListeners } from 'c/pubsub';
+import { fireEvent } from 'c/pubsub';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @wire(CurrentPageReference) pageRef;
@@ -11,11 +11,12 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     minPages = 1;
     @track contactInfo = {};
     @track serviceSelectInfo = {};
-    @track uniqueUrlKey = 'branchId';
+    @track uniqueUrlKey = 'store';
     @track branchIdVal = '';
     @track vehicleInfo = {};
     @track storeId = '';
     @track availableStoreList = [];
+    //@track hasUpdates = false;
     //@track isChildLoading = false;
     
 
@@ -37,6 +38,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     handleStoreChange(event){
+        console.log('###### handleStoreChange ########');
         console.log(JSON.parse(JSON.stringify(event)));
         console.log('handleStoreChange'+event.detail._branchId+'   detail._storeRecordId  '+event.detail._storeRecordId);
         this.branchIdVal = event.detail._branchId;
@@ -61,7 +63,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         else if(this.CurrentPage === 4){
             //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
         }
-        //console.log(" validationStatus : "+validationStatus);
+        console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
             if(this.CurrentPage === 1){
                 const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(false);
@@ -82,10 +84,10 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 //console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
             }
             else if(this.CurrentPage === 4){
-                
+                console.log("   ############# 4 Continue ################## "); 
                 const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
                 this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
-                //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
+                console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
             }
 
             this.previousPage = this.CurrentPage;
@@ -117,6 +119,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             //console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
         }
         else if(this.CurrentPage === 4){
+            console.log("   ############# 4 Preious ################## "); 
             const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
             const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
             this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
@@ -190,10 +193,12 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     get showStoreChangeAlert(){
-        console.log('showStoreChangeAlert ');
+        console.log('##################### showStoreChangeAlert ############# ');
         console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
         console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
-        return (this.serviceSelectInfo !== undefined && (JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}) || this.serviceSelectInfo._isUpdated !== true ) ) ? false : true ;
+        return (this.serviceSelectInfo === undefined 
+                || JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}) 
+                || this.serviceSelectInfo._isUpdated === false )  ? false : true ;
     }
 
     showToast(title , message , variant , mode){

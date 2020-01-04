@@ -20,13 +20,13 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     
 
     connectedCallback() {
-        console.log('this.storeWrapperList '+(this.storeWrapperList === []));
-        console.log('this.storeWrapperList '+(this.storeWrapperList === undefined));
-        console.log('this.storeWrapperList '+(this.storeWrapperList.length === 0));
-        console.log('this.storeWrapperList '+(this.storeWrapperList === ''));
-        console.log('this.storeWrapperList '+(this.storeWrapperList === null));
+        //console.log('this.storeWrapperList '+(this.storeWrapperList === []));
+        //console.log('this.storeWrapperList '+(this.storeWrapperList === undefined));
+       // console.log('this.storeWrapperList '+(this.storeWrapperList.length === 0));
+        //console.log('this.storeWrapperList '+(this.storeWrapperList === ''));
+       // console.log('this.storeWrapperList '+(this.storeWrapperList === null));
         if(this.storeWrapperList === undefined || this.storeWrapperList === [] || this.storeWrapperList.length === 0){
-            console.log('branchId'+this.storeWrapperList.length);
+           // console.log('branchId'+this.storeWrapperList.length);
             this.getStoreInfo();
         }
         else{
@@ -107,7 +107,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     @api
     getSelectedStoreObjInfo(reload) {
-        console.log('getSelectedStoreObjInfo   : '+reload);
+        //console.log('getSelectedStoreObjInfo   : '+reload);
         if(reload){
             //console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
             this.getStoreInfo();
@@ -123,7 +123,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     onStoreSelection(event){
         //console.log('onStoreSelection Id : '+event.target.dataset.id);
        // console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
-        console.log('displayStoreChangeAlert : '+this.displayStoreChangeAlert);
+        console.log('##################### displayStoreChangeAlert : '+this.displayStoreChangeAlert);
         this.newBranchId = event.target.dataset.branchId;
         this.storeRecordId = event.target.dataset.id;
         

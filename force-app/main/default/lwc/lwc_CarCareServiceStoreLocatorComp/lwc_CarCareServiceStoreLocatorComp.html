@@ -2,11 +2,10 @@
     <!--<div class="slds-align_absolute-center" style="height: 200px;">-->
         <div if:true={isLoaded} >
             <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
+                <div class="storeHeading">SELECTED STORE</div>
                 <template for:each={storeWrapperList} for:item="storeInfo">
-                    
                     <div key={storeInfo.id} class="slds-form-element storeCompChkBox">
                         <div if:true={storeInfo.isSelected} >
-                             
                             <div class="slds-form-element__control" >
                                 <div class="slds-checkbox">
                                     <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
@@ -14,7 +13,7 @@
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">
                                             <span class="storeInfo">{storeInfo.name}</span><br/>
-                                            <span class="storeInfo">{storeInfo.openingTimings}</span><br/>
+                                            <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
                                             <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
                                         </span>
                                     </label>
@@ -24,10 +23,12 @@
                                 </div>
                             </div>
                         </div>
-
-                        
+                    </div>
+                </template>
+                <div class="storeHeading">OTHER NEARBY LOCATIONS</div>
+                <template for:each={storeWrapperList} for:item="storeInfo">
+                    <div key={storeInfo.id} class="slds-form-element storeCompChkBox">
                         <div if:true={storeInfo.isNotSelected} >
-                            
                             <div class="slds-form-element__control" >
                                 <div class="slds-checkbox">
                                     <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
@@ -35,7 +36,7 @@
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">
                                             <span class="storeInfo">{storeInfo.name}</span><br/>
-                                            <span class="storeInfo">{storeInfo.openingTimings}</span><br/>
+                                            <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
                                             <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
                                         </span>
                                     </label>
@@ -71,10 +72,10 @@
                                 Are you sure you would like to change your location? Your Appointment information will be lost.
                             </div>
                         </div>
-                        <footer class="slds-modal__footer">
+                        <footer class="slds-modal__footer storeFooter">
                             <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
-                            <lightning-button variant="brand" label="I Understand" onclick={handleContinueModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
-                            <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal}></lightning-button>
+                            <lightning-button variant="brand" label="Yes" onclick={handleContinueModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
+                            <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal} class="storeCancelBtn"></lightning-button>
                         </footer>
                     </div>
                 </section>

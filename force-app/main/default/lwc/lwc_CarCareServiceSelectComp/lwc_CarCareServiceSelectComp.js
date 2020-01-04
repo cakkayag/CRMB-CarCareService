@@ -5,6 +5,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
   //@api availableServicesObj = [];
   @api serviceSelect = {};
   @api storeId;
+ 
 
   @track availableServices = [];
   @track error;
@@ -66,6 +67,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
         console.log('In side');
         this.availableServices = this.serviceSelect._availableServices;
         this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
+        this.isUpdated = this.serviceSelect._isUpdated;
         if(this.availableServices === undefined || this.availableServices.length <= 0){
 
         
@@ -112,6 +114,7 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
     else if(this.serviceSelect !== undefined){
       this.availableServices = this.serviceSelect._availableServices;
       this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
+      this.isUpdated = this.serviceSelect._isUpdated;
       this.isLoading = false;
       console.log('Else');
     }
