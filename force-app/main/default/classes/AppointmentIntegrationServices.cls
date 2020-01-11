@@ -1,4 +1,4 @@
-public with sharing class AppointmentIntegrationServices {
+public without sharing class AppointmentIntegrationServices {
 
     private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
     private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';

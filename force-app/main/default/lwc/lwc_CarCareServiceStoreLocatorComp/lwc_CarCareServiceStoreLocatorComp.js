@@ -1,6 +1,9 @@
 import { LightningElement, track, api } from 'lwc';
-import { fireEvent } from 'c/pubsub';
+//import { fireEvent } from 'c/pubsub';
 import getSelectedAndNearbyStoresInfo from "@salesforce/apex/AppointmentIntegrationServices.getSelectedAndNearbyStoresList";
+import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
+import { loadStyle } from 'lightning/platformResourceLoader';
+import strUserId from '@salesforce/user/Id';
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
@@ -15,8 +18,32 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     @track isOpenModal = false;
     @track showNearbyStore = false;
- 
-   
+    hasRendered = false;
+    @track userName ='test';
+
+    renderedCallback() {
+        if(!this.hasRendered){
+            
+            Promise.all([
+                //loadScript(this, D3 + '/d3.v5.min.js'),
+                loadStyle(this, carCareResources + '/css/reserveService.css'),
+            ])
+            .then(() => {
+                
+            })
+            .catch(error => {
+                // eslint-disable-next-line no-console
+                console.log('--error--'+error);
+            });
+            
+        }
+        else{
+            this.hasRendered = true;
+        }
+
+        
+        
+    }
     
 
     connectedCallback() {
@@ -40,7 +67,10 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     getStoreInfo() {
         this.isLoading = true;
-        console.log('--before call to apex--')
+        console.log('--before call to apex--'+this.branchId);
+        this.userName = strUserId;
+        console.log('--before call to apex--'+strUserId);
+        console.log('--before call to apex--'+this.userName);
         getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
             .then(result => {
                 console.log('--'+JSON.parse(JSON.stringify(result)));
@@ -96,6 +126,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 this.error = error;
                 this.selectedStoreInfo = undefined;
                 this.isLoading = false;
+                console.log('### Error ###');
+                console.log(JSON.parse(JSON.stringify(this.error)));
             });
         
     }
