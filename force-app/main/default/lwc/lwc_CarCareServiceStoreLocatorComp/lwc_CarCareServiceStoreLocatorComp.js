@@ -26,7 +26,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         //console.log('this.storeWrapperList '+(this.storeWrapperList === ''));
        // console.log('this.storeWrapperList '+(this.storeWrapperList === null));
         if(this.storeWrapperList === undefined || this.storeWrapperList === [] || this.storeWrapperList.length === 0){
-           // console.log('branchId'+this.storeWrapperList.length);
+           console.log('branchId'+this.storeWrapperList.length);
             this.getStoreInfo();
         }
         else{
@@ -40,9 +40,10 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     getStoreInfo() {
         this.isLoading = true;
+        console.log('--before call to apex--')
         getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
             .then(result => {
-                //console.log(JSON.parse(JSON.stringify(result)));
+                console.log('--'+JSON.parse(JSON.stringify(result)));
                 const storeInfoTemp = [];
                 if (result !== undefined) {
                     result.forEach(element => {
@@ -89,7 +90,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 //this.showNearbyStore = true;
                 this.isLoading = false;
                 this.error = undefined;
-                //console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
+                console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
             })
             .catch(error => {
                 this.error = error;
