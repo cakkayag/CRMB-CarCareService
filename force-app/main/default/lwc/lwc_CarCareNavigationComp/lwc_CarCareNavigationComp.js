@@ -1,5 +1,5 @@
 import { LightningElement, wire, track } from "lwc";
-import { fireEvent, registerListener, unregisterAllListeners } from "c/pubsub";
+import { registerListener, unregisterAllListeners } from "c/pubsub";
 import { CurrentPageReference } from "lightning/navigation";
 
 export default class lwc_CarCareNavigationComp extends LightningElement {
@@ -20,8 +20,8 @@ export default class lwc_CarCareNavigationComp extends LightningElement {
   handleButtonPressedEvent(detail) {
     this.currentSelection = detail.CurrentPage;
   }
-  /*
-    navigateToScreen(event){
+  //TODO: We have already deveoped way to naigate around screens need to disccuss and remove these
+  /* navigateToScreen(event){
         this.previousSelection = this.currentSelection
         const targetId = event.currentTarget.dataset.targetId;
         this.currentSelection = parseInt(targetId, 0);
@@ -38,6 +38,7 @@ export default class lwc_CarCareNavigationComp extends LightningElement {
             //console.log("An error has Occured, please contact you Admin");
         }
     }*/
+    //TODO: We have already deveoped way to naigate around screens need to disccuss and remove these
 
   get showFirstPage_Normal() {
     return this.currentSelection < 1 ? true : false;
