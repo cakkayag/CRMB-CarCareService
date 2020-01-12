@@ -4,30 +4,44 @@
             <div class="colDiv">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Store Location</span>
-                    <span class="colEdit">EDIT</span>
+                    <span class="colEdit" data-naviagate-id="1" onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    <span>AAA - Indian Land 9737 Charoltte Highway, Indian Land, SC 29707</span>
+                    <!--<span>AAA - Indian Land 9737 Charoltte Highway, Indian Land, SC 29707</span>-->
+                    {storeLocationReview.name}
                 </div>
             </div>
             <div class="colDiv">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Contact Info</span>
-                    <span class="colEdit">EDIT</span>
+                    <span class="colEdit" data-naviagate-id="2" onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    <span>FIRST NAME LAST NAME</span>
+                    <!--<span>FIRST NAME LAST NAME</span>
                     <span>EMAIL</span>
-                    <span>PHONE NUMBER</span>
+                    <span>PHONE NUMBER</span>-->
+                    <span>{contactInfoReview.firstName} {contactInfoReview.lastName}</span>
+                    <span>{contactInfoReview.email}</span>
+                    <span>{contactInfoReview.mobile}</span>
                 </div>
 
                 <div class="colHeaderDiv">
                     <span class="colHeader">Service Request</span>
-                    <span class="colEdit">EDIT</span>
+                    <span class="colEdit" data-naviagate-id="4" onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    <span>Oil Change</span>
-                    <span>Tire Arrangement</span>
+                    <!--<span>Oil Change</span>
+                    <span>Tire Arrangement</span>-->
+                    <template class="slds-form-element" for:each={serviceRequestReview._availableServices} for:item='service'>
+                        <div class="slds-form-element__control" key={service.id}>
+                            <div if:true={service.isSelected} >
+                                <span>{service.name}</span>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!--<span>Tire Arrangement</span>-->
+                    
                 </div>
             </div>
         </div>
@@ -35,18 +49,21 @@
             <div class="colDiv">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Vehicle Info</span>
-                    <span class="colEdit">EDIT</span>
+                    <span class="colEdit" data-naviagate-id="3" onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    <span>Year Make</span>
+                    <!--<span>Year Make</span>
                     <span>Model Submodel</span>
-                    <span>Mileage: XXXX</span>
+                    <span>Mileage: XXXX</span>-->
+                    <span>{vehicleInfoReview._selectedMake}</span>
+                    <span>{vehicleInfoReview._selectedModel}</span>
+                    <span>{vehicleInfoReview._selectedYear}</span>
                 </div>
             </div>
             <div class="colDiv">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Date & Time</span>
-                    <span class="colEdit">EDIT</span>
+                    <span class="colEdit" data-naviagate-id="5" onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
                     <span>Thursday, October 8th, 2019</span>

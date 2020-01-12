@@ -26,7 +26,12 @@
             </c-lwc_-car-care-service-Appointment-comp>
         </div>
         <div if:true={showSixthPage}>
-            <c-lwc_-car-care-service-confirmation-comp>
+            <c-lwc_-car-care-service-confirmation-comp store-location-review={selectedStoreObjInfo}
+            contact-info-review={contactInfo}
+            service-request-review={serviceSelectInfo}
+            date-time-review={dateTimeInfo}
+            vehicle-info-review={vehicleInfo}
+            oneditinfo={handleEditRequest}>
             </c-lwc_-car-care-service-confirmation-comp>
         </div>
         <lightning-layout horizontal-align="center" multiple-rows="true">

@@ -16,6 +16,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     @track vehicleInfo = {};
     @track storeId = '';
     @track availableStoreList = [];
+    @track selectedStoreObjInfo = {};
+    @track dateTimeInfo = {}
     //@track hasUpdates = false;
     //@track isChildLoading = false;
     
@@ -69,9 +71,11 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(false);
                 this.availableStoreList = JSON.parse(JSON.stringify(_availableStoreList));
                 this.storeId = storeInfoComp.getSelectedStoreId();
+                this.selectedStoreObjInfo = storeInfoComp.getSelectedStoreObj();
                 
-                //console.log("handleContinue "+this.storeId);
-                //console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
+                console.log("handleContinue "+this.storeId);
+                console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
+                console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
             }
             else if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
@@ -213,6 +217,20 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
     getUrlParamValue(url, key) {
         return new URL(url).searchParams.get(key);
+    }
+
+    handleEditRequest(event){
+        console.log('###### handleStoreChange ########');
+        console.log(JSON.parse(JSON.stringify(event)));
+        console.log('handleEditRequest'+event.detail);
+        this.CurrentPage = parseInt(event.detail, 0);
+        console.log('this.CurrentPage'+this.CurrentPage);
+        this.previousPage = this.CurrentPage;
+        this.nextPage = this.CurrentPage;
+        this.previousPage = this.previousPage > this.minPages ? this.previousPage - 1 : this.previousPage ;
+        this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
+        
+        fireEvent(this.pageRef, 'buttonClickedEvent', this);
     }
 
 }

@@ -11,6 +11,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @api displayStoreChangeAlert = false;
     newBranchId = '';
     storeRecordId = '';
+    @track selectedStoreObj = {};
 
     @track newStoreSelection = '';
     @track isLoading = true;
@@ -112,6 +113,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                         
                         if(isEqualCheck){
                             this.storeRecordId =  element.id;
+                            this.selectedStoreObj = selectOption;
                         }
                     
                     });
@@ -140,7 +142,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     @api
     getSelectedStoreObjInfo(reload) {
-        //console.log('getSelectedStoreObjInfo   : '+reload);
+        console.log('getSelectedStoreObjInfo reload status   : '+reload);
         if(reload){
             //console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
             this.getStoreInfo();
@@ -151,6 +153,11 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @api
     getSelectedStoreId() {
         return this.storeRecordId;
+    }
+
+    @api
+    getSelectedStoreObj(){
+        return this.selectedStoreObj;
     }
 
     onStoreSelection(event){
