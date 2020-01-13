@@ -36,9 +36,6 @@
             "c/lwc_ProgressBarComp": [
                 "lwc_ProgressBarComp/lwc_ProgressBarComp.js"
             ],
-            "c/lwc_ReusableFunctionality": [
-                "lwc_ReusableFunctionality/lwc_ReusableFunctionality.js"
-            ],
             "c/pubsub": [
                 "pubsub/pubsub.js"
             ]

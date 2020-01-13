@@ -12,7 +12,12 @@
                                     <label class="slds-checkbox__label" for={storeInfo.id}>
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">
-                                            <span class="storeInfo">{storeInfo.name}</span><br/>
+                                            <span class="storeInfo">{storeInfo.name}</span>
+                                            <div class="infoIconDiv" onclick={showStoreDetailModal}>
+                                                <lightning-icon icon-name="action:info" variant="inverse" alternative-text="Info" size="xx-small">
+                                                </lightning-icon>
+                                            </div>
+                                            <br/>
                                             <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
                                             <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
                                         </span>
@@ -76,6 +81,55 @@
                             <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
                             <lightning-button variant="brand" label="Yes" onclick={handleContinueModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
                             <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal} class="storeCancelBtn"></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+
+        <!-- store detail pop up-->
+        <template if:true={showStoreDetail}>
+            <div style="height: 500px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container storeCompModal">
+                        <header class="slds-modal__header">
+                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
+                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
+                            <div class="storeInfoDetailHeader">
+                                <span>{selectedStoreObj.name}</span>
+                                <lightning-icon icon-name="action:map" variant="error" size="xx-small"></lightning-icon>
+                            </div>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                            <div class="storeInfoDetailBody">
+                                <div class="slds-form-element slds-form-element_horizontal storeDetailElement">
+                                    <label class="slds-form-element__label storeInfoDetailLeftPanel">PHONE</label>
+                                    <div class="slds-form-element__control floatRight">
+                                        <a href={selectedStoreObj.phoneHref} class="storePhone">{selectedStoreObj.phone}</a>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element slds-form-element_horizontal storeDetailElement">
+                                    <label class="slds-form-element__label storeInfoDetailLeftPanel">WEBSITE</label>
+                                    <div class="slds-form-element__control floatRight">
+                                        <a href={selectedStoreObj.url} class="storePhone">{selectedStoreObj.url}</a>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element slds-form-element_horizontal storeDetailElement">
+                                    <label class="slds-form-element__label storeInfoDetailLeftPanel">Hours</label>
+                                    <div class="slds-form-element__control floatRight"></div>
+                                </div>
+                                <template for:each={selectedStoreObj.storeTimingsMap} for:item="mapKey">
+                                    <div key={mapKey.key} class="slds-form-element slds-form-element_horizontal storeDetailElement">
+                                        <label class="slds-form-element__label storeInfoDetailLeftPanel">{mapKey.key}</label>
+                                        <div class="slds-form-element__control floatRight">{mapKey.value}</div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer storeFooter">
+                            <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
+                            <lightning-button variant="brand" label="Close" onclick={closeStoreDetailModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
                         </footer>
                     </div>
                 </section>
