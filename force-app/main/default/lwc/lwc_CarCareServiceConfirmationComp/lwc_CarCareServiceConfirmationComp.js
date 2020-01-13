@@ -7,8 +7,10 @@ export default class lwc_CarCareServiceConfirmationComp extends LightningElement
     @api dateTimeReview = '';
     @api vehicleInfoReview = '';
     
+    
+
     navigateToEdit(event){
-        console.log('### Navigation Id: '+event.target.dataset.naviagateId);
+        //console.log('### Navigation Id: '+event.target.dataset.naviagateId);
         //fireEvent(this.pageRef, 'storeChangeRequested', selectedStore);
         // Creates the event with the contact ID data.
         const selectedEvent = new CustomEvent('editinfo', { detail: event.target.dataset.naviagateId });

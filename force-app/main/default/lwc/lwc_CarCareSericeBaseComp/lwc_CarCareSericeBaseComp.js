@@ -1,4 +1,4 @@
-import { LightningElement, wire, track, api } from 'lwc';
+import { LightningElement, wire, track } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { fireEvent } from 'c/pubsub';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
@@ -40,9 +40,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     handleStoreChange(event){
-        console.log('###### handleStoreChange ########');
-        console.log(JSON.parse(JSON.stringify(event)));
-        console.log('handleStoreChange'+event.detail._branchId+'   detail._storeRecordId  '+event.detail._storeRecordId);
+        //console.log('###### handleStoreChange ########');
+        //console.log(JSON.parse(JSON.stringify(event)));
+        //console.log('handleStoreChange'+event.detail._branchId+'   detail._storeRecordId  '+event.detail._storeRecordId);
         this.branchIdVal = event.detail._branchId;
         this.storeId = event.detail._storeRecordId;
         const storeInfoComp = this.template.querySelector('c-lwc_-car-care-service-store-locator-comp');
@@ -65,7 +65,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         else if(this.CurrentPage === 4){
             //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
         }
-        console.log(" validationStatus : "+validationStatus);
+        //console.log(" validationStatus : "+validationStatus);
         if(validationStatus){
             if(this.CurrentPage === 1){
                 const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(false);
@@ -73,9 +73,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 this.storeId = storeInfoComp.getSelectedStoreId();
                 this.selectedStoreObjInfo = storeInfoComp.getSelectedStoreObj();
                 
-                console.log("handleContinue "+this.storeId);
-                console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
-                console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
+                //console.log("handleContinue this.CurrentPage === 1 ");
+                //console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
+                //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
             }
             else if(this.CurrentPage === 2){
                 const contactTemp = contactComp.getContactInfo();
@@ -88,10 +88,10 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
                 //console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
             }
             else if(this.CurrentPage === 4){
-                console.log("   ############# 4 Continue ################## "); 
+                //console.log("   ############# 4 Continue ################## "); 
                 const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
                 this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
-                console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
+                //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo))); 
             }
 
             this.previousPage = this.CurrentPage;
@@ -106,7 +106,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         
     }
 
-    handlePrevious(event) {
+    handlePrevious() {
         
         
         if(this.CurrentPage === 2){
@@ -123,7 +123,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             //console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
         }
         else if(this.CurrentPage === 4){
-            console.log("   ############# 4 Preious ################## "); 
+            //console.log("   ############# 4 Preious ################## "); 
             const sericeSelectComp = this.template.querySelector('c-lwc_-car-care-service-select-comp');
             const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
             this.serviceSelectInfo = JSON.parse(JSON.stringify(serviceSelectInfoTemp));
@@ -197,9 +197,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     get showStoreChangeAlert(){
-        console.log('##################### showStoreChangeAlert ############# ');
-        console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
-        console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
+        //console.log('##################### showStoreChangeAlert ############# ');
+        //console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
+        //console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
         return (this.serviceSelectInfo === undefined 
                 || JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}) 
                 || this.serviceSelectInfo._isUpdated === false )  ? false : true ;
@@ -220,16 +220,17 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     }
 
     handleEditRequest(event){
-        console.log('###### handleStoreChange ########');
-        console.log(JSON.parse(JSON.stringify(event)));
-        console.log('handleEditRequest'+event.detail);
+        //console.log('###### handleStoreChange ########');
+        //console.log(JSON.parse(JSON.stringify(event)));
+        //console.log('handleEditRequest'+event.detail);
         this.CurrentPage = parseInt(event.detail, 0);
-        console.log('this.CurrentPage'+this.CurrentPage);
+        //console.log('this.CurrentPage'+this.CurrentPage);
         this.previousPage = this.CurrentPage;
         this.nextPage = this.CurrentPage;
         this.previousPage = this.previousPage > this.minPages ? this.previousPage - 1 : this.previousPage ;
         this.nextPage = this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage ;
-        
+        //console.log('### handleEditRequest selectedStoreObjInfo: ');
+        //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
         fireEvent(this.pageRef, 'buttonClickedEvent', this);
     }
 
