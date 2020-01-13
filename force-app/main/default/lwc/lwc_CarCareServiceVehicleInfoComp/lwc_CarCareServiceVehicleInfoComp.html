@@ -41,7 +41,7 @@
                 <div class="slds-form__item" role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Model*</label>
-                        <div class="slds-form-element__control">
+                        <!--<div if:true={isModelLoaded} class="slds-form-element__control">-->
                             <input id="modelInput" name="modelInput" list="modelValueList" placeholder="Models" required
                                 class="slds-input modelInput vehicleInput" autocomplete="off" type="text"
                                 value={selectedModel} onchange={handleModelChange} />
@@ -50,7 +50,10 @@
                                     <option key={item.value} value={item.value}>{item.value}</option>
                                 </template>
                             </datalist>
-                        </div>
+                        <!--</div>
+                        <div if:true={isModelLoading} class="maxWidth600px">
+                            <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
+                        </div>-->
                     </div>
                 </div>
             </div>

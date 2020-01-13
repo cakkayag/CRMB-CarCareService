@@ -49,38 +49,39 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
     }*/
 
   getAvailableServicesByStore() {
-    console.log('getAvailableServicesByStore');
-    console.log(JSON.parse(JSON.stringify(this.availableServices)));
-    let t0 = new Date().getTime();//performance.now();
-    let t1; 
-    let diffTime;
+    //console.log('getAvailableServicesByStore');
+    //console.log(JSON.parse(JSON.stringify(this.availableServices)));
+    //let t0 = new Date().getTime();//performance.now();
+    //let t1; 
+    //let diffTime;
     //console.log("Started on : " + t0);
-    console.log("this.serviceSelect : " + this.serviceSelect);
-    console.log(JSON.parse(JSON.stringify(this.serviceSelect)));
-    console.log(" this.storeId : " + this.storeId);
+    //console.log("this.serviceSelect : " + this.serviceSelect);
+    //console.log(JSON.parse(JSON.stringify(this.serviceSelect)));
+    //console.log(" this.storeId : " + this.storeId);
 
     this.serviceSelect = JSON.parse(JSON.stringify(this.serviceSelect));
-    console.log("this.serviceSelect 2: " + this.serviceSelect);
-    console.log("this.serviceSelect  check : " + (this.serviceSelect === {} ));
-    console.log("this.serviceSelect  check : " + (JSON.stringify(this.serviceSelect) === JSON.stringify({})));
+    //console.log("this.serviceSelect 2: " + this.serviceSelect);
+    //console.log("this.serviceSelect  check : " + (this.serviceSelect === {} ));
+    //console.log("this.serviceSelect  check : " + (JSON.stringify(this.serviceSelect) === JSON.stringify({})));
     if (this.serviceSelect === undefined || JSON.stringify(this.serviceSelect) === JSON.stringify({})) {
-        console.log('In side');
-        this.availableServices = this.serviceSelect._availableServices;
-        this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
-        this.isUpdated = this.serviceSelect._isUpdated;
+        //console.log('In side');
+        this.availableServices = [];
+        this.serviceAdditionalInfo = '';
+        this.isUpdated = false;
+        console.log("this.isUpdated : " +this.isUpdated );
         if(this.availableServices === undefined || this.availableServices.length <= 0){
 
         
           getAvailableServices({ storeId : this.storeId })
             .then(result => {
-              console.log(JSON.parse(JSON.stringify(result)));
+              //console.log(JSON.parse(JSON.stringify(result)));
               const availableServicesTemp = [];
               if (result.items !== undefined) {
-                console.log(JSON.parse(JSON.stringify(result.items)));
+                //console.log(JSON.parse(JSON.stringify(result.items)));
                 result.items.forEach(element => {
-                  console.log(JSON.parse(JSON.stringify(element)));
+                  //console.log(JSON.parse(JSON.stringify(element)));
                   if (element.isPackage === undefined || element.isPackage !== true) {
-                    console.log(element.isPackage);
+                    //console.log(element.isPackage);
                     let selectOption = {
                       id: element.id,
                       name: element.name,
@@ -94,9 +95,9 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
               this.availableServices = availableServicesTemp;
               this.isLoading = false;
               this.error = undefined;
-              t1 = new Date().getTime();//performance.now();
-              diffTime = t1-t0;
-              console.log(JSON.parse(JSON.stringify(this.availableServices)));
+              //t1 = new Date().getTime();//performance.now();
+              //diffTime = t1-t0;
+              //console.log(JSON.parse(JSON.stringify(this.availableServices)));
               //console.log("Ended on : " + t1);
               //console.log("diff : " + diffTime);
             })
@@ -104,10 +105,10 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
               this.error = error;
               this.availableServices = undefined;
               this.isLoading = false;
-              console.log('Error'+error);
+              //console.log('Error'+error);
             });
         }else{
-          console.log('Inside Error');
+          //console.log('Inside Error');
           this.isLoading = false;
         }
     }
@@ -116,11 +117,11 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
       this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
       this.isUpdated = this.serviceSelect._isUpdated;
       this.isLoading = false;
-      console.log('Else');
+      //console.log('Else');
     }
     else{
       this.isLoading = false;
-      console.log('Else 2' );
+      //console.log('Else 2' );
     }
   }
 
@@ -193,7 +194,8 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
       _serviceAdditionalInfo: this.serviceAdditionalInfo,
       _isUpdated : this.isUpdated 
     };
-
+    console.log("this.isUpdated : " +this.isUpdated );
+    console.log( JSON.parse(JSON.stringify(serviceSelectInfo)) );
     return serviceSelectInfo;
   }
 }

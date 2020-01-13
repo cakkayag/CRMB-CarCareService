@@ -78,17 +78,19 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 //console.log('--'+JSON.parse(JSON.stringify(result)));
                 const storeInfoTemp = [];
                 if (result !== undefined) {
+                    let now = new Date();
+                    let dayName = this.getDayNameList()[now.getDay()];
                     result.forEach(element => {
                         let storeOpeningTimings = '';
                         //TODO : Need to work this at later part - Start
-                        console.log('element.storeHours : '+element.storeHours);
+                        //console.log('element.storeHours : '+element.storeHours);
                         if(element.storeHours !== undefined){
-                            let now = new Date();
-                            let dayName = this.getDayNameList()[now.getDay()];
-                            console.log('dayName : '+dayName);
+                            
+                            //console.log('dayName : '+dayName);
                             for(let i = 0 ; i < element.storeHours.length  ; i++){
-                                console.log('element.storeHours[i].day : '+element.storeHours[i].day);
-                                if(dayName === element.storeHours[i].day){
+                                //console.log('element.storeHours[i].day : '+element.storeHours[i].day);
+                                
+                                if(element.storeHours[i].day !== undefined && dayName.toUpperCase() === element.storeHours[i].day.toUpperCase()){
                                     storeOpeningTimings = element.storeHours[i].day + ' open ' + element.storeHours[i].hours; 
                                     break;
                                 }
@@ -96,7 +98,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                                 //storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
                             }
                         }
-                        console.log('storeOpeningTimings : '+storeOpeningTimings);
+                        //console.log('storeOpeningTimings : '+storeOpeningTimings);
                         //TODO : Need to work this at later part - END
                         //console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
                         let isEqualCheck = isNaN(element.branchId) === false && isNaN(this.branchId) === false 
@@ -133,7 +135,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 this.error = error;
                 this.selectedStoreInfo = undefined;
                 this.isLoading = false;
-                this.showToast('Error' , 'Error Occured while fetching Store Info, Please contact Support team' , 'Error', 'sticky'  );
+                this.showToast('Error' , 'Error Occured while fetching Store Info ( '+this.error+' ), Please contact Support team' , 'Error', 'sticky'  );
             });
         
     }

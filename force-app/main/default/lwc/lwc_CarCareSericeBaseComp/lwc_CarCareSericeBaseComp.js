@@ -59,7 +59,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         const storeInfoComp = this.template.querySelector('c-lwc_-car-care-service-store-locator-comp');
 
         let validationStatus =  true;
-        if(this.CurrentPage === 2){
+        if(this.CurrentPage === 1222){
             validationStatus = contactComp.ValidateContactInfo(event) ;
         }
         else if(this.CurrentPage === 4){
