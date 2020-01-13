@@ -3,7 +3,7 @@ import { LightningElement, track, api } from 'lwc';
 import getSelectedAndNearbyStoresInfo from "@salesforce/apex/AppointmentIntegrationServices.getSelectedAndNearbyStoresList";
 import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
 import { loadStyle } from 'lightning/platformResourceLoader';
-import strUserId from '@salesforce/user/Id';
+//import strUserId from '@salesforce/user/Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
@@ -18,12 +18,15 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @track isLoading = true;
     @track error = '';
 
-    @track isOpenModal = false;
+    @track displayStoreModal = false;
+    @track displayStoreClosedModal = false;
     @track showNearbyStore = false;
     hasRendered = false;
-    @track userName ='test';
-
+    //@track userName ='test';
+    
     @track showStoreDetail = false;
+    @track isSelectedStoreClosed = false;
+    @track storeInfoForDisplay = {};
 
     renderedCallback() {
         if(!this.hasRendered){
@@ -72,7 +75,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     getStoreInfo() {
         this.isLoading = true;
         //console.log('--before call to apex--'+this.branchId);
-        this.userName = strUserId;
+        //this.userName = strUserId;
         //console.log('--before call to apex--'+strUserId);
         //console.log('--before call to apex--'+this.userName);
         getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
@@ -130,12 +133,19 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                         if(isEqualCheck){
                             this.storeRecordId =  element.id;
                             this.selectedStoreObj = selectOption;
+                            if(element.status === undefined || element.status.toUpperCase() !== 'Open'.toUpperCase()){
+                                this.isSelectedStoreClosed = true;
+                                this.displayStoreClosedModal = true;
+                            }
+                        }
+                        else{
+                            this.showNearbyStore = true;
                         }
                     
                     });
                 }
                 this.storeWrapperList = storeInfoTemp;
-                //this.showNearbyStore = true;
+                
                 this.isLoading = false;
                 this.error = undefined;
                 //console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
@@ -183,7 +193,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         this.storeRecordId = event.target.dataset.id;
         
         if(this.displayStoreChangeAlert){
-            this.isOpenModal = true;
+            this.displayStoreModal = true;
         }
         else{
             this.handleContinueModal(event);
@@ -192,7 +202,11 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     }
 
     handleCloseModal() {
-        this.isOpenModal = false;
+        this.displayStoreModal = false;
+    }
+
+    handleClosedStoreCloseModal() {
+        this.displayStoreClosedModal = false;
     }
 
     handleContinueModal(){
@@ -211,17 +225,29 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         this.dispatchEvent(selectedEvent);
     }
 
-    showStoreDetailModal(){
+    showStoreDetailModal(event){
+        let BranchId = event.target.dataset.branchId;
+        for(let i=0 ; i < this.storeWrapperList.length ; i++ ){
+            if(BranchId === this.storeWrapperList[i].branchId){
+                this.storeInfoForDisplay = this.storeWrapperList[i];
+                break;
+            }
+        }
         this.showStoreDetail = true;
     }
+    
     closeStoreDetailModal(){
         this.showStoreDetail = false;
+        this.storeInfoForDisplay = {};
     }
-/*
-    get displayNearbyStore(){
-        //this.showNearbyStore = this.showNearbyStore === true ? true : this.showNearbyStore; 
-        return this.showNearbyStore;
-    }*/
+
+    get displayClosedStoreWithNearByStore(){
+        return this.isSelectedStoreClosed && this.showNearbyStore ? true : false;
+    }
+
+    get displayClosedStoreWithOutNearByStore(){
+        return this.isSelectedStoreClosed && this.showNearbyStore === false ? true : false;
+    }
 
     showToast(title , message , variant , mode){
         const evt = new ShowToastEvent({

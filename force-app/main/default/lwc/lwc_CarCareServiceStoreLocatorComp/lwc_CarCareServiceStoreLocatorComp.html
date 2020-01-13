@@ -3,63 +3,71 @@
         <div if:true={isLoaded} >
             <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
                 <div class="storeHeading">SELECTED STORE</div>
-                <template for:each={storeWrapperList} for:item="storeInfo">
-                    <div key={storeInfo.id} class="slds-form-element storeCompChkBox">
-                        <div if:true={storeInfo.isSelected} >
+                <!--<template for:each={storeWrapperList} for:item="storeInfo">-->
+                    <!--<div key={selectedStoreObj.id} class="slds-form-element storeCompChkBox">
+                        <div if:true={storeInfo.isSelected} >-->
                             <div class="slds-form-element__control" >
                                 <div class="slds-checkbox">
-                                    <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
-                                    <label class="slds-checkbox__label" for={storeInfo.id}>
+                                    <input type="checkbox" name={selectedStoreObj.name} id={selectedStoreObj.id} data-id={selectedStoreObj.id} data-branch-id={selectedStoreObj.branchId} value={selectedStoreObj.isSelected} checked={selectedStoreObj.isSelected} disabled={selectedStoreObj.isDisabled} onchange={onStoreSelection}/>
+                                    <label class="slds-checkbox__label" for={selectedStoreObj.id}>
                                         <span class="slds-checkbox_faux"></span>
                                         <span class="slds-form-element__label">
-                                            <span class="storeInfo">{storeInfo.name}</span>
-                                            <div class="infoIconDiv" onclick={showStoreDetailModal}>
+                                            <span class="storeInfo">{selectedStoreObj.name}</span>
+                                            <div class="infoIconDiv" data-branch-id={selectedStoreObj.branchId} onclick={showStoreDetailModal}>
                                                 <lightning-icon icon-name="action:info" variant="inverse" alternative-text="Info" size="xx-small">
                                                 </lightning-icon>
                                             </div>
                                             <br/>
-                                            <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
-                                            <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
+                                            <span class="storeTimings">{selectedStoreObj.openingTimings}</span><br/>
+                                            <a href={selectedStoreObj.phoneHref} class="storePhone">{selectedStoreObj.phone}</a><br/>
                                         </span>
                                     </label>
                                     <!--<div class="slds-p-around_medium lgc-bg">
                                         <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
                                     </div>-->
                                 </div>
-                            </div>
-                        </div>
+                            <!--</div>
+                        </div>-->
                     </div>
-                </template>
-                <div class="storeHeading">OTHER NEARBY LOCATIONS</div>
-                <template for:each={storeWrapperList} for:item="storeInfo">
-                    <div key={storeInfo.id} class="slds-form-element storeCompChkBox">
-                        <div if:true={storeInfo.isNotSelected} >
-                            <div class="slds-form-element__control" >
-                                <div class="slds-checkbox">
-                                    <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
-                                    <label class="slds-checkbox__label" for={storeInfo.id}>
-                                        <span class="slds-checkbox_faux"></span>
-                                        <span class="slds-form-element__label">
-                                            <span class="storeInfo">{storeInfo.name}</span><br/>
-                                            <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
-                                            <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
-                                        </span>
-                                    </label>
-                                    <!--<div class="slds-p-around_medium lgc-bg">
-                                        <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
-                                    </div>-->
+                <!--</template>-->
+                <div if:true={showNearbyStore} >
+                    <div class="storeHeading">OTHER NEARBY LOCATIONS</div>
+                    <template for:each={storeWrapperList} for:item="storeInfo">
+                        <div key={storeInfo.id} class="slds-form-element storeCompChkBox">
+                            <div if:true={storeInfo.isNotSelected} >
+                                <div class="slds-form-element__control" >
+                                    <div class="slds-checkbox">
+                                        <input type="checkbox" name={storeInfo.name} id={storeInfo.id} data-id={storeInfo.id} data-branch-id={storeInfo.branchId} value={storeInfo.isSelected} checked={storeInfo.isSelected} disabled={storeInfo.isDisabled} onchange={onStoreSelection}/>
+                                        <label class="slds-checkbox__label" for={storeInfo.id}>
+                                            <span class="slds-checkbox_faux"></span>
+                                            <span class="slds-form-element__label">
+                                                <span class="storeInfo">{storeInfo.name}</span>
+                                                <div class="infoIconDiv" data-branch-id={storeInfo.branchId} onclick={showStoreDetailModal}>
+                                                    <lightning-icon icon-name="action:info" variant="inverse" alternative-text="Info" size="xx-small">
+                                                    </lightning-icon>
+                                                </div>
+                                                <br/>
+                                                <span class="storeTimings">{storeInfo.openingTimings}</span><br/>
+                                                <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
+                                            </span>
+                                        </label>
+                                        <!--<div class="slds-p-around_medium lgc-bg">
+                                            <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
+                                        </div>-->
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </template>
+                    </template>
+                </div>
             </fieldset>
         </div>
     
         <div if:true={isLoading} class="maxWidth600px">
             <lightning-spinner alternative-text="Loading.." class="spins" size="small"></lightning-spinner>
         </div>
-        <template if:true={isOpenModal}>
+        <!--Store Change pop-Up-->
+        <template if:true={displayStoreModal}>
             <div style="height: 500px;">
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container storeCompModal">
@@ -87,6 +95,39 @@
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </div>
         </template>
+        <!--Store Change pop-Up-->
+
+        <!--Store Closed pop-Up-->
+        <template if:true={displayStoreClosedModal}>
+            <div style="height: 500px;">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container storeCompModal">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
+                                <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="Close" size="medium">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
+                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
+                            <div class="slds-text-align_center">
+                                <span if:true={displayClosedStoreWithNearByStore}>We apologize but the store you have selected is currently closed. however there is another store located nearby that is open for car care needs.
+                                </span>
+                                <span if:true={displayClosedStoreWithOutNearByStore}>We apologize but the store you have selected is currently closed due to unforeseen circumstances. Unfortunatly there are no nearby locations.
+                                </span>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer storeFooter">
+                            <lightning-button label="Cancel" variant="neutral" onclick={handleClosedStoreCloseModal} class="storeCancelBtn"></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
+        <!--Store Closed pop-Up-->
 
         <!-- store detail pop up-->
         <template if:true={showStoreDetail}>
