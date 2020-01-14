@@ -5,9 +5,6 @@ import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
 import { loadStyle } from 'lightning/platformResourceLoader';
 //import strUserId from '@salesforce/user/Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import storeChangeMessage from '@salesforce/label/c.Edit';
-import closedStoreWithNoNearByStoreMessage from '@salesforce/label/c.Save';
-import closedStoreWithNearByStoreMessage from '@salesforce/label/c.Title';
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
@@ -71,11 +68,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         }
     }
 
-    label = {
-        storeChangeMessage,
-        closedStoreWithNoNearByStoreMessage,
-        closedStoreWithNearByStoreMessage
-    };
     getDayNameList(){
         return ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
     }
