@@ -6,7 +6,7 @@
                 <!--<template for:each={storeWrapperList} for:item="storeInfo">-->
                     <!--<div key={selectedStoreObj.id} class="slds-form-element storeCompChkBox">
                         <div if:true={storeInfo.isSelected} >-->
-                            <div class="slds-form-element__control" >
+                            <div class="slds-form-element__control storeCompChkBox" >
                                 <div class="slds-checkbox">
                                     <input type="checkbox" name={selectedStoreObj.name} id={selectedStoreObj.id} data-id={selectedStoreObj.id} data-branch-id={selectedStoreObj.branchId} value={selectedStoreObj.isSelected} checked={selectedStoreObj.isSelected} disabled={selectedStoreObj.isDisabled} onchange={onStoreSelection}/>
                                     <label class="slds-checkbox__label" for={selectedStoreObj.id}>
@@ -135,8 +135,9 @@
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container storeCompModal">
                         <header class="slds-modal__header">
-                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
-                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
+                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>
+                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>-->
+                            <img class="StoreDetailImage" src="http://locator.carolinas.aaa.com/wp-content/uploads/2017/09/indian-land.jpg"></img>
                             <div class="storeInfoDetailHeader">
                                 <span>{selectedStoreObj.name}</span>
                                 <lightning-icon icon-name="action:map" variant="error" size="xx-small"></lightning-icon>
