@@ -17,13 +17,14 @@ public without sharing class AppointmentIntegrationServices {
         if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
             Integer nearByRange = Integer.valueOf(setting.Setting_Value__c);
             // To fetch lat long values of selected store
-            AAA_Location__c selectedLoc = [select name,Geocode__Latitude__s,Geocode__Longitude__s from AAA_Location__c where Car_Care_Location_Number__c =: branchId and Car_Care__c = true limit 1] ;
+            AAA_Location__c selectedLoc = [select name,Car_Care_Location_Number__c, Store_Image_URL__c, Geocode__Latitude__s,Geocode__Longitude__s from AAA_Location__c where Car_Care_Location_Number__c =: branchId and Car_Care__c = true limit 1] ;
             Decimal latitude = selectedLoc.Geocode__Latitude__s;  // This will be our selected store lat value
             Decimal longitude = selectedLoc.Geocode__Longitude__s; // This will be our selected store long value
 
             
             //To get nearby locations within 10 miles…
             Locations = new List<AAA_Location__c >([SELECT Car_Care_Location_Number__c ,
+                                                        Store_Image_URL__c,
                                                         Geocode__Latitude__s, 
                                                         Geocode__Longitude__s,
                                                         DISTANCE(Geocode__c, GEOLOCATION(:latitude,:longitude), 'mi') dist
@@ -35,6 +36,7 @@ public without sharing class AppointmentIntegrationServices {
                                                         DISTANCE( Geocode__c, GEOLOCATION( :latitude, :longitude ), 'mi' )   
                                                         ]);
             
+            Locations.add(selectedLoc);
             }
         return Locations;
     }
@@ -52,37 +54,46 @@ public without sharing class AppointmentIntegrationServices {
                 HTTPResponse res = callAppointmentServiceAPI( setting.Setting_Value__c );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
-                    system.debug(' getNearByStoreList : jsonBody : '+jsonBody);
+                    //system.debug(' getNearByStoreList : jsonBody : '+jsonBody);
                     nearByStoresObj = AppointmentStoreObj.parseList(jsonBody);
                     if(nearByStoresObj != null && nearByStoresObj.items != null){
                         Map<Integer , AppointmentStoreObj.Items> branchIdToStoreObjMap = new Map<Integer , AppointmentStoreObj.Items>();
                         for(AppointmentStoreObj.Items items : nearByStoresObj.items){
-                            system.debug(' items   : '+items);
-                            system.debug(' items.branchId   : '+items.branchId);
-                            system.debug(' branchId.isNumeric()   : '+branchId.isNumeric());
+                            //system.debug(' items   : '+items);
+                            //system.debug(' items.branchId   : '+items.branchId);
+                            //system.debug(' branchId.isNumeric()   : '+branchId.isNumeric());
                             if(items.branchId != null && branchId.isNumeric() ){
+                                
                                 branchIdToStoreObjMap.put(items.branchId , items );
-                                system.debug(' branchIdToStoreObjMap   : '+branchIdToStoreObjMap);
-                                if(items.branchId ==  Integer.valueOf(branchId) ){
+                                //system.debug(' branchIdToStoreObjMap   : '+branchIdToStoreObjMap);
+                                /*if(items.branchId ==  Integer.valueOf(branchId) ){
                                     distanceToStoreMap.put(0.0 , items);
-                                }
+                                }*/
                             }
                         }
-                        system.debug(' distanceToStoreMap 1st   : '+distanceToStoreMap);
+                        //system.debug(' distanceToStoreMap 1st   : '+distanceToStoreMap);
                         List<AAA_Location__c> Locations = getNearbyLocation(branchId);
-                        system.debug(' Locations    : '+Locations);
+                        //system.debug(' Locations    : '+Locations);
                         for(AAA_Location__c locationObj : Locations){
                             Integer carCareLocationNumber = String.isNotBlank(locationObj.Car_Care_Location_Number__c) &&
                                                             locationObj.Car_Care_Location_Number__c.isNumeric() 
                                                             ? Integer.valueOf(locationObj.Car_Care_Location_Number__c)
                                                             : null;
-                            system.debug(' carCareLocationNumber    : '+carCareLocationNumber);
-                            system.debug(' branchIdToStoreObjMap.containsKey(carCareLocationNumber)   : '+branchIdToStoreObjMap.containsKey(carCareLocationNumber));
-                            system.debug(' branchIdToStoreObjMap.get(carCareLocationNumber)    : '+branchIdToStoreObjMap.get(carCareLocationNumber));
-                            system.debug(' (Decimal)locationObj.get(\'dist\')    : '+(Decimal)locationObj.get('dist') );
+                            //system.debug(' carCareLocationNumber    : '+carCareLocationNumber);
+                            //system.debug(' branchIdToStoreObjMap.containsKey(carCareLocationNumber)   : '+branchIdToStoreObjMap.containsKey(carCareLocationNumber));
+                            //system.debug(' branchIdToStoreObjMap.get(carCareLocationNumber)    : '+branchIdToStoreObjMap.get(carCareLocationNumber));
+                            //system.debug(' (Decimal)locationObj.get(\'dist\')    : '+locationObj.get('dist') );
                             if( carCareLocationNumber != null && branchIdToStoreObjMap.containsKey(carCareLocationNumber)){
                                 system.debug(' locationObj    : '+locationObj);
-                                distanceToStoreMap.put((Decimal)locationObj.get('dist') , branchIdToStoreObjMap.get(carCareLocationNumber));
+                                AppointmentStoreObj.Items Item = branchIdToStoreObjMap.get(carCareLocationNumber);
+                                Item.imageUrl = locationObj.Store_Image_URL__c ;
+                                if(Item.branchId !=  Integer.valueOf(branchId) ){
+                                    distanceToStoreMap.put((Decimal)locationObj.get('dist') , Item);
+                                }else{
+                                    distanceToStoreMap.put(0.0 , Item);
+                                }
+                                
+                                
                             }
                         }
                     } 

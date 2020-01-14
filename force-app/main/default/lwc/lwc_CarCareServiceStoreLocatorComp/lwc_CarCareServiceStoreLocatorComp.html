@@ -82,7 +82,7 @@
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                             <div class="slds-text-align_center">
-                                Are you sure you would like to change your location? Your Appointment information will be lost.
+                                {storeChangeMessage}
                             </div>
                         </div>
                         <footer class="slds-modal__footer storeFooter">
@@ -137,7 +137,7 @@
                         <header class="slds-modal__header">
                             <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>
                             <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>-->
-                            <img class="StoreDetailImage" src="http://locator.carolinas.aaa.com/wp-content/uploads/2017/09/indian-land.jpg"></img>
+                            <img class="StoreDetailImage" src={selectedStoreObj.imageUrl}></img>
                             <div class="storeInfoDetailHeader">
                                 <span>{selectedStoreObj.name}</span>
                                 <lightning-icon icon-name="action:map" variant="error" size="xx-small"></lightning-icon>

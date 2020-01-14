@@ -14,6 +14,7 @@ public with sharing class AppointmentStoreObj {
 		@AuraEnabled public String zip {get;set;} 
 		@AuraEnabled public String phone {get;set;} 
 		@AuraEnabled public String url {get;set;} 
+		@AuraEnabled public String imageUrl {get;set;}
 		@AuraEnabled public String status {get;set;} 
 		@AuraEnabled public List<StoreHours> storeHours {get;set;} 
 	}
