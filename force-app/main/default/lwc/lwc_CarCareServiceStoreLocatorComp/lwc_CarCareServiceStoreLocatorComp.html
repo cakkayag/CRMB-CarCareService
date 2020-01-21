@@ -82,7 +82,7 @@
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                             <div class="slds-text-align_center">
-                                Are you sure you would like to change your location? Your Appointment information will be lost.
+                                {label.storeChangeMessage}
                             </div>
                         </div>
                         <footer class="slds-modal__footer storeFooter">
@@ -113,9 +113,9 @@
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
                             <div class="slds-text-align_center">
-                                <span if:true={displayClosedStoreWithNearByStore}>We apologize but the store you have selected is currently closed. however there is another store located nearby that is open for car care needs.
+                                <span if:true={displayClosedStoreWithNearByStore}>{label.closedStoreWithNearByStoreMessage}
                                 </span>
-                                <span if:true={displayClosedStoreWithOutNearByStore}>We apologize but the store you have selected is currently closed due to unforeseen circumstances. Unfortunatly there are no nearby locations.
+                                <span if:true={displayClosedStoreWithOutNearByStore}>{label.closedStoreWithNoNearByStoreMessage}
                                 </span>
                             </div>
                         </div>

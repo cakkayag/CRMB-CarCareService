@@ -5,6 +5,11 @@ import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
 import { loadStyle } from 'lightning/platformResourceLoader';
 //import strUserId from '@salesforce/user/Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import storeChangeMessage from '@salesforce/label/c.Store_Change_Message';
+import closedStoreWithNoNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_NO_Near_By_Store_Message';
+import closedStoreWithNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_Near_By_Store_Message';
+
+    
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
@@ -27,6 +32,12 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @track showStoreDetail = false;
     @track isSelectedStoreClosed = false;
     @track storeInfoForDisplay = {};
+
+    label = {
+        storeChangeMessage,
+        closedStoreWithNoNearByStoreMessage,
+        closedStoreWithNearByStoreMessage
+    };
 
     renderedCallback() {
         if(!this.hasRendered){
@@ -65,6 +76,13 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         }
         else{
             this.isLoading = false;
+            for(let i =0 ; i < this.storeWrapperList.length ; i++){
+                if(this.storeWrapperList[i].isSelected === false){
+                    this.showNearbyStore = true;
+                    break;
+                }
+            }
+            
         }
     }
 
@@ -188,6 +206,11 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @api
     getSelectedStoreObj(){
         return this.selectedStoreObj;
+    }
+
+    @api
+    getIsSelectedStoreClosed(){
+        return this.isSelectedStoreClosed;
     }
 
     onStoreSelection(event){
