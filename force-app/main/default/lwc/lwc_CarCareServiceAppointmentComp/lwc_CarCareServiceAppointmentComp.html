@@ -1,5 +1,27 @@
 <template>
-    <div class="slds-align_absolute-center" style="height: 200px;">
-        This is Appointment Selector component
+    <div class="slds-align_absolute-center">
+        <table>
+            <thead class="headerRowDateTime_Main">
+                <tr>
+                    <template for:each={days} for:item='day'>
+                        <td key={day.date} class="headerRowDateTime">
+                            <span class="headerRowDate">{day.date}</span>
+                            <span class="headerRowTime">{day.openTime} - {day.closeTime}</span>
+                        </td>
+                    </template>
+                </tr>
+            </thead>
+            <tbody class="dateTimeBody">
+                <template for:each={hours} for:item='h'>
+                    <tr key={h}>
+                        <template for:each={days} for:item='day'>
+                            <td key={day}>
+                                <div class="timeSlot">{h}</div>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
     </div>
 </template>

@@ -215,7 +215,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     onStoreSelection(event){
         //console.log('onStoreSelection Id : '+event.target.dataset.id);
-       // console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
+        // console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
         //console.log('##################### displayStoreChangeAlert : '+this.displayStoreChangeAlert);
         this.newBranchId = event.target.dataset.branchId;
         this.storeRecordId = event.target.dataset.id;
