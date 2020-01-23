@@ -1,15 +1,7 @@
 public without sharing class AppointmentIntegrationServices {
 
-    //private static string AuthorizationKey = 'B81KyUqIH6RF6CjUOcdnbqNl9kEpQO2dEgef8wv1tM6aYrcHp6sKcPuTrjldBWU';
-    //private static string storeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store';
-    //private static string serviceEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Store/{StoreId}/Services';
-    //private static string vehicleMakeEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetMakes';
-    //private static string vehicleModelEndPoint = 'https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetModels/{VehicleMake}?searchText={vehicleModel}';
-    //private static string getYearsEndPoint ='https://apidev.aaacarolinas.net/AppointmentApi/api/Vehicle/GetYears';
     private static string exceptionStr = '';
-    
-    //private static Integer range = 10000;
-    
+    private static map<String, Car_Care_Service_Setting__mdt> settingsMap = new map<String, Car_Care_Service_Setting__mdt>(); 
 
     private static List<AAA_Location__c> getNearbyLocation(String branchId){
         List<AAA_Location__c> Locations = new List<AAA_Location__c >();

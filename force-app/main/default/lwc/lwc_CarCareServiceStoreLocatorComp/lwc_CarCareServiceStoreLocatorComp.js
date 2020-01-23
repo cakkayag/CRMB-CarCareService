@@ -8,7 +8,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import storeChangeMessage from '@salesforce/label/c.Store_Change_Message';
 import closedStoreWithNoNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_NO_Near_By_Store_Message';
 import closedStoreWithNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_Near_By_Store_Message';
-
+import redirectUrlOnNoAvailableStores from '@salesforce/label/c.Redirect_Url_On_No_Available_Stores';
     
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
@@ -151,6 +151,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                         if(isEqualCheck){
                             this.storeRecordId =  element.id;
                             this.selectedStoreObj = selectOption;
+                            //Re-assigning as this method can be called from multiple places and reassigning default value would be needed
+                            this.isSelectedStoreClosed = false; 
                             if(element.status === undefined || element.status.toUpperCase() !== 'Open'.toUpperCase()){
                                 this.isSelectedStoreClosed = true;
                                 this.displayStoreClosedModal = true;
@@ -235,6 +237,10 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     handleClosedStoreCloseModal() {
         this.displayStoreClosedModal = false;
+        console.log('handleClosedStoreCloseModal '+this.displayClosedStoreWithOutNearByStore);
+        if(this.displayClosedStoreWithOutNearByStore){
+            window.location.href = "http://locator.carolinas.aaa.com/?type=carcare";
+        }
     }
 
     handleContinueModal(){
@@ -267,6 +273,10 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     closeStoreDetailModal(){
         this.showStoreDetail = false;
         this.storeInfoForDisplay = {};
+    }
+
+    get displaySelectedStore(){
+        return this.isSelectedStoreClosed ? false : true;
     }
 
     get displayClosedStoreWithNearByStore(){

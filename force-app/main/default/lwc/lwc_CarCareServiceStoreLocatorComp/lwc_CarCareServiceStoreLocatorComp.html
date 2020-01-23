@@ -2,11 +2,12 @@
     <!--<div class="slds-align_absolute-center" style="height: 200px;">-->
         <div if:true={isLoaded} >
             <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
-                <div class="storeHeading">SELECTED STORE</div>
-                <!--<template for:each={storeWrapperList} for:item="storeInfo">-->
-                    <!--<div key={selectedStoreObj.id} class="slds-form-element storeCompChkBox">
+                <div if:true={displaySelectedStore} >
+                    <div class="storeHeading">SELECTED STORE</div>
+                    <!--<template for:each={storeWrapperList} for:item="storeInfo">-->
+                        <!--<div key={selectedStoreObj.id} class="slds-form-element storeCompChkBox">
                         <div if:true={storeInfo.isSelected} >-->
-                            <div class="slds-form-element__control storeCompChkBox" >
+                    <div class="slds-form-element__control storeCompChkBox" >
                                 <div class="slds-checkbox">
                                     <input type="checkbox" name={selectedStoreObj.name} id={selectedStoreObj.id} data-id={selectedStoreObj.id} data-branch-id={selectedStoreObj.branchId} value={selectedStoreObj.isSelected} checked={selectedStoreObj.isSelected} disabled={selectedStoreObj.isDisabled} onchange={onStoreSelection}/>
                                     <label class="slds-checkbox__label" for={selectedStoreObj.id}>
@@ -29,6 +30,7 @@
                             <!--</div>
                         </div>-->
                     </div>
+                </div>
                 <!--</template>-->
                 <div if:true={showNearbyStore} >
                     <div class="storeHeading">OTHER NEARBY LOCATIONS</div>
