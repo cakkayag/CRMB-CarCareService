@@ -8,7 +8,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import storeChangeMessage from '@salesforce/label/c.Store_Change_Message';
 import closedStoreWithNoNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_NO_Near_By_Store_Message';
 import closedStoreWithNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_Near_By_Store_Message';
-import redirectUrlOnNoAvailableStores from '@salesforce/label/c.Redirect_Url_On_No_Available_Stores';
+
     
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
