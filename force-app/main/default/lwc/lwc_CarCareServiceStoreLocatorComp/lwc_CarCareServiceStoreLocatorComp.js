@@ -1,15 +1,11 @@
 import { LightningElement, track, api } from 'lwc';
-//import { fireEvent } from 'c/pubsub';
 import getSelectedAndNearbyStoresInfo from "@salesforce/apex/AppointmentIntegrationServices.getSelectedAndNearbyStoresList";
 import carCareResources from '@salesforce/resourceUrl/CarCareReserveService';
 import { loadStyle } from 'lightning/platformResourceLoader';
-//import strUserId from '@salesforce/user/Id';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import storeChangeMessage from '@salesforce/label/c.Store_Change_Message';
 import closedStoreWithNoNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_NO_Near_By_Store_Message';
 import closedStoreWithNearByStoreMessage from '@salesforce/label/c.Closed_Store_With_Near_By_Store_Message';
-
-    
 
 export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement {
     @api storeWrapperList = [];
@@ -27,7 +23,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     @track displayStoreClosedModal = false;
     @track showNearbyStore = false;
     hasRendered = false;
-    //@track userName ='test';
     
     @track showStoreDetail = false;
     @track isSelectedStoreClosed = false;
@@ -43,7 +38,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         if(!this.hasRendered){
             
             Promise.all([
-                //loadScript(this, D3 + '/d3.v5.min.js'),
                 loadStyle(this, carCareResources + '/css/reserveService.css'),
             ])
             .then(() => {
@@ -65,13 +59,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     
 
     connectedCallback() {
-        //console.log('this.storeWrapperList '+(this.storeWrapperList === []));
-        //console.log('this.storeWrapperList '+(this.storeWrapperList === undefined));
-       // console.log('this.storeWrapperList '+(this.storeWrapperList.length === 0));
-        //console.log('this.storeWrapperList '+(this.storeWrapperList === ''));
-       // console.log('this.storeWrapperList '+(this.storeWrapperList === null));
         if(this.storeWrapperList === undefined || this.storeWrapperList === [] || this.storeWrapperList.length === 0){
-           //console.log('branchId'+this.storeWrapperList.length);
             this.getStoreInfo();
         }
         else{
@@ -92,13 +80,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     getStoreInfo() {
         this.isLoading = true;
-        //console.log('--before call to apex--'+this.branchId);
-        //this.userName = strUserId;
-        //console.log('--before call to apex--'+strUserId);
-        console.log('--before call to apex--'+this.userName);
         getSelectedAndNearbyStoresInfo({ branchId: this.branchId })
             .then(result => {
-                console.log(JSON.parse(JSON.stringify(result)));
                 const storeInfoTemp = [];
                 if (result !== undefined) {
                     let now = new Date();
@@ -106,17 +89,13 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                     result.forEach(element => {
                         let storeOpeningTimings = '';
                         let storeTimingsMap = [];
-                        //TODO : Need to work this at later part - Start
-                        //console.log('element.storeHours : '+element.storeHours);
                         if(element.storeHours !== undefined){
                             for(let i = 0 ; i < element.storeHours.length  ; i++) {
                                 if(element.storeHours[i].day !== undefined) {
                                     storeTimingsMap.push({key:element.storeHours[i].day, value:element.storeHours[i].hours});
                                 }
                             }
-                            console.log('storeTimingsMap : '+JSON.stringify(storeTimingsMap));
                             for(let i = 0 ; i < element.storeHours.length  ; i++){
-                                //console.log('element.storeHours[i].day : '+element.storeHours[i].day);
                                 if(element.storeHours[i].day !== undefined && dayName.toUpperCase() === element.storeHours[i].day.toUpperCase()){
                                     storeOpeningTimings = element.storeHours[i].day + ' open ' + element.storeHours[i].hours; 
                                     break;
@@ -125,13 +104,10 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                                 //storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
                             }
                         }
-                        //console.log('storeOpeningTimings : '+storeOpeningTimings);
-                        //TODO : Need to work this at later part - END
-                        //console.log('element.branchId '+element.branchId+' ==== this.branchId '+this.branchId);
+
                         let isEqualCheck = isNaN(element.branchId) === false && isNaN(this.branchId) === false 
                                             ? Number(element.branchId) === Number(this.branchId) 
                                             : false;
-                        //console.log('isEqualCheck '+isEqualCheck);
                         let selectOption = {
                             id: element.id,
                             branchId : element.branchId,
@@ -173,7 +149,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 
                 this.isLoading = false;
                 this.error = undefined;
-                //console.log(JSON.parse(JSON.stringify(this.storeWrapperList)));
             })
             .catch(error => {
                 this.error = error;
@@ -192,9 +167,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     @api
     getSelectedStoreObjInfo(reload) {
-        //console.log('getSelectedStoreObjInfo reload status   : '+reload);
         if(reload){
-            //console.log('In Reload  this.storeRecordId  : '+this.storeRecordId+'  this.branchId   :'+this.branchId);
             this.getStoreInfo();
         }
         return this.storeWrapperList;
@@ -216,9 +189,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     }
 
     onStoreSelection(event){
-        //console.log('onStoreSelection Id : '+event.target.dataset.id);
-        // console.log('onStoreSelection branchId : '+event.target.dataset.branchId);
-        //console.log('##################### displayStoreChangeAlert : '+this.displayStoreChangeAlert);
         this.newBranchId = event.target.dataset.branchId;
         this.storeRecordId = event.target.dataset.id;
         
@@ -237,22 +207,18 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
     handleClosedStoreCloseModal() {
         this.displayStoreClosedModal = false;
-        console.log('handleClosedStoreCloseModal '+this.displayClosedStoreWithOutNearByStore);
         if(this.displayClosedStoreWithOutNearByStore){
             window.location.href = "http://locator.carolinas.aaa.com/?type=carcare";
         }
     }
 
     handleContinueModal(){
-        //console.log( 'handleContinueModal this.newBranchId : '+this.newBranchId);
-        //console.log( 'handleContinueModal this.storeRecordId : '+this.storeRecordId);
         this.branchId = this.newBranchId;
         this.handleCloseModal();
         let selectedStore = {
             _branchId : this.branchId,
             _storeRecordId : this.storeRecordId 
         };
-        //fireEvent(this.pageRef, 'storeChangeRequested', selectedStore);
         // Creates the event with the contact ID data.
         const selectedEvent = new CustomEvent('storechange', { detail: selectedStore });
         // Dispatches the event.

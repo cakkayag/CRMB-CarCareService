@@ -1,37 +1,26 @@
 <template>
-    <!--<div class="slds-align_absolute-center" style="height: 200px;">-->
         <div if:true={isLoaded} >
             <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
                 <div if:true={displaySelectedStore} >
                     <div class="storeHeading">SELECTED STORE</div>
-                    <!--<template for:each={storeWrapperList} for:item="storeInfo">-->
-                        <!--<div key={selectedStoreObj.id} class="slds-form-element storeCompChkBox">
-                        <div if:true={storeInfo.isSelected} >-->
                     <div class="slds-form-element__control storeCompChkBox" >
-                                <div class="slds-checkbox">
-                                    <input type="checkbox" name={selectedStoreObj.name} id={selectedStoreObj.id} data-id={selectedStoreObj.id} data-branch-id={selectedStoreObj.branchId} value={selectedStoreObj.isSelected} checked={selectedStoreObj.isSelected} disabled={selectedStoreObj.isDisabled} onchange={onStoreSelection}/>
-                                    <label class="slds-checkbox__label" for={selectedStoreObj.id}>
-                                        <span class="slds-checkbox_faux"></span>
-                                        <span class="slds-form-element__label">
-                                            <span class="storeInfo">{selectedStoreObj.name}</span>
-                                            <div class="infoIconDiv" data-branch-id={selectedStoreObj.branchId} onclick={showStoreDetailModal}>
-                                                <lightning-icon icon-name="action:info" variant="inverse" alternative-text="Info" size="xx-small">
-                                                </lightning-icon>
-                                            </div>
-                                            <br/>
-                                            <!--<span class="storeTimings">{selectedStoreObj.openingTimings}</span><br/>-->
-                                            <a href={selectedStoreObj.phoneHref} class="storePhone">{selectedStoreObj.phone}</a><br/>
-                                        </span>
-                                    </label>
-                                    <!--<div class="slds-p-around_medium lgc-bg">
-                                        <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
-                                    </div>-->
-                                </div>
-                            <!--</div>
-                        </div>-->
+                        <div class="slds-checkbox">
+                            <input type="checkbox" name={selectedStoreObj.name} id={selectedStoreObj.id} data-id={selectedStoreObj.id} data-branch-id={selectedStoreObj.branchId} value={selectedStoreObj.isSelected} checked={selectedStoreObj.isSelected} disabled={selectedStoreObj.isDisabled} onchange={onStoreSelection}/>
+                            <label class="slds-checkbox__label" for={selectedStoreObj.id}>
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label">
+                                    <span class="storeInfo">{selectedStoreObj.name}</span>
+                                    <div class="infoIconDiv" data-branch-id={selectedStoreObj.branchId} onclick={showStoreDetailModal}>
+                                        <lightning-icon icon-name="action:info" variant="inverse" alternative-text="Info" size="xx-small">
+                                        </lightning-icon>
+                                    </div>
+                                    <br/>
+                                    <a href={selectedStoreObj.phoneHref} class="storePhone">{selectedStoreObj.phone}</a><br/>
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
-                <!--</template>-->
                 <div if:true={showNearbyStore} >
                     <div class="storeHeading">OTHER NEARBY LOCATIONS</div>
                     <template for:each={storeWrapperList} for:item="storeInfo">
@@ -49,13 +38,9 @@
                                                     </lightning-icon>
                                                 </div>
                                                 <br/>
-                                                <!--<span class="storeTimings">{storeInfo.openingTimings}</span><br/>-->
                                                 <a href={storeInfo.phoneHref} class="storePhone">{storeInfo.phone}</a><br/>
                                             </span>
                                         </label>
-                                        <!--<div class="slds-p-around_medium lgc-bg">
-                                            <lightning-helptext icon-name="utility:salesforce1" content={storeInfo.openingTimings}></lightning-helptext>
-                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -74,12 +59,6 @@
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container storeCompModal">
                         <header class="slds-modal__header">
-                            <!--<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
-                                <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="Close" size="medium">
-                                </lightning-icon>
-                                <span class="slds-assistive-text">Close</span>
-                            </button>
-                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
                             <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
@@ -88,7 +67,6 @@
                             </div>
                         </div>
                         <footer class="slds-modal__footer storeFooter">
-                            <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
                             <lightning-button variant="brand" label="Yes" onclick={handleContinueModal} class="slds-m-left_x-small storeCompBtn"></lightning-button>
                             <lightning-button label="Cancel" variant="neutral" onclick={handleCloseModal} class="storeCancelBtn"></lightning-button>
                         </footer>
@@ -105,12 +83,6 @@
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container storeCompModal">
                         <header class="slds-modal__header">
-                            <!--<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={handleCloseModal}>
-                                <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="Close" size="medium">
-                                </lightning-icon>
-                                <span class="slds-assistive-text">Close</span>
-                            </button>
-                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>-->
                             <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
@@ -122,7 +94,6 @@
                             </div>
                         </div>
                         <footer class="slds-modal__footer storeFooter">
-                            <!--<lightning-button label="Cancel" variant="neutral" onclick={handleClosedStoreCloseModal} class="storeCancelBtn"></lightning-button>-->
                             <lightning-button variant="brand" label="CLOSE" onclick={handleClosedStoreCloseModal} class="slds-m-left_x-small storeCompBtn storeDetailBtn"></lightning-button>
                         </footer>
                     </div>
@@ -138,12 +109,9 @@
                 <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container storeCompModal storeCompDetailModal">
                         <header class="slds-modal__header">
-                            <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Alert</h2>
-                            <lightning-icon icon-name="action:close" alternative-text="Success!" variant="error" size="xx-small"></lightning-icon>-->
                             <img class="StoreDetailImage" src={selectedStoreObj.imageUrl}></img>
                             <div class="storeInfoDetailHeader">
                                 <span>{selectedStoreObj.name}</span>
-                                <!--<lightning-icon icon-name="action:map" class="mapIcon" variant="error" size="xx-small"></lightning-icon>-->
                             </div>
                         </header>
                         <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
@@ -173,7 +141,6 @@
                             </div>
                         </div>
                         <footer class="slds-modal__footer storeFooter">
-                            <!--<lightning-button label="Okie" variant="neutral" onclick={handleContinueModal}></lightning-button>-->
                             <lightning-button variant="brand" label="Close" onclick={closeStoreDetailModal} class="slds-m-left_x-small storeCompBtn storeDetailBtn"></lightning-button>
                         </footer>
                     </div>

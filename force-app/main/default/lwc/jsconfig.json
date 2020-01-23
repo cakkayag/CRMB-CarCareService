@@ -3,9 +3,6 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "c/lwc_AutoCompletePicklistComp": [
-                "lwc_AutoCompletePicklistComp/lwc_AutoCompletePicklistComp.js"
-            ],
             "c/lwc_CarCareNavigationComp": [
                 "lwc_CarCareNavigationComp/lwc_CarCareNavigationComp.js"
             ],

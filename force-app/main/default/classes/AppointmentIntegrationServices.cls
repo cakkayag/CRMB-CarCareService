@@ -46,35 +46,21 @@ public without sharing class AppointmentIntegrationServices {
                 HTTPResponse res = callAppointmentServiceAPI( setting.Setting_Value__c );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
-                    //system.debug(' getNearByStoreList : jsonBody : '+jsonBody);
                     nearByStoresObj = AppointmentStoreObj.parseList(jsonBody);
                     if(nearByStoresObj != null && nearByStoresObj.items != null){
                         Map<Integer , AppointmentStoreObj.Items> branchIdToStoreObjMap = new Map<Integer , AppointmentStoreObj.Items>();
                         for(AppointmentStoreObj.Items items : nearByStoresObj.items){
-                            //system.debug(' items   : '+items);
-                            //system.debug(' items.branchId   : '+items.branchId);
-                            //system.debug(' branchId.isNumeric()   : '+branchId.isNumeric());
                             if(items.branchId != null && branchId.isNumeric() ){
                                 
                                 branchIdToStoreObjMap.put(items.branchId , items );
-                                //system.debug(' branchIdToStoreObjMap   : '+branchIdToStoreObjMap);
-                                /*if(items.branchId ==  Integer.valueOf(branchId) ){
-                                    distanceToStoreMap.put(0.0 , items);
-                                }*/
                             }
                         }
-                        //system.debug(' distanceToStoreMap 1st   : '+distanceToStoreMap);
                         List<AAA_Location__c> Locations = getNearbyLocation(branchId);
-                        //system.debug(' Locations    : '+Locations);
                         for(AAA_Location__c locationObj : Locations){
                             Integer carCareLocationNumber = String.isNotBlank(locationObj.Car_Care_Location_Number__c) &&
                                                             locationObj.Car_Care_Location_Number__c.isNumeric() 
                                                             ? Integer.valueOf(locationObj.Car_Care_Location_Number__c)
                                                             : null;
-                            //system.debug(' carCareLocationNumber    : '+carCareLocationNumber);
-                            //system.debug(' branchIdToStoreObjMap.containsKey(carCareLocationNumber)   : '+branchIdToStoreObjMap.containsKey(carCareLocationNumber));
-                            //system.debug(' branchIdToStoreObjMap.get(carCareLocationNumber)    : '+branchIdToStoreObjMap.get(carCareLocationNumber));
-                            //system.debug(' (Decimal)locationObj.get(\'dist\')    : '+locationObj.get('dist') );
                             if( carCareLocationNumber != null && branchIdToStoreObjMap.containsKey(carCareLocationNumber)){
                                 system.debug(' locationObj    : '+locationObj);
                                 AppointmentStoreObj.Items Item = branchIdToStoreObjMap.get(carCareLocationNumber);
@@ -91,14 +77,9 @@ public without sharing class AppointmentIntegrationServices {
                     } 
                     
                 }
-                else{
-                    //availableServices.hasException = true;
-                    //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
-                }
             }
             
         }
-        system.debug(' before Return : '+distanceToStoreMap.values());
         return distanceToStoreMap != null && distanceToStoreMap.isEmpty() == false ? distanceToStoreMap.values() : new List<AppointmentStoreObj.Items>() ;
     }
 
@@ -109,21 +90,14 @@ public without sharing class AppointmentIntegrationServices {
             Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings(CarCareServiceConstants.Service_End_Point);
             if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
                 String endPoint = setting.Setting_Value__c.replace('{StoreId}',  storeId);
-                //String jsonBody = callAppointmentServiceAPI(endPoint );
-                //system.debug(' ## availableServices.items : '+jsonBody);
                 
                 HTTPResponse res = callAppointmentServiceAPI(endPoint );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
                     availableServices = AppointmentServiceObj.parse(jsonBody);
                 }
-                else{
-                    //availableServices.hasException = true;
-                    //availableServices.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
-                }
             }
         }
-        system.debug(' before Return : '+availableServices.items);
         return availableServices;
     }
 
@@ -135,10 +109,8 @@ public without sharing class AppointmentIntegrationServices {
         if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
             String endPoint = setting.Setting_Value__c;
             HTTPResponse res = callAppointmentServiceAPI(endPoint );
-            system.debug(' ## res.getStatusCode() : '+res.getStatusCode());
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
-                system.debug(' ## vehicleMakeList : '+jsonBody);
                 vehicleMake = (ItemsWrap) System.JSON.deserialize(jsonBody, ItemsWrap.class);
             }
             else{
@@ -159,8 +131,6 @@ public without sharing class AppointmentIntegrationServices {
             if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
             
                 String endPoint = setting.Setting_Value__c.replace('{VehicleMake}',  makeSelectedStr).replace('{vehicleModel}',  modelStr);
-                //String jsonBody = callAppointmentServiceAPI(endPoint );
-                //system.debug(' ## vehicleModelList : '+jsonBody);
                 HTTPResponse res = callAppointmentServiceAPI(endPoint );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
@@ -173,7 +143,6 @@ public without sharing class AppointmentIntegrationServices {
                 
             }    
         }
-        //system.debug(' before Return vehicleModelList : '+vehicleModel);
         return vehicleModel;
     }
 
@@ -182,9 +151,6 @@ public without sharing class AppointmentIntegrationServices {
     @AuraEnabled(cacheable=true)
     public static ItemsWrap getYears(){
         ItemsWrap years = new ItemsWrap();
-        //String endPoint = getYearsEndPoint;
-        //String jsonBody = callAppointmentServiceAPI(getYearsEndPoint );
-        //system.debug(' ## yearsList : '+jsonBody);
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings(CarCareServiceConstants.Years_End_Point);
         if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
         
@@ -198,14 +164,10 @@ public without sharing class AppointmentIntegrationServices {
                 years.exceptionMessage = 'Callout Failed due to '+ (res != null ? res.getStatus() : exceptionStr);
             }
         }
-        //system.debug(' before Return yearsList : '+years);
         return years;
     }
 
     private static HTTPResponse callAppointmentServiceAPI(String endPoint ){
-        //System.debug(' #### endPoint : '+endPoint);
-        //endPoint = EncodingUtil.urlEncode(endPoint, 'UTF-8');
-        //System.debug(' #### urlEncode endPoint : '+endPoint);
         HTTPResponse res = null;
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings(CarCareServiceConstants.Authorization_Key);
         if(setting != null && String.isNotBlank( setting.Setting_Value__c)){
@@ -233,8 +195,6 @@ public without sharing class AppointmentIntegrationServices {
             
         }
         return res;
-        //System.debug(res.getStatusCode());
-        //return res.getBody();
     }
 
     //Query Against Custom Metadata doesn't consider for 100 SOQL Governer limits, 
@@ -264,16 +224,4 @@ public without sharing class AppointmentIntegrationServices {
             exceptionMessage = '';   
         }
     }
-
-    /*public static String generateErrorMessage(HTTPResponse res){
-        String integartionCallOutErrorMessage = '';
-        if(res == null){
-            integartionCallOutErrorMessage 
-        }
-        else{
-
-        }
-        return null;
-    }*/
-
 }

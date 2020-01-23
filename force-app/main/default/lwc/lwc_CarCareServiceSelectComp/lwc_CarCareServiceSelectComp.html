@@ -5,7 +5,6 @@
             <span>Please select a service</span>
         </div>
         <fieldset class="slds-align_absolute-center maxWidth600px displayBlock">
-            <!--<legend class="slds-form-element__legend slds-form-element__label">Checkbox Group Label</legend>-->
             <template class="slds-form-element" for:each={availableServices} for:item='service'>
                 <div class="slds-form-element__control" key={service.id}>
                     <div class="slds-checkbox serviceElement" key={service.id}>
@@ -27,10 +26,7 @@
             <span>Please describe the service that you are requesting. Put as much detail as possible so the technician
                 can be more prepared. Describe any and all symptoms such as smells, noises, tremors, etc.</span>
         </div>
-        <!--<div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
-                <textarea placeholder="Input Text" rows="5" cols="150"></textarea>
-                
-        </div>-->
+        
         <div class="AdditionalInputTextArea slds-align_absolute-center maxWidth600px">
             <lightning-textarea name="serviceAdditionalInfo" value={serviceAdditionalInfo}
                 style="width: 100%; height:100%" onchange={onTextAreaChange}></lightning-textarea>
