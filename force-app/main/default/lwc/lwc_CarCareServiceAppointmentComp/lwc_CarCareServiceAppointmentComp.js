@@ -1,6 +1,10 @@
 import { LightningElement, track, api } from "lwc";
+import carCareResources from "@salesforce/resourceUrl/CarCareReserveService";
 
 export default class lwc_CarCareServiceAppointmentComp extends LightningElement {
+  leftArrowURL = carCareResources + "/images/arrowLeft.png";
+  rightArrowURL = carCareResources + "/images/arrowRight.png";
+
   @track days = []; //["25 Mar", "26 Mar", "27 Mar", "28 Mar", "29 Mar"];
   @track hours = [
     "8 AM",

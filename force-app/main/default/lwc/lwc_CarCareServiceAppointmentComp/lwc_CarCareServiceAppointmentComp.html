@@ -3,22 +3,26 @@
         <table>
             <thead class="headerRowDateTime_Main">
                 <tr>
+                    <td><img src={rightArrowURL} class="dateTimeArrowImg dateTimeLeftArrowImg" /></td>
                     <template for:each={days} for:item='day'>
                         <td key={day.date} class="headerRowDateTime">
                             <span class="headerRowDate">{day.date}</span>
                             <span class="headerRowTime">{day.openTime} - {day.closeTime}</span>
                         </td>
                     </template>
+                    <td><img src={rightArrowURL} class="dateTimeArrowImg" /></td>
                 </tr>
             </thead>
             <tbody class="dateTimeBody">
                 <template for:each={hours} for:item='h'>
                     <tr key={h}>
+                        <td></td>
                         <template for:each={days} for:item='day'>
                             <td key={day}>
                                 <div class="timeSlot">{h}</div>
                             </td>
                         </template>
+                        <td></td>
                     </tr>
                 </template>
             </tbody>
