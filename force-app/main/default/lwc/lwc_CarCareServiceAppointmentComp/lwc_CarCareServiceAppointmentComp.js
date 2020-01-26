@@ -1,9 +1,12 @@
 import { LightningElement, track, api } from "lwc";
 import carCareResources from "@salesforce/resourceUrl/CarCareReserveService";
+import getAvailableAppointmentsInfo from "@salesforce/apex/AppointmentIntegrationServices.getAvailableAppointments";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class lwc_CarCareServiceAppointmentComp extends LightningElement {
   leftArrowURL = carCareResources + "/images/arrowLeft.png";
   rightArrowURL = carCareResources + "/images/arrowRight.png";
+  @api storeId = '';
 
   @track days = []; //["25 Mar", "26 Mar", "27 Mar", "28 Mar", "29 Mar"];
   @track hours = [
@@ -117,5 +120,43 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       //this.days.push(daysElement.date);
     });
     console.log("--" + this.days);
+  }
+
+  getAvailableAppointmentsInfoMethod(){
+    this.isLoading = true;
+    getAvailableAppointmentsInfo({ storeId: this.storeId })
+      .then(result => {
+        if (result !== undefined) {
+          result.forEach(element => {
+        
+          })
+        
+        this.isLoading = false;
+        this.error = undefined;
+        }
+      })
+      .catch(error => {
+        this.error = error;
+        this.selectedStoreInfo = undefined;
+        this.isLoading = false;
+        this.showToast(
+          "Error",
+          "Error Occured while fetching Store Info ( " +
+            this.error +
+            " ), Please contact Support team",
+          "Error",
+          "sticky"
+        );
+      });
+  }
+
+  showToast(title, message, variant, mode) {
+    const evt = new ShowToastEvent({
+      title: title,
+      message: message,
+      variant: variant,
+      mode: mode
+    });
+    this.dispatchEvent(evt);
   }
 }
