@@ -1,31 +1,81 @@
 <template>
-    <div class="slds-align_absolute-center">
-        <table>
-            <thead class="headerRowDateTime_Main">
-                <tr>
-                    <td><img src={rightArrowURL} class="dateTimeArrowImg dateTimeLeftArrowImg" /></td>
-                    <template for:each={days} for:item='day'>
-                        <td key={day.date} class="headerRowDateTime">
-                            <span class="headerRowDate">{day.date}</span>
-                            <span class="headerRowTime">{day.openTime} - {day.closeTime}</span>
-                        </td>
-                    </template>
-                    <td><img src={rightArrowURL} class="dateTimeArrowImg" /></td>
-                </tr>
-            </thead>
-            <tbody class="dateTimeBody">
-                <template for:each={hours} for:item='h'>
-                    <tr key={h}>
-                        <td></td>
-                        <template for:each={days} for:item='day'>
-                            <td key={day}>
-                                <div class="timeSlot">{h}</div>
-                            </td>
-                        </template>
-                        <td></td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
-    </div>
+  <div class="slds-align_absolute-center">
+    <table class="dateTimeCmpTable">
+      <thead class="headerRowDateTime_Main">
+        <tr>
+          <td align="center">
+            <img
+              src={rightArrowURL}
+              class="dateTimeArrowImg dateTimeLeftArrowImg"
+            />
+          </td>
+          <template for:each={days} for:item="day">
+            <td key={day.date} class="headerRowDateTime">
+              <span class="headerRowDate">{day.date}</span>
+              <span class="headerRowTime">
+                {day.openTime} - {day.closeTime}
+              </span>
+            </td>
+          </template>
+          <td align="center">
+            <img src={rightArrowURL} class="dateTimeArrowImg" />
+          </td>
+        </tr>
+      </thead>
+      <tbody class="dateTimeBody">
+        <template for:each={availableHoursWithDatesArr} for:item="h">
+          <tr key={h.hour}>
+            <td></td>
+            <template for:each={h.availableTimes} for:item="slot">
+              <td align="center" key={slot.date} class="dateTimeBodytd">
+                <div
+                  if:true={slot.isAvailable}
+                  class="timeSlot availableTimeSlot"
+                  data-date={slot.date}
+                  data-hour={h.hour}
+                  onclick={selectTimeSlot}
+                >
+                  {h.hour}
+                </div>
+                <div if:false={slot.isAvailable} class="timeSlot">
+                  {h.hour}
+                </div>
+              </td>
+            </template>
+            <td></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+  <div class="slds-align_absolute-center dateTimeLegend">
+    <div class="unavailable"></div>
+    &nbsp;<span>unavailable</span>
+    <div class="available"></div>
+    &nbsp;<span>available</span>
+    <div class="selected"></div>
+    &nbsp;<span>selected</span>
+  </div>
+  <div class="slds-align_absolute-center">
+    <fieldset class="slds-form-element contactFormChckBoxes">
+      <div class="slds-form-element__control">
+        <lightning-input
+          type="checkbox"
+          name="stayWithVehicle"
+          label="I’m going to stay with the vehicle during service."
+          checked={stayWithVehicle}
+        >
+        </lightning-input>
+      </div>
+      <div class="slds-form-element__control">
+        <lightning-input
+          type="checkbox"
+          name="needTransportationServices"
+          label="I need transportation services."
+          checked={needTransportationServices}
+        >
+        </lightning-input>
+      </div>
+    </fieldset>
+  </div>
 </template>

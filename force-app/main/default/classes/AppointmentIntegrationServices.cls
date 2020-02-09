@@ -157,7 +157,7 @@ public without sharing class AppointmentIntegrationServices {
             //System.debug('res : '+(res != null ? string.valueOf(res.getStatusCode()) : 'Its null '));
             //if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
-                availableAppointment.days = (List<AppointmentObj.Days>)AppointmentServiceObj.parse(jsonBody); //(List<AppointmentObj.Days>) System.JSON.deserialize(jsonBody, List<AppointmentObj.Days>.class);
+                availableAppointment.days = (List<AppointmentObj.Days>) System.JSON.deserialize(jsonBody, List<AppointmentObj.Days>.class);
             //}
             /*else{
                 availableAppointment.hasException = true;
