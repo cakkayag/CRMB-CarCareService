@@ -146,16 +146,23 @@ public without sharing class AppointmentIntegrationServices {
         if(setting != null && String.isNotBlank( setting.Appointment_Endpoint__c)){
             Integer configuredWeeks = setting.Consideration_Weeks__c != null && setting.Consideration_Weeks__c > 0 ? 
                                         Integer.valueof(setting.Consideration_Weeks__c) : CarCareServiceConstants.defaultWeeks;
+            availableAppointment.paginationForMobile =  setting.pagination_for_Mobile__c != null && setting.pagination_for_Mobile__c > 0 ? 
+                                        Integer.valueof(setting.pagination_for_Mobile__c) : CarCareServiceConstants.pagination_for_Mobile;
+            availableAppointment.paginationForLaptop = setting.pagination_for_Laptop__c != null && setting.pagination_for_Laptop__c > 0 ? 
+                                        Integer.valueof(setting.pagination_for_Laptop__c) : CarCareServiceConstants.pagination_for_Laptop;
+            
             String endPoint = setting.Appointment_Endpoint__c.replace('{StoreId}',  storeId).replace('{Weeks}', String.valueOf(configuredWeeks));
-           HTTPResponse res = callAppointmentServiceAPI( endPoint );
-            if(res != null && res.getStatusCode() == 200 ){
+            System.debug('endPoint : '+endPoint);
+            HTTPResponse res = callAppointmentServiceAPI( endPoint );
+            //System.debug('res : '+(res != null ? string.valueOf(res.getStatusCode()) : 'Its null '));
+            //if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
-                availableAppointment = (AppointmentObj) System.JSON.deserialize(jsonBody, AppointmentObj.class);
-            }
-            else{
+                availableAppointment.days = (List<AppointmentObj.Days>)AppointmentServiceObj.parse(jsonBody); //(List<AppointmentObj.Days>) System.JSON.deserialize(jsonBody, List<AppointmentObj.Days>.class);
+            //}
+            /*else{
                 availableAppointment.hasException = true;
                 availableAppointment.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
-            }
+            }*/
         }
         return availableAppointment;
     }
@@ -225,7 +232,17 @@ public without sharing class AppointmentIntegrationServices {
         Car_Care_Service_Setting__mdt carCareServiceSetting = new Car_Care_Service_Setting__mdt();
         for( Car_Care_Service_Setting__mdt Setting : [Select id, 
                                                             DeveloperName, 
-                                                            Setting_Value__c 
+                                                            Appointment_Endpoint__c,
+                                                            Authorization_Key__c,
+                                                            Consideration_Range__c,
+                                                            Consideration_Weeks__c,
+                                                            pagination_for_Laptop__c,
+                                                            pagination_for_Mobile__c,
+                                                            service_Endpoint__c,
+                                                            store_Endpoint__c,
+                                                            vehicle_Make_EndPoint__c,
+                                                            vehicle_Model_EndPoint__c,
+                                                            years_EndPoint__c 
                                                             from Car_Care_Service_Setting__mdt 
                                                             where DeveloperName =: 'Car_Care_Service_Setting']){
             

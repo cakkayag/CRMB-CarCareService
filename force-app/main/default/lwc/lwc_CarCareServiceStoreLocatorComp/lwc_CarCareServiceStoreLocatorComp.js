@@ -87,9 +87,13 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
         if (result !== undefined) {
           let now = new Date();
           let dayName = this.getDayNameList()[now.getDay()];
+          console.log('result');
+          console.log(JSON.parse(JSON.stringify(result)));
           result.forEach(element => {
             let storeOpeningTimings = "";
             let storeTimingsMap = [];
+            console.log('element');
+          console.log(JSON.parse(JSON.stringify(element)));
             if (element.storeHours !== undefined) {
               for (let i = 0; i < element.storeHours.length; i++) {
                 if (element.storeHours[i].day !== undefined) {
@@ -143,6 +147,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
               openingTimings: storeOpeningTimings,
               storeTimingsMap: storeTimingsMap
             };
+            console.log('isEqualCheck'+isEqualCheck);
+             console.log(JSON.parse(JSON.stringify(selectOption)));
 
             if (isEqualCheck) {
               this.storeRecordId = element.id;

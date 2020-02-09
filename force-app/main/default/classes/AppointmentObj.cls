@@ -1,5 +1,7 @@
 public with sharing class AppointmentObj {
     @AuraEnabled public List<Days> days;
+    @AuraEnabled public Integer paginationForMobile;
+    @AuraEnabled public Integer paginationForLaptop;
     @AuraEnabled public boolean hasException;
     @AuraEnabled public String exceptionMessage;
 

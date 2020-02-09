@@ -6,24 +6,17 @@ import { ShowToastEvent } from "lightning/platformShowToastEvent";
 export default class lwc_CarCareServiceAppointmentComp extends LightningElement {
   leftArrowURL = carCareResources + "/images/arrowLeft.png";
   rightArrowURL = carCareResources + "/images/arrowRight.png";
+  
   @api storeId = '';
+  @api selectedAppointmentObj ={};
+  
+  @track days = []; 
+  @track hours = ["8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM"];
+  @track isLoading = true;
+  @track error;
 
-  @track days = []; //["25 Mar", "26 Mar", "27 Mar", "28 Mar", "29 Mar"];
-  @track hours = [
-    "8 AM",
-    "9 AM",
-    "10 AM",
-    "11 AM",
-    "12 PM",
-    "1 PM",
-    "2 PM",
-    "3 PM",
-    "4 PM",
-    "5 PM",
-    "6 PM",
-    "7 PM",
-    "8 PM"
-  ];
+  weekday = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  monthStr = [ "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
   @api isMobile = {
     Android: function() {
@@ -71,6 +64,11 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       this.showMobile = true;
     }
 
+    if(this.selectedAppointmentObj !== undefined){
+      this.getAvailableAppointmentsInfoMethod();
+    }
+
+    /*
     this.dateTimeResponseObj = JSON.parse(this.dateTimeResponse);
 
     let weekday = new Array(7);
@@ -119,20 +117,47 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       }
       //this.days.push(daysElement.date);
     });
-    console.log("--" + this.days);
+    console.log("--" + this.days);*/
   }
 
   getAvailableAppointmentsInfoMethod(){
     this.isLoading = true;
     getAvailableAppointmentsInfo({ storeId: this.storeId })
       .then(result => {
-        if (result !== undefined) {
-          result.forEach(element => {
-        
+        if (result !== undefined && result.days !== undefined ) {
+          let daysArrCount = 0;
+          let numberOfColsToDisplay = this.showMobile ? result.paginationForMobile : result.pagination_for_Laptop;
+          result.days.forEach(element => {
+            if (daysArrCount < numberOfColsToDisplay) {
+              let daysObj = {};
+              let myDate = new Date(element.date);
+              daysObj.date =
+                this.weekday[myDate.getDay()] +
+                " " +
+                myDate.getDate() +
+                " " +
+                this.monthStr[myDate.getMonth()];
+              //daysObj.date = daysElement.date;
+              daysObj.openTime = element.openTime;
+              daysObj.closeTime = element.closeTime;
+              this.days.push(daysObj);
+              daysArrCount++;
+            }
           })
-        
-        this.isLoading = false;
-        this.error = undefined;
+          this.isLoading = false;
+          this.error = undefined;
+        }
+        else{
+          this.error = 'No Records found';
+          this.isLoading = false;
+          this.showToast(
+            "Error",
+            "Error Occured while fetching Store Info ( " +
+              this.error +
+              " ), Please contact Support team",
+            "Error",
+            "sticky"
+          );
         }
       })
       .catch(error => {
@@ -159,4 +184,5 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     });
     this.dispatchEvent(evt);
   }
+
 }
