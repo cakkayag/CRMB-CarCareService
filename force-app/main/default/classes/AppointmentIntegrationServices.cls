@@ -147,22 +147,24 @@ public without sharing class AppointmentIntegrationServices {
             Integer configuredWeeks = setting.Consideration_Weeks__c != null && setting.Consideration_Weeks__c > 0 ? 
                                         Integer.valueof(setting.Consideration_Weeks__c) : CarCareServiceConstants.defaultWeeks;
             availableAppointment.paginationForMobile =  setting.pagination_for_Mobile__c != null && setting.pagination_for_Mobile__c > 0 ? 
-                                        Integer.valueof(setting.pagination_for_Mobile__c) : CarCareServiceConstants.pagination_for_Mobile;
+                                        Integer.valueof(setting.pagination_for_Mobile__c) : CarCareServiceConstants.default_pagination_for_Mobile;
             availableAppointment.paginationForLaptop = setting.pagination_for_Laptop__c != null && setting.pagination_for_Laptop__c > 0 ? 
-                                        Integer.valueof(setting.pagination_for_Laptop__c) : CarCareServiceConstants.pagination_for_Laptop;
-            
+                                        Integer.valueof(setting.pagination_for_Laptop__c) : CarCareServiceConstants.default_pagination_for_Laptop;
+            availableAppointment.paginationForLaptop = setting.pagination_for_Tablet__c != null && setting.pagination_for_Tablet__c > 0 ? 
+                                        Integer.valueof(setting.pagination_for_Tablet__c) : CarCareServiceConstants.default_pagination_for_Tablet;
+
             String endPoint = setting.Appointment_Endpoint__c.replace('{StoreId}',  storeId).replace('{Weeks}', String.valueOf(configuredWeeks));
-            System.debug('endPoint : '+endPoint);
             HTTPResponse res = callAppointmentServiceAPI( endPoint );
-            //System.debug('res : '+(res != null ? string.valueOf(res.getStatusCode()) : 'Its null '));
-            //if(res != null && res.getStatusCode() == 200 ){
+            if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
-                availableAppointment.days = (List<AppointmentObj.Days>) System.JSON.deserialize(jsonBody, List<AppointmentObj.Days>.class);
-            //}
-            /*else{
-                availableAppointment.hasException = true;
-                availableAppointment.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
-            }*/
+                availableAppointment.days = AppointmentObj.parse(jsonBody);
+            }
+            else{
+                String jsonBody =  '{"days":[{"date":"1/21/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/22/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/23/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/24/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/25/2020 12:00:00 AM","openTime":"08:00:00","closeTime":"16:00:00","availableTimes":["08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00"]},{"date":"1/27/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]}]}';
+                availableAppointment.days = AppointmentObj.parse(jsonBody);
+                //availableAppointment.hasException = true;
+                //availableAppointment.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
+            }
         }
         return availableAppointment;
     }
@@ -227,7 +229,7 @@ public without sharing class AppointmentIntegrationServices {
         return Locations;
     }
     
-    //Query Against Custom Metadata doesn't consider for 100 SOQL Governer limits, 
+     
     private static Car_Care_Service_Setting__mdt getCarCareServiceSettings(){
         Car_Care_Service_Setting__mdt carCareServiceSetting = new Car_Care_Service_Setting__mdt();
         for( Car_Care_Service_Setting__mdt Setting : [Select id, 
@@ -238,13 +240,14 @@ public without sharing class AppointmentIntegrationServices {
                                                             Consideration_Weeks__c,
                                                             pagination_for_Laptop__c,
                                                             pagination_for_Mobile__c,
+                                                            pagination_for_Tablet__c,
                                                             service_Endpoint__c,
                                                             store_Endpoint__c,
                                                             vehicle_Make_EndPoint__c,
                                                             vehicle_Model_EndPoint__c,
                                                             years_EndPoint__c 
                                                             from Car_Care_Service_Setting__mdt 
-                                                            where DeveloperName =: 'Car_Care_Service_Setting']){
+                                                            where DeveloperName =: CarCareServiceConstants.Car_Care_Service_Setting]){
             
             carCareServiceSetting = Setting;
             break;
