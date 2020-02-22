@@ -19,18 +19,22 @@
             </c-lwc_-car-care-service-vehicle-info-comp>
         </div>
         <div if:true={showFourthPage}>
-            <c-lwc_-car-care-service-select-comp service-select={serviceSelectInfo} store-id={storeId}>
+            <c-lwc_-car-care-service-select-comp 
+                service-select={serviceSelectInfo} 
+                store-id={storeId}>
             </c-lwc_-car-care-service-select-comp>
         </div>
         <div if:true={showFifthPage}>
-            <c-lwc_-car-care-service-Appointment-comp store-id={storeId}>
+            <c-lwc_-car-care-service-Appointment-comp 
+                store-id={storeId} 
+                selected-appointment-obj={appointmentSelectionInfo}>
             </c-lwc_-car-care-service-Appointment-comp>
         </div>
         <div if:true={showSixthPage}>
             <c-lwc_-car-care-service-confirmation-comp store-location-review={selectedStoreObjInfo}
             contact-info-review={contactInfo}
             service-request-review={serviceSelectInfo}
-            date-time-review={dateTimeInfo}
+            date-time-review={appointmentSelectionInfo}
             vehicle-info-review={vehicleInfo}
             oneditinfo={handleEditRequest}>
             </c-lwc_-car-care-service-confirmation-comp>

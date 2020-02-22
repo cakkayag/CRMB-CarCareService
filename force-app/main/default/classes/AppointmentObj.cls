@@ -2,6 +2,7 @@ public with sharing class AppointmentObj {
     @AuraEnabled public List<Days> days;
     @AuraEnabled public Integer paginationForMobile;
     @AuraEnabled public Integer paginationForLaptop;
+    @AuraEnabled public Integer paginationForTablet;
     @AuraEnabled public boolean hasException;
     @AuraEnabled public String exceptionMessage;
 
@@ -37,7 +38,7 @@ public with sharing class AppointmentObj {
             for(Object availableTime : availableTimeList){
                 day.availableTimes.add((String)availableTime);
             }
-             
+
             availableDayList.add(day);
             
         }

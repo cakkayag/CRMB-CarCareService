@@ -9,12 +9,16 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
 
   @api storeId = "";
   @api selectedAppointmentObj = {};
-
-  @track needTransportationServices = false;
-  @track stayWithVehicle = false;
-
+  @track selectedDate = '';
+  @track selectedHour = '';
   @track days = [];
   @track availableHoursWithDatesArr = [];
+  @track needTransportationServices = false;
+  @track stayWithVehicle = false;
+  @track isLoading = true;
+  @track error;
+
+  
   @track hours = [
     "7:30 A.M.",
     "8:00 A.M.",
@@ -34,9 +38,9 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     "3:00 P.M.",
     "3:30 P.M.",
     "4:00 P.M."
+     
   ];
-  @track isLoading = true;
-  @track error;
+  
 
   weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   monthStr = [
@@ -86,24 +90,71 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   @track dateTimeResponseObjArr;
 
   connectedCallback() {
-    if (
-      this.isMobile.Android() ||
-      this.isMobile.BlackBerry() ||
-      this.isMobile.iOS() ||
-      this.isMobile.Opera() ||
-      this.isMobile.Windows()
-    ) {
-      //this.showMobile = true;
-      this.numberOfColsToDisplay = 2;
-    } else if (this.isMobile.ipad()) {
-      this.numberOfColsToDisplay = 4;
-    } else {
-      this.numberOfColsToDisplay = 5;
+    
+    this.selectedAppointmentObj = JSON.parse(JSON.stringify(this.selectedAppointmentObj));
+    if (this.selectedAppointmentObj === undefined || JSON.stringify(this.selectedAppointmentObj) === JSON.stringify({})) {
+      this.getAvailableAppointmentsInfoMethod();
+      //TODO : Remove below 2 line
+      //this.getTestData();
+      //this.isLoading = false;
     }
+    else{
+      this.days = this.selectedAppointmentObj._days !== undefined ? this.selectedAppointmentObj._days : [];
+      this.availableHoursWithDatesArr = this.selectedAppointmentObj._availableHoursWithDatesArr !== undefined ? this.selectedAppointmentObj._availableHoursWithDatesArr : [];
+      this.selectedDate = this.selectedAppointmentObj._selectedDate !== undefined ? this.selectedAppointmentObj._selectedDate : '';
+      this.selectedHour = this.selectedAppointmentObj._selectedHour !== undefined ? this.selectedAppointmentObj._selectedHour : '';
+      //this.isLoading = false;
 
-    if (this.selectedAppointmentObj !== undefined) {
-      //this.getAvailableAppointmentsInfoMethod();
-      this.getTestData();
+      //TODO : Comment below
+      this.getAvailableAppointmentsInfoMethod();
+      
+      /*console.log('availableHoursWithDatesArr :');
+      console.log(JSON.parse(JSON.stringify(this.availableHoursWithDatesArr)));
+      let indexVal = 0;
+      let finalIndex ;
+      this.availableHoursWithDatesArr.forEach(availableHour => {
+      console.log('availableHour.hour :');
+      console.log(JSON.parse(JSON.stringify(availableHour)));
+      console.log(availableHour.hour+"  ===  "+this.selectedHour );
+        if(availableHour.hour === this.selectedHour ){
+          finalIndex = indexVal;
+          availableHour.availableTimes.forEach(availableTime => {
+            console.log('availableHour.availableTimes :');
+            console.log(JSON.parse(JSON.stringify(availableTime.date)));
+            console.log(availableTime.date +"  ===  "+this.selectedDate );
+            if(availableTime.date === this.selectedDate){
+              availableTime.isSelected = true;
+              console.log('availableHour.isSelected ');
+            }
+          });
+        }
+        console.log('before indexVal :'+indexVal);
+        indexVal++;
+        console.log('After indexVal :'+indexVal);
+        
+      });
+      console.log('Has value :');
+      let availableSlots = this.template.querySelectorAll(".timeSlot");
+      console.log('JSON.parse(JSON.stringify(availableSlots'+JSON.parse(JSON.stringify(availableSlots)));
+      if (availableSlots !== undefined && availableSlots.length > 0) {
+        for(let i=0 ; i < availableSlots.length ; i++){
+          console.log('availableSlots :');
+          console.log(JSON.parse(JSON.stringify(availableSlots[i])));
+          console.log(availableSlots[i].dataset.date +"  ===  "+this.selectedDate );
+          console.log(availableSlots[i].dataset.hour +"  ===  "+this.selectedHour );
+          if(availableSlots[i].dataset.date === this.selectedDate && 
+            availableSlots[i].dataset.hour === this.selectedHour ){
+            availableSlots[i].classList.add("selectedTimeSlot");
+          }
+          else{
+            availableSlots[i].classList.remove("selectedTimeSlot");
+          }
+        }
+        
+      }*/
+      
+      
+      
     }
   }
 
@@ -161,27 +212,82 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     this.isLoading = true;
     getAvailableAppointmentsInfo({ storeId: this.storeId })
       .then(result => {
-        if (result !== undefined && result.days !== undefined) {
+        if (result !== undefined ) {
+          let daysArr = result.days !== undefined ? result.days : [];
           let daysArrCount = 0;
-          let numberOfColsToDisplay = this.showMobile
-            ? result.paginationForMobile
-            : result.pagination_for_Laptop; // need to change as line number 63-69
-          result.days.forEach(element => {
-            if (daysArrCount < numberOfColsToDisplay) {
+
+          if (
+            this.isMobile.Android() ||
+            this.isMobile.BlackBerry() ||
+            this.isMobile.iOS() ||
+            this.isMobile.Opera() ||
+            this.isMobile.Windows()
+          ) {
+            //this.showMobile = true;
+            this.numberOfColsToDisplay = result.paginationForMobile !== undefined ? result.paginationForMobile : 2;
+          } else if (this.isMobile.ipad()) {
+            this.numberOfColsToDisplay = result.paginationForTablet !== undefined ? result.paginationForTablet : 4;
+          } else {
+            this.numberOfColsToDisplay =  result.paginationForLaptop !== undefined ? result.paginationForLaptop : 5;
+          }
+
+          
+
+          daysArr.forEach(daysElement => {
+            //console.log('daysElement :');
+            //console.log(JSON.parse(JSON.stringify(daysElement)));
+            if (daysArrCount < this.numberOfColsToDisplay) {
               let daysObj = {};
-              let myDate = new Date(element.date);
+              let myDate = new Date(daysElement.dateVal);
               daysObj.date =
                 this.weekday[myDate.getDay()] +
                 " " +
                 myDate.getDate() +
                 " " +
                 this.monthStr[myDate.getMonth()];
-              //daysObj.date = daysElement.date;
-              daysObj.openTime = this.strToTime(element.openTime, "h:m:s"); //element.openTime;
-              daysObj.closeTime = this.strToTime(element.closeTime, "h:m:s"); //element.closeTime;
+              daysObj.openTime = this.strToTime(daysElement.openTime, "h:m:s");
+              daysObj.closeTime = this.strToTime(daysElement.closeTime, "h:m:s");
+              daysObj.availableTimes = daysElement.availableTimes;
               this.days.push(daysObj);
               daysArrCount++;
             }
+          });
+
+          this.hours.forEach(hourElement => {
+            let availableHoursWithDates = {};
+            availableHoursWithDates.hour = hourElement;
+            let availableHoursPerDateArr = [];
+            this.days.forEach(dayElement => {
+              let formattedAvailableTimes = [];
+              dayElement.availableTimes.forEach(availableTimeSlot => {
+                formattedAvailableTimes.push(
+                  this.strToTime(availableTimeSlot, "h:m:s")
+                );
+              });
+              let availableHoursPerDate = {};
+              availableHoursPerDate.date = dayElement.date;
+              availableHoursPerDate.isSelected = false;
+              if (formattedAvailableTimes.includes(hourElement)) {
+                availableHoursPerDate.isAvailable = true;
+                console.log('########### :');
+                
+                console.log(this.selectedDate +"  ===  "+dayElement.date );
+                console.log(this.selectedHour +"  ===  "+hourElement );
+                if(this.selectedDate === dayElement.date && this.selectedHour === hourElement){
+                  availableHoursPerDate.isSelected = true;
+                  console.log('************************** Selected ************************');
+                }
+              } else {
+                availableHoursPerDate.isAvailable = false;
+                
+              }
+              
+              
+              availableHoursPerDateArr.push(availableHoursPerDate);
+            });
+            availableHoursWithDates.availableTimes = availableHoursPerDateArr;
+            if (!this.availableHoursWithDatesArr.includes(availableHoursWithDates))
+              this.availableHoursWithDatesArr.push(availableHoursWithDates);
           });
           this.isLoading = false;
           this.error = undefined;
@@ -200,7 +306,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       })
       .catch(error => {
         this.error = error;
-        this.selectedStoreInfo = undefined;
+        //this.selectedStoreInfo = undefined;
         this.isLoading = false;
         this.showToast(
           "Error",
@@ -225,7 +331,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
 
   strToTime(dStr, format) {
     var dt = new Date();
-    if (format == "h:m:s") {
+    if (format === "h:m:s") {
       dt.setHours(dStr.substr(0, dStr.indexOf(":")));
       dt.setMinutes(dStr.substr(this.getPosition(dStr, ":", 1) + 1, 2));
       dt.setSeconds(0);
@@ -238,14 +344,36 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     }
     return "Invalid Format";
   }
+
   getPosition(string, subString, index) {
     return string.split(subString, index).join(subString).length;
   }
+
   selectTimeSlot(event) {
     let selectedSlots = this.template.querySelectorAll(".selectedTimeSlot");
     if (selectedSlots.length > 0) {
       selectedSlots[0].classList.remove("selectedTimeSlot");
     }
     event.currentTarget.classList.add("selectedTimeSlot");
+    console.log('event.currentTarget :');
+    this.selectedDate = event.currentTarget.dataset.date;
+    this.selectedHour = event.currentTarget.dataset.hour;
+  }
+
+  @api
+  getAppointmentInfo(){
+    this.selectedAppointmentObj = { 
+      _day : this.days,
+      _hours : this.hours,
+      _availableHoursWithDatesArr : this.availableHoursWithDatesArr,
+      _selectedDate : this.selectedDate,
+      _selectedHour : this.selectedHour,
+      _response : this.stayWithVehicle === true ? "I’m going to stay with the vehicle during service." : "I need transportation services." 
+    };
+    return this.selectedAppointmentObj;
+  }
+
+  get isLoaded() {
+    return this.isLoading ? false : true;
   }
 }

@@ -150,10 +150,11 @@ public without sharing class AppointmentIntegrationServices {
                                         Integer.valueof(setting.pagination_for_Mobile__c) : CarCareServiceConstants.default_pagination_for_Mobile;
             availableAppointment.paginationForLaptop = setting.pagination_for_Laptop__c != null && setting.pagination_for_Laptop__c > 0 ? 
                                         Integer.valueof(setting.pagination_for_Laptop__c) : CarCareServiceConstants.default_pagination_for_Laptop;
-            availableAppointment.paginationForLaptop = setting.pagination_for_Tablet__c != null && setting.pagination_for_Tablet__c > 0 ? 
+            availableAppointment.paginationForTablet = setting.pagination_for_Tablet__c != null && setting.pagination_for_Tablet__c > 0 ? 
                                         Integer.valueof(setting.pagination_for_Tablet__c) : CarCareServiceConstants.default_pagination_for_Tablet;
 
             String endPoint = setting.Appointment_Endpoint__c.replace('{StoreId}',  storeId).replace('{Weeks}', String.valueOf(configuredWeeks));
+            System.debug('endPoint : '+endPoint);
             HTTPResponse res = callAppointmentServiceAPI( endPoint );
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();

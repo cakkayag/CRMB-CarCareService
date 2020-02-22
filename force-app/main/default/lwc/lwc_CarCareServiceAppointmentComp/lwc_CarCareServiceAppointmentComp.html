@@ -1,4 +1,5 @@
 <template>
+  <div if:true={isLoaded}>
   <div class="slds-align_absolute-center">
     <table class="dateTimeCmpTable">
       <thead class="headerRowDateTime_Main">
@@ -28,14 +29,25 @@
             <td></td>
             <template for:each={h.availableTimes} for:item="slot">
               <td align="center" key={slot.date} class="dateTimeBodytd">
+                <div if:true={slot.isAvailable}>
+                  <div
+                  if:true={slot.isSelected}
+                  class="timeSlot availableTimeSlot selectedTimeSlot"
+                  data-date={slot.date}
+                  data-hour={h.hour}
+                  onclick={selectTimeSlot}
+                >
+                  {h.hour}
+                </div>
                 <div
-                  if:true={slot.isAvailable}
+                  if:false={slot.isSelected}
                   class="timeSlot availableTimeSlot"
                   data-date={slot.date}
                   data-hour={h.hour}
                   onclick={selectTimeSlot}
                 >
                   {h.hour}
+                </div>
                 </div>
                 <div if:false={slot.isAvailable} class="timeSlot">
                   {h.hour}
@@ -78,4 +90,8 @@
       </div>
     </fieldset>
   </div>
+</div>
+<div if:true={isLoading} class="maxWidth600px">
+    <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
+</div>
 </template>
