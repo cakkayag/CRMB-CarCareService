@@ -1,40 +1,62 @@
 <template>
     <div class="slds-align_absolute-center maxWidth600px displayBlock">
-
         <div class="slds-grid slds-wrap">
             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Store Location</span>
-                    <span class="colEdit" data-naviagate-id="1" onclick={navigateToEdit}>EDIT</span>
+                    <span class="colEdit"
+                          data-naviagate-id="1"
+                          onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
                     {storeLocationReview.name}
                 </div>
-                <div class="colBody">
+                <!--<div class="colBody">
                     <span>Hours: Monday - Friday 7:30AM - 6PM</span>
                     <span>Saturday 8:00AM - 4PM</span>
                     <span>Sunday Closed</span>
-                </div>
+                </div>-->
             </div>
             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Contact Info</span>
-                    <span class="colEdit" data-naviagate-id="2" onclick={navigateToEdit}>EDIT</span>
+                    <span class="colEdit"
+                          data-naviagate-id="2"
+                          onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
                     <span>{contactInfoReview.firstName} {contactInfoReview.lastName}</span>
                     <span>{contactInfoReview.email}</span>
                     <span>{contactInfoReview.mobile}</span>
                 </div>
-
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
                 <div class="colHeaderDiv">
-                    <span class="colHeader">Service Request</span>
-                    <span class="colEdit" data-naviagate-id="4" onclick={navigateToEdit}>EDIT</span>
+                    <span class="colHeader">Vehicle Info</span>
+                    <span class="colEdit"
+                          data-naviagate-id="3"
+                          onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    <template class="slds-form-element" for:each={serviceRequestReview._availableServices}
-                        for:item='service'>
-                        <div class="slds-form-element__control" key={service.id}>
+                    <span>{vehicleInfoReview._selectedYear}
+                        {vehicleInfoReview._selectedMake}</span>
+                    <span>{vehicleInfoReview._selectedModel} SubModel</span>
+                    <span>Mileage: XXXX</span>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
+                <div class="colHeaderDiv">
+                    <span class="colHeader">Service Request</span>
+                    <span class="colEdit"
+                          data-naviagate-id="4"
+                          onclick={navigateToEdit}>EDIT</span>
+                </div>
+                <div class="colBody">
+                    <template class="slds-form-element"
+                              for:each={serviceRequestReview._availableServices}
+                              for:item="service">
+                        <div class="slds-form-element__control"
+                             key={service.id}>
                             <div if:true={service.isSelected}>
                                 <span>{service.name}</span>
                             </div>
@@ -43,30 +65,19 @@
                 </div>
             </div>
             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
-                <div class="colHeaderDiv">
-                    <span class="colHeader">Vehicle Info</span>
-                    <span class="colEdit" data-naviagate-id="3" onclick={navigateToEdit}>EDIT</span>
-                </div>
-                <div class="colBody">
-                    <span>{vehicleInfoReview._selectedYear} {vehicleInfoReview._selectedMake}</span>
-                    <span>{vehicleInfoReview._selectedModel} SubModel</span>
-                    <span>Mileage: XXXX</span>
-                </div>
+                &nbsp;
             </div>
             <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_6-of-12">
                 <div class="colHeaderDiv">
                     <span class="colHeader">Date & Time</span>
-                    <span class="colEdit" data-naviagate-id="5" onclick={navigateToEdit}>EDIT</span>
+                    <span class="colEdit"
+                          data-naviagate-id="5"
+                          onclick={navigateToEdit}>EDIT</span>
                 </div>
                 <div class="colBody">
-                    
                     <span>{dateTimeReview._selectedDate}</span>
                     <span>Drop off time: {dateTimeReview._selectedHour}</span>
                     <span>{dateTimeReview._response}</span>
-                    <!--
-                    <span>Thursday, October 8th, 2019</span>
-                    <span>Drop off time: 9:00 a.m.</span>
-                    <span>I will wait with my car</span>-->
                 </div>
             </div>
         </div>

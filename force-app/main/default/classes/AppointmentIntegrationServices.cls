@@ -144,6 +144,9 @@ public without sharing class AppointmentIntegrationServices {
         AppointmentObj availableAppointment = new AppointmentObj();
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
         if(setting != null && String.isNotBlank( setting.Appointment_Endpoint__c)){
+            String businessHoursJSON = getBusinessHoursJSON(setting.Business_Hours_Name__c);
+            List<Date> holidays = getHolidaysList();
+            System.debug('--businessHoursJSON--'+businessHoursJSON);
             Integer configuredWeeks = setting.Consideration_Weeks__c != null && setting.Consideration_Weeks__c > 0 ? 
                                         Integer.valueof(setting.Consideration_Weeks__c) : CarCareServiceConstants.defaultWeeks;
             availableAppointment.paginationForMobile =  setting.pagination_for_Mobile__c != null && setting.pagination_for_Mobile__c > 0 ? 
@@ -161,11 +164,13 @@ public without sharing class AppointmentIntegrationServices {
                 availableAppointment.days = AppointmentObj.parse(jsonBody);
             }
             else{
-                String jsonBody =  '{"days":[{"date":"1/21/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/22/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/23/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/24/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/25/2020 12:00:00 AM","openTime":"08:00:00","closeTime":"16:00:00","availableTimes":["08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00"]},{"date":"1/27/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]}]}';
+                String jsonBody =  '{"days":[{"date":"1/21/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/22/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/23/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/24/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/25/2020 12:00:00 AM","openTime":"08:00:00","closeTime":"16:00:00","availableTimes":["08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00"]},{"date":"1/27/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/28/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/29/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/30/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/31/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]}]}';
                 availableAppointment.days = AppointmentObj.parse(jsonBody);
                 //availableAppointment.hasException = true;
                 //availableAppointment.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
             }
+            availableAppointment.businessHoursJSON = businessHoursJSON;
+            availableAppointment.holidays = holidays;
         }
         return availableAppointment;
     }
@@ -246,7 +251,8 @@ public without sharing class AppointmentIntegrationServices {
                                                             store_Endpoint__c,
                                                             vehicle_Make_EndPoint__c,
                                                             vehicle_Model_EndPoint__c,
-                                                            years_EndPoint__c 
+                                                            years_EndPoint__c,
+                                                            Business_Hours_Name__c 
                                                             from Car_Care_Service_Setting__mdt 
                                                             where DeveloperName =: CarCareServiceConstants.Car_Care_Service_Setting]){
             
@@ -254,6 +260,82 @@ public without sharing class AppointmentIntegrationServices {
             break;
         }
         return carCareServiceSetting;
+    }
+
+    private static String getBusinessHoursJSON(String businessHoursName) {
+        String bhoursJSON = '';
+        List<BusinessHours> bList = [SELECT Id, Name, MondayStartTime, MondayEndTime, 
+                                        TuesdayStartTime, TuesdayEndTime, 
+                                        WednesdayStartTime, WednesdayEndTime, 
+                                        ThursdayStartTime, ThursdayEndTime,  
+                                        FridayStartTime, FridayEndTime, 
+                                        SaturdayStartTime, SaturdayEndTime 
+                                        FROM BusinessHours where name =: businessHoursName];
+        if(bList != null && bList.size() > 0) {
+            BusinessHours bhours = bList[0];
+            String mondayStartTime = '"'+((bhours.MondayStartTime.hour() > 12) ? bhours.MondayStartTime.hour() - 12 : bhours.MondayStartTime.hour()) 
+                                        + ':' + bhours.MondayStartTime.minute() + ' ' 
+                                        + ((bhours.MondayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String mondayEndTime = '"'+((bhours.MondayEndTime.hour() > 12) ? bhours.MondayEndTime.hour() - 12 : bhours.MondayEndTime.hour()) 
+                                        + ':' + bhours.MondayEndTime.minute() + ' ' 
+                                        + ((bhours.MondayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String tuesdayStartTime = '"'+((bhours.TuesdayStartTime.hour() > 12) ? bhours.TuesdayStartTime.hour() - 12 : bhours.TuesdayStartTime.hour()) 
+                                        + ':' + bhours.TuesdayStartTime.minute() + ' ' 
+                                        + ((bhours.TuesdayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String tuesdayEndTime = '"'+((bhours.TuesdayEndTime.hour() > 12) ? bhours.TuesdayEndTime.hour() - 12 : bhours.TuesdayEndTime.hour()) 
+                                        + ':' + bhours.TuesdayEndTime.minute() + ' ' 
+                                        + ((bhours.TuesdayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String wednesdayStartTime = '"'+((bhours.WednesdayStartTime.hour() > 12) ? bhours.WednesdayStartTime.hour() - 12 : bhours.WednesdayStartTime.hour()) 
+                                        + ':' + bhours.WednesdayStartTime.minute() + ' ' 
+                                        + ((bhours.WednesdayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String wednesdayEndTime = '"'+((bhours.WednesdayEndTime.hour() > 12) ? bhours.WednesdayEndTime.hour() - 12 : bhours.WednesdayEndTime.hour()) 
+                                        + ':' + bhours.WednesdayEndTime.minute() + ' ' 
+                                        + ((bhours.WednesdayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String thursdayStartTime = '"'+((bhours.ThursdayStartTime.hour() > 12) ? bhours.ThursdayStartTime.hour() - 12 : bhours.ThursdayStartTime.hour()) 
+                                        + ':' + bhours.ThursdayStartTime.minute() + ' ' 
+                                        + ((bhours.ThursdayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String thursdayEndTime = '"'+((bhours.ThursdayEndTime.hour() > 12) ? bhours.ThursdayEndTime.hour() - 12 : bhours.ThursdayEndTime.hour()) 
+                                        + ':' + bhours.ThursdayEndTime.minute() + ' ' 
+                                        + ((bhours.ThursdayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String fridayStartTime = '"'+((bhours.FridayStartTime.hour() > 12) ? bhours.FridayStartTime.hour() - 12 : bhours.FridayStartTime.hour()) 
+                                        + ':' + bhours.FridayStartTime.minute() + ' ' 
+                                        + ((bhours.FridayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String fridayEndTime = '"'+((bhours.FridayEndTime.hour() > 12) ? bhours.FridayEndTime.hour() - 12 : bhours.FridayEndTime.hour()) 
+                                        + ':' + bhours.FridayEndTime.minute() + ' ' 
+                                        + ((bhours.FridayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String saturdayStartTime = '"'+((bhours.SaturdayStartTime.hour() > 12) ? bhours.SaturdayStartTime.hour() - 12 : bhours.SaturdayStartTime.hour()) 
+                                        + ':' + bhours.SaturdayStartTime.minute() + ' ' 
+                                        + ((bhours.SaturdayStartTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            String saturdayEndTime = '"'+((bhours.SaturdayEndTime.hour() > 12) ? bhours.SaturdayEndTime.hour() - 12 : bhours.SaturdayEndTime.hour()) 
+                                        + ':' + bhours.SaturdayEndTime.minute() + ' ' 
+                                        + ((bhours.SaturdayEndTime.hour() > 12) ? 'P.M.' : 'A.M.') + '"';
+            
+            bhoursJSON = '{'+ '"mondayStartTime" :' + mondayStartTime + ',' 
+                            + '"mondayEndTime" :' + mondayEndTime + ',' 
+                            + '"tuesdayStartTime" :' + tuesdayStartTime + ',' 
+                            + '"tuesdayEndTime" :' + tuesdayEndTime + ',' 
+                            + '"wednesdayStartTime" :' + wednesdayStartTime + ',' 
+                            + '"wednesdayEndTime" :' + wednesdayEndTime + ',' 
+                            + '"thursdayStartTime" :' + thursdayStartTime + ',' 
+                            + '"thursdayEndTime" :' + thursdayEndTime + ',' 
+                            + '"fridayStartTime" :' + fridayStartTime + ',' 
+                            + '"fridayEndTime" :' + fridayEndTime + ',' 
+                            + '"saturdayStartTime" :' + saturdayStartTime + ',' 
+                            + '"saturdayEndTime" :' + saturdayEndTime 
+                            + '}';
+        }
+        return bhoursJSON;
+    }
+
+    private static List<Date> getHolidaysList() {
+        List<Holiday> holidayList = [SELECT Id, Name, ActivityDate FROM Holiday WHERE ActivityDate = THIS_YEAR];
+        List<Date> holidays = new List<Date>();
+        if(holidayList != null && holidayList.size() > 0) {
+            for(Holiday h: holidayList) {
+                holidays.add(h.ActivityDate);
+            }
+        }
+        return holidays;
     }
 
     public class ItemsWrap{

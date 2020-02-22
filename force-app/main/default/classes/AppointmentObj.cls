@@ -1,5 +1,7 @@
 public with sharing class AppointmentObj {
     @AuraEnabled public List<Days> days;
+    @AuraEnabled public String businessHoursJSON;
+    @AuraEnabled public List<Date> holidays;
     @AuraEnabled public Integer paginationForMobile;
     @AuraEnabled public Integer paginationForLaptop;
     @AuraEnabled public Integer paginationForTablet;
@@ -8,6 +10,8 @@ public with sharing class AppointmentObj {
 
     public AppointmentObj(){
         days = new List<Days>(); 
+        businessHoursJSON = '';
+        holidays = new List<Date>();
         hasException = false;
         exceptionMessage = '';   
     }

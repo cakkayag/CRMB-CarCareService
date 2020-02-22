@@ -1,5 +1,6 @@
 <template>
     <div if:true={isLoaded}>
+        <!-- desktop version starts-->
         <div class="slds-form slds-align_absolute-center maxWidth600px desktopOnly">
             <div class="slds-form__row vehicleFormElement">
                 <div class="slds-form__item" role="listitem">
@@ -60,17 +61,55 @@
                 </div>
             </div>
         </div>
+        <!-- desktop version ends-->
+
+        <!-- mobile view starts-->
         <div class="slds-form slds-align_absolute-center maxWidth600px mobileOnly">
-
-           <!-- <select class="slds-select" onchange={handleYearChange} >
-                
-               <template for:each={availableYearOptions} for:item="year"> 
-                   <option key={year.label} value={year.value}>{year.value}</option>
-               </template>
-
-          </select>-->
+            <div class="slds-form__row vehicleFormElement">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                        <label class="slds-form-element__label formElement">Year*</label>
+                        <select class="slds-select" onchange={handleYearChange} >
+                            <option  value="">Select Year</option>
+                            <template for:each={availableYearOptions} for:item="year"> 
+                                <option key={year.label} value={year.value}>{year.value}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             <div class="slds-form__row vehicleFormElement">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                        <label class="slds-form-element__label formElement">Make*</label>
+                        <select class="slds-select" onchange={handleMakeChange} >
+                            <option  value="">Select Make</option>
+                            <template for:each={availableMakeOptions} for:item="make"> 
+                                <option key={make.label} value={make.value}>{make.value}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slds-form__row vehicleFormElement">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                        <label class="slds-form-element__label formElement">Model*</label>
+                        <select class="slds-select" onchange={handleModelChange} >
+                            <option  value="">Select model</option>
+                            <template for:each={availableModelOptions} for:item="model"> 
+                                <option key={model.label} value={model.value}>{model.value}</option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <!--<div class="slds-form__row vehicleFormElement">
                 <div class="slds-form__item" role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Year*</label>
@@ -107,8 +146,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
+        <!-- mobile view ends -->
     </div>
     <div if:true={isLoading} class="maxWidth600px">
         <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
