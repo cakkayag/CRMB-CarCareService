@@ -1,54 +1,57 @@
-import { LightningElement, track, wire, api } from 'lwc';
+import { LightningElement, track, wire, api } from "lwc";
 import getAllVehicleMakeInfo from "@salesforce/apex/AppointmentIntegrationServices.getAllVehicleMakes";
 import getAllVehicleModelsByMakeSelectedInfo from "@salesforce/apex/AppointmentIntegrationServices.getAllVehicleModelsByMakeSelected";
 import getAllYears from "@salesforce/apex/AppointmentIntegrationServices.getYears";
 
 export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement {
-    
-    @api vehicleInfoRec={}
+  @api vehicleInfoRec = {};
 
-    @track selectedYear = '';
-    @track selectedMake = '';
-    @track selectedModel = '';
-    @track availableModelOptions = [];
-    @track availableMakeOptions = [];
-    @track availableYearOptions = [];
-    @track isLoading = true;
-    @track isModelLoading = false;
-    @track error;
+  @track selectedYear = "";
+  @track selectedMake = "";
+  @track selectedModel = "";
+  @track selectedMileage = "";
+  @track availableModelOptions = [];
+  @track availableMakeOptions = [];
+  @track availableYearOptions = [];
+  @track isLoading = true;
+  @track isModelLoading = false;
+  @track error;
 
-    hasRendered = false;
+  hasRendered = false;
 
-    
-    renderedCallback() {
-      //console.log('this.hasRendered : '+this.hasRendered);  
-      if (!this.hasRendered ) {
-        
-        
-        if(this.template.querySelector('.yearsValueList') != null) {
-          //console.log('--availableYearOptions--'+JSON.stringify(this.availableYearOptions));
-          //console.log('--availableMakeOptions--'+JSON.stringify(this.availableMakeOptions));
-          //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
-          //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
-        let yearsListId = this.template.querySelector('.yearsValueList').id;
-        this.template.querySelector(".yearsInput").setAttribute("list", yearsListId);
+  renderedCallback() {
+    //console.log('this.hasRendered : '+this.hasRendered);
+    if (!this.hasRendered) {
+      if (this.template.querySelector(".yearsValueList") != null) {
+        //console.log('--availableYearOptions--'+JSON.stringify(this.availableYearOptions));
+        //console.log('--availableMakeOptions--'+JSON.stringify(this.availableMakeOptions));
+        //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
+        //console.log('--availableModelOptions--'+JSON.stringify(this.availableModelOptions));
+        let yearsListId = this.template.querySelector(".yearsValueList").id;
+        this.template
+          .querySelector(".yearsInput")
+          .setAttribute("list", yearsListId);
 
-        let makeListId = this.template.querySelector('.makeValueList').id;
-        this.template.querySelector(".makeInput").setAttribute("list", makeListId);
+        let makeListId = this.template.querySelector(".makeValueList").id;
+        this.template
+          .querySelector(".makeInput")
+          .setAttribute("list", makeListId);
 
-        let modelListId = this.template.querySelector('.modelValueList').id;
-        this.template.querySelector(".modelInput").setAttribute("list", modelListId);
+        let modelListId = this.template.querySelector(".modelValueList").id;
+        this.template
+          .querySelector(".modelInput")
+          .setAttribute("list", modelListId);
 
         //console.log('   renderedCallback vehicleInfoRec ');
         //console.log(JSON.parse(JSON.stringify(this.vehicleInfoRec)));
         //console.log('this.vehicleInfoRec !== {} '+(this.vehicleInfoRec !== {}));
-        if(this.vehicleInfoRec !== undefined && this.vehicleInfoRec !== {}){
-          this.vehicleInfoRec = JSON.parse(JSON.stringify(this.vehicleInfoRec))
-            this.setVehicleInfoRecord(this.vehicleInfoRec);
+        if (this.vehicleInfoRec !== undefined && this.vehicleInfoRec !== {}) {
+          this.vehicleInfoRec = JSON.parse(JSON.stringify(this.vehicleInfoRec));
+          this.setVehicleInfoRecord(this.vehicleInfoRec);
         }
         this.hasRendered = true;
       }
-          /*let datalistHtmlTagList = this.template.querySelectorAll('datalist');
+      /*let datalistHtmlTagList = this.template.querySelectorAll('datalist');
           let inputHTMLTagList = this.template.querySelectorAll('lightning-input');
           console.log('datalistHtmlTagList : '+datalistHtmlTagList);
           console.log('datalistHtmlTagList.length : '+datalistHtmlTagList.length);
@@ -79,102 +82,104 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
               
           });
         }*/
+    }
+  }
+
+  get isLoaded() {
+    return this.isLoading ? false : true;
+  }
+
+  get isModelLoaded() {
+    return this.isModelLoading ? false : true;
+  }
+
+  @api
+  getVehicleDetailsInfo() {
+    let vehicleDetailsInfo = {
+      _selectedYear: this.selectedYear,
+      _selectedMake: this.selectedMake,
+      _selectedModel: this.selectedModel,
+      _selectedMileage: this.selectedMileage
+    };
+    //console.log("diff : " );
+    //console.log('getVehicleDetailsInfo : '+JSON.parse(JSON.stringify(vehicleDetailsInfo)));
+    return vehicleDetailsInfo;
+  }
+
+  setVehicleInfoRecord(Obj) {
+    //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedYear '+ Obj._selectedYear);
+    this.selectedYear =
+      Obj._selectedYear !== undefined ? Obj._selectedYear : "";
+    //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedYear '+ this.selectedYear);
+    //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedMake '+ Obj._selectedMake);
+    this.selectedMake =
+      Obj._selectedMake !== undefined ? Obj._selectedMake : "";
+    //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedMake  '+this.selectedMake );
+    //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedModel '+ Obj._selectedModel);
+    this.selectedModel =
+      Obj._selectedModel !== undefined ? Obj._selectedModel : "";
+    //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
+    //this.selectedMileage = obj._selectedMileage !== undefined ? obj._selectedMileage : "";
+  }
+
+  @wire(getAllYears)
+  getAllAvailableYears({ error, data }) {
+    if (data) {
+      //console.log('onload getAllAvailableYears !!! ');
+      //console.log(JSON.parse(JSON.stringify(data)));
+
+      const _availableYearOptions = [];
+      if (data.items !== undefined) {
+        data.items.forEach(element => {
+          let selectOption = {
+            label: element,
+            value: element
+          };
+          _availableYearOptions.push(selectOption);
+        });
+        //console.log('_availableYearOptions : ');
+        //console.log(JSON.parse(JSON.stringify(_availableYearOptions)));
       }
+      this.availableYearOptions = _availableYearOptions;
+      this.isLoading = false;
+      this.error = undefined;
+      //console.log('_availableYearOptions : ');
+      //console.log(JSON.parse(JSON.stringify(_availableYearOptions)));
+    } else if (error) {
+      this.error = error;
+      this.availableYearOptions = undefined;
+      this.isLoading = false;
     }
+  }
 
-    get isLoaded() {
-      return this.isLoading ? false : true;
-    }
+  @wire(getAllVehicleMakeInfo)
+  getAllAvailableVehicleMakeInfo({ error, data }) {
+    if (data) {
+      //console.log('onload getAllAvailableVehicleMakeInfo !!! ');
+      //console.log(JSON.parse(JSON.stringify(data)));
 
-    get isModelLoaded(){
-      return this.isModelLoading ? false : true;
-    }
-
-    @api
-    getVehicleDetailsInfo() {
-      let vehicleDetailsInfo = {
-        _selectedYear: this.selectedYear,
-        _selectedMake: this.selectedMake,
-        _selectedModel : this.selectedModel
-      };
-      //console.log("diff : " ); 
-      //console.log('getVehicleDetailsInfo : '+JSON.parse(JSON.stringify(vehicleDetailsInfo)));
-      return vehicleDetailsInfo;
-    }
-
-    setVehicleInfoRecord(Obj) {
-      //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedYear '+ Obj._selectedYear);
-      this.selectedYear = Obj._selectedYear !== undefined  ? Obj._selectedYear : '';
-      //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedYear '+ this.selectedYear);
-      //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedMake '+ Obj._selectedMake);
-      this.selectedMake = Obj._selectedMake!== undefined ? Obj._selectedMake : '';
-      //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedMake  '+this.selectedMake );
-      //console.log('   setVehicleInfoRecord vehicleInfoRec _selectedModel '+ Obj._selectedModel);
-      this.selectedModel = Obj._selectedModel !== undefined ? Obj._selectedModel : '';
-      //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
-    }
-
-    @wire(getAllYears)
-    getAllAvailableYears({ error, data }) {
-      if (data) {
-        //console.log('onload getAllAvailableYears !!! ');
-          //console.log(JSON.parse(JSON.stringify(data))); 
-          
-          const _availableYearOptions = [];
-          if(data.items !== undefined){
-              data.items.forEach(element => {
-                  let selectOption = {
-                    label : element,
-                    value : element
-                  }; 
-                  _availableYearOptions.push(selectOption);
-                    
-              });
-              //console.log('_availableYearOptions : ');
-              //console.log(JSON.parse(JSON.stringify(_availableYearOptions)));  
-          }
-          this.availableYearOptions = _availableYearOptions;
-          this.isLoading = false;
-          this.error = undefined;
-          //console.log('_availableYearOptions : ');
-            //console.log(JSON.parse(JSON.stringify(_availableYearOptions))); 
-      } else if (error) {
-          this.error = error;
-          this.availableYearOptions = undefined;
-          this.isLoading = false;
+      const _availableVehicleMakeOptions = [];
+      if (data.items !== undefined) {
+        data.items.forEach(element => {
+          let selectOption = {
+            label: element,
+            value: element
+          };
+          _availableVehicleMakeOptions.push(selectOption);
+        });
+        //console.log(JSON.parse(JSON.stringify(_availableVehicleMakeOptions)));
       }
+      this.availableMakeOptions = _availableVehicleMakeOptions;
+      this.isLoading = false;
+      this.error = undefined;
+    } else if (error) {
+      this.error = error;
+      this.availableMakeOptions = [];
+      this.isLoading = false;
     }
+  }
 
-    @wire(getAllVehicleMakeInfo)
-    getAllAvailableVehicleMakeInfo({ error, data }) {
-      if (data) {
-        //console.log('onload getAllAvailableVehicleMakeInfo !!! ');
-        //console.log(JSON.parse(JSON.stringify(data))); 
-          
-          const _availableVehicleMakeOptions = [];
-          if(data.items !== undefined){
-              data.items.forEach(element => {
-                  let selectOption = {
-                    label : element,
-                    value : element
-                  }; 
-                  _availableVehicleMakeOptions.push(selectOption);
-                    
-              });
-              //console.log(JSON.parse(JSON.stringify(_availableVehicleMakeOptions)));  
-          }
-          this.availableMakeOptions = _availableVehicleMakeOptions;
-          this.isLoading = false;
-          this.error = undefined;
-      } else if (error) {
-          this.error = error;
-          this.availableMakeOptions = [];
-          this.isLoading = false;
-      }
-    }
-
-  
-    /*
+  /*
     get yearOptions() {
         return [
             { label: 'New', value: 'new' },
@@ -199,35 +204,34 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         ];
     }
     */
-    handleYearChange(event) {
-        //console.log('--year changed--'+event.target.value);
-        this.selectedYear = event.target.value;//event.detail.value;
-        //console.log('this.selectedYear : '+this.selectedYear);
-        //this.getAllYearsOnSearch();
-    }
+  handleYearChange(event) {
+    //console.log('--year changed--'+event.target.value);
+    this.selectedYear = event.target.value; //event.detail.value;
+    //console.log('this.selectedYear : '+this.selectedYear);
+    //this.getAllYearsOnSearch();
+  }
 
-    handleMakeChange(event) {
-      this.isModelLoading = true;
-        //console.log('--Make changed--'+event.target.value);
-        this.selectedMake = event.target.value;//event.detail.value;
-        //console.log('this.selectedMake : '+this.selectedMake);
-        //this.getAllVehicleMakeInfoOnSearch();
-        this.selectedModel = '';
-        if(this.selectedMake !== undefined && this.selectedMake !== '' ){
-          this.getAllVehicleModelByMakeInfoOnSearch();
-        }
-        
-        
-        
+  handleMakeChange(event) {
+    this.isModelLoading = true;
+    //console.log('--Make changed--'+event.target.value);
+    this.selectedMake = event.target.value; //event.detail.value;
+    //console.log('this.selectedMake : '+this.selectedMake);
+    //this.getAllVehicleMakeInfoOnSearch();
+    this.selectedModel = "";
+    if (this.selectedMake !== undefined && this.selectedMake !== "") {
+      this.getAllVehicleModelByMakeInfoOnSearch();
     }
+  }
 
-    handleModelChange(event) {
-      //console.log('--Model changed--'+event.target.value);
-      this.selectedModel = event.target.value;//event.detail.value;
-    }
+  handleModelChange(event) {
+    //console.log('--Model changed--'+event.target.value);
+    this.selectedModel = event.target.value; //event.detail.value;
+  }
+  handleMileageChange(event) {
+    this.selectedMileage = event.target.value;
+  }
 
-    
-    /*
+  /*
     getAllVehicleMakeInfoOnSearch() {
         console.log('getAllVehicleMakeInfoOnSearch');
         console.log('this.selectedMake : '+this.selectedMake);
@@ -265,7 +269,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
           this.isLoading = false;
         }
     }*/
-    /*handleModelkeyup(event) {
+  /*handleModelkeyup(event) {
       console.log('this.selectedMake : '+this.selectedMake);
       this.selectedModel = event.target.value;
       console.log('this.selectedModel : '+this.selectedModel);
@@ -279,55 +283,54 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
       this.getAllVehicleModelByMakeInfoOnSearch();
     }*/
 
-    getAllVehicleModelByMakeInfoOnSearch() {
-        //console.log('getAllVehicleModelByMakeInfoOnSearch');
-        //console.log(JSON.parse(JSON.stringify(this.selectedModel)))
-        //console.log(JSON.parse(JSON.stringify(this.selectedMake)));
-        //let t0 = new Date().getTime();//performance.now();
-        //let t1; 
-        //let diffTime;
-        //console.log("Started on : " + t0);
-        //console.log("this.selectedMake : " + this.selectedMake);
-        //console.log(" this.selectedModel : " + this.selectedModel);
-        //if (this.selectedModel !== undefined && this.selectedModel !== '' && this.selectedModel.length > 2)   {
-        //let modelListId = this.template.querySelector('.modelValueList').id;
-        //this.template.querySelector(".modelInput").setAttribute("list", modelListId);  
-        if (this.selectedMake !== undefined && this.selectedMake !== '')   {
-                //this.isLoading = true;
-            getAllVehicleModelsByMakeSelectedInfo({ makeSelectedStr: this.selectedMake , modelStr : '' })
-                .then(result => {
-                  //console.log(JSON.parse(JSON.stringify(result)));
-                  const _availableModelOptions = [];
-                  if(result.items !== undefined){
-                    result.items.forEach(element => {
-                          let selectOption = {
-                            label : element,
-                            value : element
-                          }; 
-                          _availableModelOptions.push(selectOption);
-                            
-                      });
-                      //console.log(JSON.parse(JSON.stringify(_availableVehicleMakeOptions)));  
-                  }
-                  this.availableModelOptions = _availableModelOptions;
-                  //this.isModelLoading = false;
-                  this.error = undefined;
-                })
-                .catch(error => {
-                this.error = error;
-                this.availableServices = undefined;
-                //this.isModelLoading = false;
+  getAllVehicleModelByMakeInfoOnSearch() {
+    //console.log('getAllVehicleModelByMakeInfoOnSearch');
+    //console.log(JSON.parse(JSON.stringify(this.selectedModel)))
+    //console.log(JSON.parse(JSON.stringify(this.selectedMake)));
+    //let t0 = new Date().getTime();//performance.now();
+    //let t1;
+    //let diffTime;
+    //console.log("Started on : " + t0);
+    //console.log("this.selectedMake : " + this.selectedMake);
+    //console.log(" this.selectedModel : " + this.selectedModel);
+    //if (this.selectedModel !== undefined && this.selectedModel !== '' && this.selectedModel.length > 2)   {
+    //let modelListId = this.template.querySelector('.modelValueList').id;
+    //this.template.querySelector(".modelInput").setAttribute("list", modelListId);
+    if (this.selectedMake !== undefined && this.selectedMake !== "") {
+      //this.isLoading = true;
+      getAllVehicleModelsByMakeSelectedInfo({
+        makeSelectedStr: this.selectedMake,
+        modelStr: ""
+      })
+        .then(result => {
+          //console.log(JSON.parse(JSON.stringify(result)));
+          const _availableModelOptions = [];
+          if (result.items !== undefined) {
+            result.items.forEach(element => {
+              let selectOption = {
+                label: element,
+                value: element
+              };
+              _availableModelOptions.push(selectOption);
             });
-            
-        } else {
-            //this.availableServices = this.availableServicesObj;
-            //this.isModelLoading = false;
-        }
+            //console.log(JSON.parse(JSON.stringify(_availableVehicleMakeOptions)));
+          }
+          this.availableModelOptions = _availableModelOptions;
+          //this.isModelLoading = false;
+          this.error = undefined;
+        })
+        .catch(error => {
+          this.error = error;
+          this.availableServices = undefined;
+          //this.isModelLoading = false;
+        });
+    } else {
+      //this.availableServices = this.availableServicesObj;
+      //this.isModelLoading = false;
     }
+  }
 
-    
-    
-    /*
+  /*
     getAllYearsOnSearch() {
         console.log('getAllYearsOnSearch');
         console.log('this.selectedYear : '+this.selectedYear);
@@ -384,6 +387,4 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
           this.isLoading = false;
         }
     }*/
-
-    
 }

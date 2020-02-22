@@ -60,6 +60,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="slds-form__row vehicleFormElement">
+                <div class="slds-form__item" role="listitem">
+                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
+                        <label class="slds-form-element__label formElement">Mileage</label>
+                        <div class="slds-form-element__control">
+                            <input id="mileageInput" name="mileageInput" 
+                            class="slds-input modelInput vehicleInput" autocomplete="off" type="text"
+                                value={selectedMileage} onchange={handleMileageChange} />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- desktop version ends-->
 
