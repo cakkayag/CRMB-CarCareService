@@ -51,15 +51,15 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
     }
   }
 
-  /*handleOnChange(event){
-        console.log("event.target.name : "+event.target.name);
-        console.log("event.target.value : "+event.target.value);
-        this[event.target.name] = event.target.value
-        console.log(" handleOnChange this.firstNameVar "+this.firstNameVar);
-        //this.getContactInfo();
-    }
-    
-    contact (fName , lName , email, mobile){
+  /*handleOnChange(event) {
+    console.log("event.target.name : " + event.target.name);
+    console.log("event.target.value : " + event.target.value);
+    this[event.target.name] = event.target.value;
+    console.log(" handleOnChange this.firstNameVar " + this.firstNameVar);
+    //this.getContactInfo();
+  }
+
+  contact (fName , lName , email, mobile){
         this.firstName = fName ;
         this.lastName = lName;
         this.email = email;

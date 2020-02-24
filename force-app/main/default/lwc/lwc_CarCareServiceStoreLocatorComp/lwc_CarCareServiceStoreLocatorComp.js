@@ -156,6 +156,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
               ) {
                 this.isSelectedStoreClosed = true;
                 this.displayStoreClosedModal = true;
+                this.disableContinue(event);
               }
               storeInfoTemp.push(selectOption);
             } else {
@@ -225,6 +226,14 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
     } else {
       this.handleContinueModal(event);
     }
+  }
+
+  disableContinue(event) {
+    console.log("---handle disable continue--");
+    // Creates the event to disable continue event.
+    const selectedEvent = new CustomEvent("disablecontinue", {});
+    // Dispatches the event.
+    this.dispatchEvent(selectedEvent);
   }
 
   handleCloseModal() {

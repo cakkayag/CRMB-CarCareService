@@ -17,6 +17,8 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   @track stayWithVehicle = false;
   @track isLoading = true;
   @track error;
+  bHours = [] ;
+  holidaysList = [] ;
 
   @track startArrCount = 0;
   @track lastArrCount = 0;
@@ -189,11 +191,11 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
             result.businessHoursJSON !== undefined
               ? result.businessHoursJSON
               : "{}";
-          let bHours = JSON.parse(bHoursJSON);
+          this.bHours = JSON.parse(bHoursJSON);
 
           let holidaysDateFormat =
             result.holidays !== undefined ? result.holidays : [];
-          let holidaysList = [];
+          this.holidaysList = [];
           holidaysDateFormat.forEach(h => {
             let holiday = new Date(
               h.split("-")[0],
@@ -206,7 +208,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
               holiday.getDate() +
               " " +
               this.monthStr[holiday.getMonth()];
-            holidaysList.push(holidayDate);
+            this.holidaysList.push(holidayDate);
           });
           if (
             this.isMobile.Android() ||
@@ -251,7 +253,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
                 myDate.getDate() +
                 " " +
                 this.monthStr[myDate.getMonth()];
-              if (holidaysList.includes(daysObj.date)) {
+              if (this.holidaysList.includes(daysObj.date)) {
                 daysObj.openCloseTimings = "Holiday";
                 //daysObj.closeTime = "";
               } else {
@@ -265,7 +267,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
             daysArrCount++;
           });
           
-          this.getAvailableHoursWithDatesArr(bHours , holidaysList);
+          this.getAvailableHoursWithDatesArr(this.bHours , this.holidaysList);
           /*
           this.hours.forEach(hourElement => {
             let availableHoursWithDates = {};
@@ -349,7 +351,40 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       });
     }
     else{
+      this.selectedDate =
+        this.selectedAppointmentObj._selectedDate !== undefined
+          ? this.selectedAppointmentObj._selectedDate
+          : "";
+      this.selectedHour =
+        this.selectedAppointmentObj._selectedHour !== undefined
+          ? this.selectedAppointmentObj._selectedHour
+          : "";
+      
+      this.bHours = 
+        this.selectedAppointmentObj._bHours !== undefined
+          ? this.selectedAppointmentObj._bHours
+          : [];
 
+      this.holidaysList = 
+        this.selectedAppointmentObj._holidaysList !== undefined
+          ? this.selectedAppointmentObj._holidaysList
+          : [];    
+
+      this.stayWithVehicle = 
+        this.selectedAppointmentObj._stayWithVehicle !== undefined
+          ? this.selectedAppointmentObj._stayWithVehicle
+          : false; 
+
+      this.needTransportationServices = 
+        this.selectedAppointmentObj._needTransportationServices !== undefined
+          ? this.selectedAppointmentObj._needTransportationServices
+          : false; 
+
+            
+      this.getAvailableHoursWithDatesArr(this.bHours , this.holidaysList);
+
+      this.isLoading = false;
+      this.error = undefined;
     }
     
   }
@@ -566,10 +601,15 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       _availableHoursWithDatesArr: this.availableHoursWithDatesArr,
       _selectedDate: this.selectedDate,
       _selectedHour: this.selectedHour,
+      _bHours : this.bHours,
+      _holidaysList : this.holidaysList,
+      _stayWithVehicle : this.stayWithVehicle,
+      _needTransportationServices : this.needTransportationServices,
       _response:
         this.stayWithVehicle === true
           ? "I’m going to stay with the vehicle during service."
-          : "I need transportation services."
+          : this.needTransportationServices === true 
+          ? "I need transportation services." : ""
     };
     return this.selectedAppointmentObj;
   }
@@ -579,34 +619,39 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   }
 
   dateTimeCheckBoxToggle(event) {
+    console.log("dateTimeCheckBoxToggle "+  event.target.name);
     if (event.target.name === "stayWithVehicle" && event.target.checked) {
       //check the stay with vehicle
+      /*console.log("stayWithVehicle : check the stay with vehicle "+  event.target.name);
       const stayWithVehicleChkBox = this.template.querySelector(
         'lightning-input[data-name="' + event.target.name + '"]'
       );
-      stayWithVehicleChkBox.checked = true;
+      stayWithVehicleChkBox.checked = true;*/
       this.stayWithVehicle = true;
       //uncheck need transportation
+      /*console.log("uncheck need transportation "+  event.target.name);
       const needTransapotationChkBox = this.template.querySelector(
         'lightning-input[data-name="' + event.target.name + '"]'
       );
-      needTransapotationChkBox.checked = false;
+      needTransapotationChkBox.checked = false;*/
       this.needTransportationServices = false;
     } else if (
       event.target.name === "needTransportationServices" &&
       event.target.checked
     ) {
       //check need transportation
+      /*console.log("needTransportationServices : check need transportation "+  event.target.name);
       const needTransapotationChkBox = this.template.querySelector(
         'lightning-input[data-name="' + event.target.name + '"]'
       );
-      needTransapotationChkBox.checked = true;
+      needTransapotationChkBox.checked = true;*/
       this.needTransportationServices = true;
       //uncheck stay with vehicle
+      /*console.log("needTransportationServices : uncheck stay with vehicle "+  event.target.name);
       const stayWithVehicleChkBox = this.template.querySelector(
         'lightning-input[data-name="' + event.target.name + '"]'
       );
-      stayWithVehicleChkBox.checked = false;
+      stayWithVehicleChkBox.checked = false;*/
       this.stayWithVehicle = false;
     }
   }

@@ -119,7 +119,8 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     this.selectedModel =
       Obj._selectedModel !== undefined ? Obj._selectedModel : "";
     //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
-    //this.selectedMileage = obj._selectedMileage !== undefined ? obj._selectedMileage : "";
+    this.selectedMileage =
+      Obj._selectedMileage !== undefined ? Obj._selectedMileage : "";
   }
 
   @wire(getAllYears)
