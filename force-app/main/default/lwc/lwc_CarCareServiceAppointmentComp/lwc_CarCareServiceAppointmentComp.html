@@ -48,6 +48,7 @@
                         if:true={slot.isSelected}
                         class="timeSlot availableTimeSlot selectedTimeSlot"
                         data-date={slot.date}
+                        data-actual-date={slot.actualDate}
                         data-hour={h.hour}
                       >
                         {h.hour}
@@ -56,6 +57,7 @@
                         if:false={slot.isSelected}
                         class="timeSlot availableTimeSlot"
                         data-date={slot.date}
+                        data-actual-date={slot.actualDate}
                         data-hour={h.hour}
                         onclick={selectTimeSlot}
                       >

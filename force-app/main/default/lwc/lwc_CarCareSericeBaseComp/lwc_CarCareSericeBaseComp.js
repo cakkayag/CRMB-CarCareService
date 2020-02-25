@@ -2,6 +2,8 @@ import { LightningElement, wire, track } from "lwc";
 import { CurrentPageReference } from "lightning/navigation";
 import { fireEvent } from "c/pubsub";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import reserveAppointment from "@salesforce/apex/AppointmentIntegrationServices.reserveAppointment";
+
 export default class lwc_CarCareSericeBaseComp extends LightningElement {
   @wire(CurrentPageReference) pageRef;
   @track nextPage = 2;
@@ -68,11 +70,16 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     this.appointmentSelectionInfo = {};
   }
 
-  handleDisableContinue(event) {
-    console.log("---handle disable continue in base cmp");
+  handleEnableContinue(event) {
+    var continueBtn = this.template.querySelector(".continueBtn");
+    continueBtn.classList.add("enableContinueBtn");
   }
 
   handleContinue(event) {
+    //remove enable unless all validations complete
+    var continueBtn = this.template.querySelector(".continueBtn");
+    continueBtn.classList.remove("enableContinueBtn");
+
     const contactComp = this.template.querySelector(
       "c-lwc_-car-care-service-contact-info-comp"
     );
@@ -91,7 +98,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
     let validationStatus = true;
     if (this.CurrentPage === 2) {
-      validationStatus = contactComp.ValidateContactInfo(event);
+      //validationStatus = contactComp.ValidateContactInfo(event);
     } else if (this.CurrentPage === 4) {
       //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
     }
@@ -244,11 +251,17 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   get showPrevious() {
-    return this.CurrentPage > this.minPages ? false : true;
+    return this.minPages < this.CurrentPage && this.CurrentPage < this.maxPages
+      ? false
+      : true;
   }
 
   get showContinue() {
     return this.CurrentPage < this.maxPages ? false : true;
+  }
+
+  get showConfirmation() {
+    return (this.CurrentPage == this.maxPages) ? false : true;
   }
 
   get showStoreChangeAlert() {
@@ -293,5 +306,139 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     //console.log('### handleEditRequest selectedStoreObjInfo: ');
     //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
     fireEvent(this.pageRef, "buttonClickedEvent", this);
+  }
+
+  sendAppointmentReservationReq(event) {
+    console.log('### sendAppointmentReservationReq: ');
+    const _appointmentTime =
+      this.appointmentSelectionInfo._selectedActualDate !== undefined &&
+      this.appointmentSelectionInfo._selectedHour !== undefined
+        ? this.appointmentSelectionInfo._selectedActualDate +
+          "T" +
+          this.appointmentSelectionInfo._selectedHour
+        : "";
+    
+    console.log('### _appointmentTime: '+_appointmentTime);
+
+    let _serviceSelected = "";
+    if (this.serviceSelectInfo !== undefined && this.serviceSelectInfo._availableServices !== undefined) {
+      
+      this.serviceSelectInfo._availableServices.forEach(element => {
+        console.log('### element: '+element);
+        if (element.isSelected === true) {
+          _serviceSelected = _serviceSelected + "" + element.name;
+        }
+      });
+    }
+
+    console.log('### _serviceSelected: '+_serviceSelected);
+
+    let reservationObj = {
+      storeId: this.storeId,
+      customerFirstName:
+      this.contactInfo !== undefined && this.contactInfo.firstName !== undefined
+          ? this.contactInfo.firstName
+          : "",
+      customerLastName:
+      this.contactInfo !== undefined && this.contactInfo.lastName !== undefined
+          ? this.contactInfo.lastName
+          : "",
+      customerEmail:
+      this.contactInfo !== undefined && this.contactInfo.email !== undefined ? this.contactInfo.email : "",
+      customerPhone:
+      this.contactInfo !== undefined && this.contactInfo.mobile !== undefined ? this.contactInfo.mobile : "",
+      vehicleMake:
+      this.vehicleInfo !== undefined && this.vehicleInfo._selectedMake !== undefined
+          ? this.vehicleInfo._selectedMake
+          : "",
+      vehicleModel:
+      this.vehicleInfo !== undefined && this.vehicleInfo.selectedModel !== undefined
+          ? this.vehicleInfo.selectedModel
+          : "",
+      vehicleYear:
+      this.vehicleInfo !== undefined && this.vehicleInfo._selectedYear !== undefined
+          ? this.vehicleInfo._selectedYear
+          : "",
+      vehicleMileage:
+      this.vehicleInfo !== undefined && this.vehicleInfo._selectedMileage !== undefined
+          ? this.vehicleInfo._selectedMileage
+          : "",
+      appointmentTime: _appointmentTime,
+      storeResource:
+      this.selectedStoreObjInfo != undefined && this.selectedStoreObjInfo.phone !== undefined
+          ? this.selectedStoreObjInfo.phone
+          : "",
+      storeResourceDescription:
+      this.selectedStoreObjInfo != undefined && this.selectedStoreObjInfo.phone !== undefined
+          ? this.selectedStoreObjInfo.phone
+          : "",
+      stayingWithVehicle:
+      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+          ? this.appointmentSelectionInfo._stayWithVehicle
+          : "",
+      customerWantsPromos:
+      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+          ? this.appointmentSelectionInfo._stayWithVehicle
+          : "",
+      customerWantsSmsReminders:
+      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+          ? this.appointmentSelectionInfo._stayWithVehicle
+          : "",
+      customerNeedsTransportation:
+      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._needTransportationServices !== undefined
+          ? this.appointmentSelectionInfo._needTransportationServices
+          : "",
+      serviceDescription: _serviceSelected
+    };
+
+    console.log('### reservationObj: '+reservationObj);
+    let _reservationObj = JSON.stringify(reservationObj);
+    console.log('### reservationObj: ');
+    console.log(JSON.parse(JSON.stringify(reservationObj)));
+    console.log('### _reservationObj: ');
+    console.log(JSON.parse(_reservationObj));
+    reserveAppointment({ payLoad: _reservationObj })
+      .then(result => {
+        console.log('### result: '+result);
+        if (result !== undefined && result.hasException !== true) {
+          this.showToast(
+            "Success",
+            "Success Created record",
+            "Success",
+            "sticky"
+          );
+
+          this.isLoading = false;
+          this.error = undefined;
+        } else {
+          this.error = result !== undefined &&
+                 result.exceptionMessage !== undefined ? 
+                 result.exceptionMessage  :  "No Records found";
+          this.isLoading = false;
+          this.showToast(
+            "Error",
+            "Error Occured while fetching Store Info ( " +
+              this.error +
+              " ), Please contact Support team",
+            "Error",
+            "sticky"
+          );
+        }
+      })
+      .catch(error => {
+        console.log('### error: ');
+        console.log(JSON.parse(JSON.stringify(error)));
+        this.error = error;
+        //this.selectedStoreInfo = undefined;
+        this.isLoading = false;
+        this.showToast(
+          "Error",
+          "Error Occured while fetching Store Info ( " +
+            this.error +
+            " ), Please contact Support team",
+          "Error",
+          "sticky"
+        );
+      });
   }
 }

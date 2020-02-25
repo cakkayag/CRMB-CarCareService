@@ -11,6 +11,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   @api selectedAppointmentObj = {};
   @track selectedDate = "";
   @track selectedHour = "";
+  @track selectedActualDate = "";
   @track days = [];
   @track availableHoursWithDatesArr = [];
   @track needTransportationServices = false;
@@ -247,6 +248,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
             if (startArrCount <= daysArrCount && daysArrCount < lastArrCount) {
               let daysObj = {};
               let myDate = new Date(daysElement.dateVal);
+              daysObj._myDate = daysElement.dateVal;
               daysObj.date =
                 this.weekday[myDate.getDay()] +
                 " " +
@@ -404,6 +406,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
         });
         let availableHoursPerDate = {};
         availableHoursPerDate.date = dayElement.date;
+        availableHoursPerDate.actualDate = dayElement._myDate;
         availableHoursPerDate.isSelected = false;
         let startTime;
         let endTime;
@@ -591,6 +594,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     event.currentTarget.classList.add("selectedTimeSlot");
     this.selectedDate = event.currentTarget.dataset.date;
     this.selectedHour = event.currentTarget.dataset.hour;
+    this.selectedActualDate = event.currentTarget.dataset.actualDate;
   }
 
   @api
@@ -601,6 +605,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       _availableHoursWithDatesArr: this.availableHoursWithDatesArr,
       _selectedDate: this.selectedDate,
       _selectedHour: this.selectedHour,
+      _selectedActualDate : this.selectedActualDate,
       _bHours : this.bHours,
       _holidaysList : this.holidaysList,
       _stayWithVehicle : this.stayWithVehicle,

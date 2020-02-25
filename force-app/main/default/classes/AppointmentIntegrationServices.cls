@@ -12,7 +12,7 @@ public without sharing class AppointmentIntegrationServices {
         
             AppointmentStoreObj.Items selectedStoreInfo = new AppointmentStoreObj.Items();
                 
-                HTTPResponse res = callAppointmentServiceAPI( setting.store_Endpoint__c );
+                HTTPResponse res = callAppointmentServiceAPI( setting.store_Endpoint__c, 'GET', '' );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
                     nearByStoresObj = AppointmentStoreObj.parseList(jsonBody);
@@ -60,7 +60,7 @@ public without sharing class AppointmentIntegrationServices {
             if(setting != null && String.isNotBlank( setting.service_Endpoint__c)){
                 String endPoint = setting.service_Endpoint__c.replace('{StoreId}',  storeId);
                 
-                HTTPResponse res = callAppointmentServiceAPI(endPoint );
+                HTTPResponse res = callAppointmentServiceAPI(endPoint, 'GET', '' );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
                     availableServices = AppointmentServiceObj.parse(jsonBody);
@@ -77,7 +77,7 @@ public without sharing class AppointmentIntegrationServices {
             
         if(setting != null && String.isNotBlank( setting.vehicle_Make_EndPoint__c)){
             String endPoint = setting.vehicle_Make_EndPoint__c;
-            HTTPResponse res = callAppointmentServiceAPI(endPoint );
+            HTTPResponse res = callAppointmentServiceAPI(endPoint, 'GET', '' );
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
                 vehicleMake = (ItemsWrap) System.JSON.deserialize(jsonBody, ItemsWrap.class);
@@ -100,7 +100,7 @@ public without sharing class AppointmentIntegrationServices {
             if(setting != null && String.isNotBlank( setting.vehicle_Model_EndPoint__c)){
             
                 String endPoint = setting.vehicle_Model_EndPoint__c.replace('{VehicleMake}',  makeSelectedStr).replace('{vehicleModel}',  modelStr);
-                HTTPResponse res = callAppointmentServiceAPI(endPoint );
+                HTTPResponse res = callAppointmentServiceAPI(endPoint, 'GET', '' );
                 if(res != null && res.getStatusCode() == 200 ){
                     String jsonBody = res.getBody();
                     vehicleModel = (ItemsWrap) System.JSON.deserialize(jsonBody, ItemsWrap.class);
@@ -123,7 +123,7 @@ public without sharing class AppointmentIntegrationServices {
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
         if(setting != null && String.isNotBlank( setting.years_EndPoint__c)){
         
-           HTTPResponse res = callAppointmentServiceAPI(setting.years_EndPoint__c );
+           HTTPResponse res = callAppointmentServiceAPI(setting.years_EndPoint__c, 'GET', '' );
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
                 years = (ItemsWrap) System.JSON.deserialize(jsonBody, ItemsWrap.class);
@@ -155,7 +155,7 @@ public without sharing class AppointmentIntegrationServices {
 
             String endPoint = setting.Appointment_Endpoint__c.replace('{StoreId}',  storeId).replace('{Weeks}', String.valueOf(configuredWeeks));
             System.debug('endPoint : '+endPoint);
-            HTTPResponse res = callAppointmentServiceAPI( endPoint );
+            HTTPResponse res = callAppointmentServiceAPI( endPoint, 'GET', '' );
             if(res != null && res.getStatusCode() == 200 ){
                 String jsonBody = res.getBody();
                 availableAppointment.days = AppointmentObj.parse(jsonBody);
@@ -172,17 +172,44 @@ public without sharing class AppointmentIntegrationServices {
         return availableAppointment;
     }
 
-    private static HTTPResponse callAppointmentServiceAPI(String endPoint ){
+    @AuraEnabled(cacheable=true)
+    public static AppointmentConfirmationServiceObj reserveAppointment(String payLoad){
+        AppointmentConfirmationServiceObj confirmRes = new AppointmentConfirmationServiceObj();
+        Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
+        if(setting != null && String.isNotBlank( setting.Confirmation_Endpoint__c)){
+            
+            String endPoint = setting.Confirmation_Endpoint__c;
+            System.debug('endPoint : '+endPoint);
+            HTTPResponse res = callAppointmentServiceAPI( endPoint, 'POST', payLoad );
+            if(res != null && res.getStatusCode() == 201 ){
+                String jsonBody = res.getBody();
+                System.debug('jsonBody : '+jsonBody);
+                confirmRes = AppointmentConfirmationServiceObj.parse(jsonBody);
+            }
+            else{
+                System.debug('res.getStatusCode()  : '+res.getStatusCode());
+                confirmRes.hasException = true;
+                confirmRes.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
+            }
+            
+        }
+        return confirmRes;
+    }
+
+    private Static HTTPResponse callAppointmentServiceAPI(String endPoint, String httpMethod, String payload ){
         HTTPResponse res = null;
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
         if(setting != null && String.isNotBlank( setting.Authorization_Key__c)){
         
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endPoint);
-            req.setMethod('GET');
+            req.setMethod(httpMethod);
             req.setHeader('Content-Type','application/json'); 
             req.setHeader('Authorization', setting.Authorization_Key__c);
-
+            if(httpMethod == 'POST'){
+                req.setBody(payload);
+            }
+            
             // Create a new http object to send the request object
             // A response object is generated as a result of the request  
 
@@ -249,7 +276,8 @@ public without sharing class AppointmentIntegrationServices {
                                                             vehicle_Make_EndPoint__c,
                                                             vehicle_Model_EndPoint__c,
                                                             years_EndPoint__c,
-                                                            Business_Hours_Name__c 
+                                                            Business_Hours_Name__c ,
+                                                            Confirmation_Endpoint__c
                                                             from Car_Care_Service_Setting__mdt 
                                                             where DeveloperName =: CarCareServiceConstants.Car_Care_Service_Setting]){
             

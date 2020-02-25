@@ -17,10 +17,12 @@ public with sharing class AppointmentConfirmationServiceObj {
     @AuraEnabled public Boolean customerWantsSmsReminders;
     @AuraEnabled public Boolean customerNeedsTransportation;
     @AuraEnabled public String serviceDescription;
-    
+    @AuraEnabled public String id;
+    @AuraEnabled public boolean hasException;
+    @AuraEnabled public String exceptionMessage;
 
 
-    public AppointmentConfirmationServiceObj() {
-
-    }
+    public static AppointmentConfirmationServiceObj parse(String json) {
+        return (AppointmentConfirmationServiceObj) System.JSON.deserialize(json, AppointmentConfirmationServiceObj.class);
+	}
 }
