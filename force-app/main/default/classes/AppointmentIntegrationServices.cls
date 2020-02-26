@@ -175,8 +175,20 @@ public without sharing class AppointmentIntegrationServices {
     @AuraEnabled(cacheable=true)
     public static AppointmentConfirmationServiceObj reserveAppointment(String payLoad){
         AppointmentConfirmationServiceObj confirmRes = new AppointmentConfirmationServiceObj();
+        System.debug('confirmRes : '+confirmRes);
+
+        /*
+        Date Appointmentdate = String.isNotBlank(confirmRes.appointmentDateVal)  
+                                ? Date.valueOf(confirmRes.appointmentDateVal)
+                                : null ;
+        
+        String time = String.isNotBlank(confirmRes.appointmentTimeVal)  
+                        ? confirmRes.appointmentTimeVal.split(' ')
+                        : null ;
+        */
+
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
-        if(setting != null && String.isNotBlank( setting.Confirmation_Endpoint__c)){
+        if(String.isNotBlank(payLoad) && setting != null && String.isNotBlank( setting.Confirmation_Endpoint__c)){
             
             String endPoint = setting.Confirmation_Endpoint__c;
             System.debug('endPoint : '+endPoint);

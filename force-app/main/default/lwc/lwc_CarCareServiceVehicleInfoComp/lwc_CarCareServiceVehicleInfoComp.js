@@ -210,6 +210,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     this.selectedYear = event.target.value; //event.detail.value;
     //console.log('this.selectedYear : '+this.selectedYear);
     //this.getAllYearsOnSearch();
+    this.checkEnableContinueButton(event);
   }
 
   handleMakeChange(event) {
@@ -222,14 +223,29 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     if (this.selectedMake !== undefined && this.selectedMake !== "") {
       this.getAllVehicleModelByMakeInfoOnSearch();
     }
+    this.checkEnableContinueButton(event);
   }
 
   handleModelChange(event) {
     //console.log('--Model changed--'+event.target.value);
     this.selectedModel = event.target.value; //event.detail.value;
+    this.checkEnableContinueButton(event);
   }
   handleMileageChange(event) {
     this.selectedMileage = event.target.value;
+  }
+
+  checkEnableContinueButton(event) {
+    if (this.selectedYear && this.selectedMake && this.selectedModel) {
+      this.enableContinue(event);
+    }
+  }
+
+  enableContinue(event) {
+    // Creates the event to disable continue event.
+    const selectedEvent = new CustomEvent("enablecontinue", {});
+    // Dispatches the event.
+    this.dispatchEvent(selectedEvent);
   }
 
   /*

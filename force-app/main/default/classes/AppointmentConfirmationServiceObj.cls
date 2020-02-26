@@ -10,6 +10,7 @@ public with sharing class AppointmentConfirmationServiceObj {
     @AuraEnabled public String vehicleYear;
     @AuraEnabled public String vehicleMileage;
     @AuraEnabled public String appointmentTime;
+    
     @AuraEnabled public String storeResource;
     @AuraEnabled public String storeResourceDescription;
     @AuraEnabled public Boolean stayingWithVehicle;

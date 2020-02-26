@@ -21,6 +21,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   @track selectedStoreObjInfo = {};
   @track dateTimeInfo = {};
   @track appointmentSelectionInfo = {};
+
+  appointmentId = '';
   //@track hasUpdates = false;
   //@track isChildLoading = false;
 
@@ -154,6 +156,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   handlePrevious() {
+    var continueBtn = this.template.querySelector(".continueBtn");
+    continueBtn.classList.add("enableContinueBtn");
+
     if (this.CurrentPage === 2) {
       const contactComp = this.template.querySelector(
         "c-lwc_-car-care-service-contact-info-comp"
@@ -261,7 +266,10 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   get showConfirmation() {
-    return (this.CurrentPage == this.maxPages) ? false : true;
+    
+    return this.CurrentPage == this.maxPages && 
+      (this.appointmentId === undefined || this.appointmentId === "" )
+      ? true : false;
   }
 
   get showStoreChangeAlert() {
@@ -304,116 +312,144 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     this.nextPage =
       this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage;
     //console.log('### handleEditRequest selectedStoreObjInfo: ');
+    this.handleEnableContinue(event);
     //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
     fireEvent(this.pageRef, "buttonClickedEvent", this);
   }
 
   sendAppointmentReservationReq(event) {
-    console.log('### sendAppointmentReservationReq: ');
+    console.log("### sendAppointmentReservationReq: ");
     const _appointmentTime =
       this.appointmentSelectionInfo._selectedActualDate !== undefined &&
       this.appointmentSelectionInfo._selectedHour !== undefined
-        ? this.appointmentSelectionInfo._selectedActualDate +
-          "T" +
-          this.appointmentSelectionInfo._selectedHour
+        ? this.prepareTimeStampFromStr(
+            this.appointmentSelectionInfo._selectedActualDate,
+            this.appointmentSelectionInfo._selectedHour
+          )
         : "";
-    
-    console.log('### _appointmentTime: '+_appointmentTime);
+
+    console.log("### _appointmentTime: " + _appointmentTime);
 
     let _serviceSelected = "";
-    if (this.serviceSelectInfo !== undefined && this.serviceSelectInfo._availableServices !== undefined) {
-      
+    if (
+      this.serviceSelectInfo !== undefined &&
+      this.serviceSelectInfo._availableServices !== undefined
+    ) {
       this.serviceSelectInfo._availableServices.forEach(element => {
-        console.log('### element: '+element);
+        console.log("### element: " + element);
         if (element.isSelected === true) {
           _serviceSelected = _serviceSelected + "" + element.name;
         }
       });
     }
 
-    console.log('### _serviceSelected: '+_serviceSelected);
+    console.log("### _serviceSelected: " + _serviceSelected);
 
     let reservationObj = {
       storeId: this.storeId,
       customerFirstName:
-      this.contactInfo !== undefined && this.contactInfo.firstName !== undefined
+        this.contactInfo !== undefined &&
+        this.contactInfo.firstName !== undefined
           ? this.contactInfo.firstName
           : "",
       customerLastName:
-      this.contactInfo !== undefined && this.contactInfo.lastName !== undefined
+        this.contactInfo !== undefined &&
+        this.contactInfo.lastName !== undefined
           ? this.contactInfo.lastName
           : "",
       customerEmail:
-      this.contactInfo !== undefined && this.contactInfo.email !== undefined ? this.contactInfo.email : "",
+        this.contactInfo !== undefined && this.contactInfo.email !== undefined
+          ? this.contactInfo.email
+          : "",
       customerPhone:
-      this.contactInfo !== undefined && this.contactInfo.mobile !== undefined ? this.contactInfo.mobile : "",
+        this.contactInfo !== undefined && this.contactInfo.mobile !== undefined
+          ? this.contactInfo.mobile
+          : "",
       vehicleMake:
-      this.vehicleInfo !== undefined && this.vehicleInfo._selectedMake !== undefined
+        this.vehicleInfo !== undefined &&
+        this.vehicleInfo._selectedMake !== undefined
           ? this.vehicleInfo._selectedMake
           : "",
       vehicleModel:
-      this.vehicleInfo !== undefined && this.vehicleInfo.selectedModel !== undefined
+        this.vehicleInfo !== undefined &&
+        this.vehicleInfo.selectedModel !== undefined
           ? this.vehicleInfo.selectedModel
           : "",
       vehicleYear:
-      this.vehicleInfo !== undefined && this.vehicleInfo._selectedYear !== undefined
+        this.vehicleInfo !== undefined &&
+        this.vehicleInfo._selectedYear !== undefined
           ? this.vehicleInfo._selectedYear
           : "",
       vehicleMileage:
-      this.vehicleInfo !== undefined && this.vehicleInfo._selectedMileage !== undefined
+        this.vehicleInfo !== undefined &&
+        this.vehicleInfo._selectedMileage !== undefined
           ? this.vehicleInfo._selectedMileage
           : "",
-      appointmentTime: _appointmentTime,
+
+      appointmentTime : _appointmentTime,
+
       storeResource:
-      this.selectedStoreObjInfo != undefined && this.selectedStoreObjInfo.phone !== undefined
+        this.selectedStoreObjInfo != undefined &&
+        this.selectedStoreObjInfo.phone !== undefined
           ? this.selectedStoreObjInfo.phone
           : "",
       storeResourceDescription:
-      this.selectedStoreObjInfo != undefined && this.selectedStoreObjInfo.phone !== undefined
+        this.selectedStoreObjInfo != undefined &&
+        this.selectedStoreObjInfo.phone !== undefined
           ? this.selectedStoreObjInfo.phone
           : "",
       stayingWithVehicle:
-      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+        this.appointmentSelectionInfo != undefined &&
+        this.appointmentSelectionInfo._stayWithVehicle !== undefined
           ? this.appointmentSelectionInfo._stayWithVehicle
           : "",
       customerWantsPromos:
-      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+        this.appointmentSelectionInfo != undefined &&
+        this.appointmentSelectionInfo._stayWithVehicle !== undefined
           ? this.appointmentSelectionInfo._stayWithVehicle
           : "",
       customerWantsSmsReminders:
-      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._stayWithVehicle !== undefined
+        this.appointmentSelectionInfo != undefined &&
+        this.appointmentSelectionInfo._stayWithVehicle !== undefined
           ? this.appointmentSelectionInfo._stayWithVehicle
           : "",
       customerNeedsTransportation:
-      this.appointmentSelectionInfo != undefined && this.appointmentSelectionInfo._needTransportationServices !== undefined
+        this.appointmentSelectionInfo != undefined &&
+        this.appointmentSelectionInfo._needTransportationServices !== undefined
           ? this.appointmentSelectionInfo._needTransportationServices
           : "",
       serviceDescription: _serviceSelected
     };
 
-    console.log('### reservationObj: '+reservationObj);
+    console.log("### reservationObj: " + reservationObj);
     let _reservationObj = JSON.stringify(reservationObj);
-    console.log('### reservationObj: ');
+    console.log("### reservationObj: ");
     console.log(JSON.parse(JSON.stringify(reservationObj)));
-    console.log('### _reservationObj: ');
+    console.log("### _reservationObj: ");
     console.log(JSON.parse(_reservationObj));
     reserveAppointment({ payLoad: _reservationObj })
       .then(result => {
-        console.log('### result: '+result);
+        console.log("### result: " + result);
         if (result !== undefined && result.hasException !== true) {
           this.showToast(
-            "Success",
-            "Success Created record",
+            "SUCCESS",
+            "Your Appointment has been confirmed",
             "Success",
             "sticky"
           );
+          
+          this.appointmentId = result.id ; 
+          
+          //var reserveMyAppointmnetBtn = this.template.querySelector(".reserveMyAppointmnetBtn");
+          //reserveMyAppointmnetBtn.classList.remove("enableContinueBtn");
 
           this.isLoading = false;
           this.error = undefined;
         } else {
-          this.error = result !== undefined &&
-                 result.exceptionMessage !== undefined ? 
-                 result.exceptionMessage  :  "No Records found";
+          this.error =
+            result !== undefined && result.exceptionMessage !== undefined
+              ? result.exceptionMessage
+              : "No Records found";
           this.isLoading = false;
           this.showToast(
             "Error",
@@ -426,7 +462,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         }
       })
       .catch(error => {
-        console.log('### error: ');
+        console.log("### error: ");
         console.log(JSON.parse(JSON.stringify(error)));
         this.error = error;
         //this.selectedStoreInfo = undefined;
@@ -440,5 +476,44 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
           "sticky"
         );
       });
+  }
+
+  prepareTimeStampFromStr(actualDate, selectedHr) {
+    console.log("--actualDate--" + actualDate); //"2/27/2020 12:00:00 AM";
+    console.log("--selectedHr--" + selectedHr); //"1:30 P.M."
+
+    var d = actualDate.substring(0, actualDate.indexOf(" "));
+    console.log(d);
+
+    var dsplit = d.split("/");
+    console.log("---date splitted---" + dsplit[1]);
+
+    var hoursToadd = 0;
+    let isNoon = selectedHr.substr(0, selectedHr.indexOf(":")) != 12;
+    if (
+      selectedHr.substr(selectedHr.indexOf(" ") + 1, 4) === "P.M." &&
+      isNoon
+    ) {
+      hoursToadd = 12;
+    }
+    var hrFormat = +selectedHr.substr(0, selectedHr.indexOf(":")) + +hoursToadd;
+    if (hrFormat < 10) {
+      hrFormat = "0" + hrFormat;
+    }
+    var monFormat = dsplit[0];
+    if (monFormat.length == 1) monFormat = "0" + monFormat;
+    let stime =
+      dsplit[2] +
+      "-" +
+      monFormat +
+      "-" +
+      dsplit[1] +
+      "T" +
+      hrFormat +
+      ":" +
+      selectedHr.substr(selectedHr.indexOf(":") + 1, 2) +
+      ":00.000Z";
+    console.log("---retruning in format--" + stime);
+    return stime;
   }
 }

@@ -71,11 +71,11 @@
                     </div>
                 </div>
             </lightning-layout-item>
-            <lightning-layout-item size="12" class="slds-align_absolute-center" if:true={showSixthPage}>
+            <lightning-layout-item size="12" class="slds-align_absolute-center" if:true={showConfirmation}>
                 <div class="slds-form slds-form_horizontal navButtons">
                     <div class="slds-form__row">
                         <lightning-button label="RESERVE MY APPOINTMENT" title="RESERVE MY APPOINTMENT" onclick={sendAppointmentReservationReq}
-                            class="slds-m-left_x-small reserveMyAppointmnetBtn" disabled={showConfirmation}>
+                            class="slds-m-left_x-small reserveMyAppointmnetBtn" >
                         </lightning-button>
                     </div>
                 </div>
