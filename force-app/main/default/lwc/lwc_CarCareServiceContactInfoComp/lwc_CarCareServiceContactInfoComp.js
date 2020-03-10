@@ -18,7 +18,7 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
   @track emailVar;
   @track mobileVar;
   @track acceptedPromotions;
-  //@track contactDetails = new this.contact('' , '' , '' , '');
+  @track isValidated = false;
 
   hasRendered = false;
 
@@ -35,7 +35,12 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
       //console.log('this.contactRec !== {} '+(this.contactRec !== {}));
       if (this.contactRec !== undefined && this.contactRec !== {}) {
         this.setContactRecord(this.contactRec);
+        if(this.isValidated === true){
+          this.enableContinue(event);
+        }
+        
       }
+      
 
       Promise.all([
         //loadScript(this, D3 + '/d3.v5.min.js'),
@@ -52,13 +57,13 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
   }
 
   handleOnChange(event) {
-    console.log("event.target.name : " + event.target.name);
-    console.log("event.target.value : " + event.target.value);
+    //console.log("event.target.name : " + event.target.name);
+    //console.log("event.target.value : " + event.target.value);
     this[event.target.name] = event.target.value;
-    console.log(" handleOnChange this.firstNameVar " + this.firstNameVar);
-    console.log(" handleOnChange this.lastNameVar " + this.lastNameVar);
-    console.log(" handleOnChange this.emailVar " + this.emailVar);
-    console.log(" handleOnChange this.mobileVar " + this.mobileVar);
+    //console.log(" handleOnChange this.firstNameVar " + this.firstNameVar);
+    //console.log(" handleOnChange this.lastNameVar " + this.lastNameVar);
+    //console.log(" handleOnChange this.emailVar " + this.emailVar);
+    //console.log(" handleOnChange this.mobileVar " + this.mobileVar);
     //this.getContactInfo();
 
     this.checkEnableContinueButton(event);
@@ -71,13 +76,20 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
       this.emailVar &&
       this.mobileVar
     ) {
+      this.isValidated = true;
+      this.enableContinue(event);
+    }
+    else if(this.isValidated === true){
+      this.isValidated = false; 
       this.enableContinue(event);
     }
   }
 
   enableContinue(event) {
     // Creates the event to disable continue event.
-    const selectedEvent = new CustomEvent("enablecontinue", {});
+    const selectedEvent = new CustomEvent("enablecontinue", {
+      detail: this.isValidated
+    });
     // Dispatches the event.
     this.dispatchEvent(selectedEvent);
   }
@@ -97,19 +109,19 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
   getContactInfo() {
     const inputComponents = this.template.querySelectorAll("lightning-input");
     inputComponents.forEach(element => {
-      console.log(" element.type " + element.type);
-      console.log(" element.name " + element.name);
+      //console.log(" element.type " + element.type);
+      //console.log(" element.name " + element.name);
       if (element.type === "checkbox") {
-        console.log(" element.checked " + element.checked);
+        //console.log(" element.checked " + element.checked);
         this[element.name] = element.checked;
       } else {
-        console.log(" element.value " + element.value);
+        //console.log(" element.value " + element.value);
         this[element.name] = element.value;
       }
-      console.log(" ########## " );
+      //console.log(" ########## " );
     });
 
-    console.log(" this.firstNameVar " + this.firstNameVar);
+    //console.log(" this.firstNameVar " + this.firstNameVar);
 
     /*
         const checkBoxComponents = this.template.querySelectorAll('input');
@@ -125,9 +137,10 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
       lastName: this.lastNameVar,
       email: this.emailVar,
       mobile: this.mobileVar,
-      _acceptedPromotions: this.acceptedPromotions
+      _acceptedPromotions: this.acceptedPromotions,
+      _isValidated : this.isValidated
     };
-
+    console.log(" ########## getContactInfo " )
     console.log(JSON.parse(JSON.stringify(contact)) );
 
     //new this.contact(this.firstNameVar , this.lastNameVar ,this.emailVar , this.mobileVar);
@@ -139,15 +152,15 @@ export default class lwc_CarCareServiceContactInfoComp extends LightningElement 
     this.lastNameVar = Obj.lastName !== undefined ? Obj.lastName : "";
     this.emailVar = Obj.email !== undefined ? Obj.email : "";
     this.mobileVar = Obj.mobile !== undefined ? Obj.mobile : "";
-
+    this.isValidated = Obj._isValidated !== undefined ? Obj._isValidated : false;
     this.acceptedPromotions =
       Obj._acceptedPromotions !== undefined ? Obj._acceptedPromotions : false;
 
-      console.log(" ########## this.firstNameVar "+this.firstNameVar );
-      console.log(" ########## acceptedPromotions "+this.acceptedPromotions );
-      console.log(" ########## this.lastName "+this.lastNameVar );
-      console.log(" ########## this.mobileVar "+this.mobileVar );
-      console.log(" ########## this.emailVar "+this.emailVar );
+      //console.log(" ########## this.firstNameVar "+this.firstNameVar );
+      //console.log(" ########## acceptedPromotions "+this.acceptedPromotions );
+      //console.log(" ########## this.lastName "+this.lastNameVar );
+      //console.log(" ########## this.mobileVar "+this.mobileVar );
+      //console.log(" ########## this.emailVar "+this.emailVar );
   }
 
   @api

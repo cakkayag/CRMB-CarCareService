@@ -74,8 +74,15 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   handleEnableContinue(event) {
+    console.log("###### handleEnableContinue ########");
+    console.log(JSON.parse(JSON.stringify(event)));
     var continueBtn = this.template.querySelector(".continueBtn");
-    continueBtn.classList.add("enableContinueBtn");
+    if (event.detail) {
+      continueBtn.classList.add("enableContinueBtn");
+    } else {
+      continueBtn.classList.remove("enableContinueBtn");
+    }
+
     //continueBtn.disabled = false;
   }
 
@@ -103,7 +110,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
     let validationStatus = true;
     if (this.CurrentPage === 2) {
-      //validationStatus = contactComp.ValidateContactInfo(event);
+      validationStatus = contactComp.ValidateContactInfo(event);
     } else if (this.CurrentPage === 4) {
       //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
     }
@@ -273,7 +280,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   get showContinue() {
-    return this.CurrentPage < this.maxPages ? false : true;
+    return this.CurrentPage < this.maxPages ? true : false;
   }
 
   get showConfirmation() {
@@ -309,10 +316,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   handleEditRequest(event) {
+    this.handleEditRequestHelper(event, event.detail);
+  }
+
+  handleEditRequestHelper(event, navigateId) {
     //console.log('###### handleStoreChange ########');
     //console.log(JSON.parse(JSON.stringify(event)));
     //console.log('handleEditRequest'+event.detail);
-    this.CurrentPage = parseInt(event.detail, 0);
+    this.CurrentPage = parseInt(navigateId, 0);
     //console.log('this.CurrentPage'+this.CurrentPage);
     this.previousPage = this.CurrentPage;
     this.nextPage = this.CurrentPage;
@@ -326,6 +337,12 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     this.handleEnableContinue(event);
     //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
     fireEvent(this.pageRef, "buttonClickedEvent", this);
+  }
+
+  navigateToAppointmentPage(event) {
+    this.appointmentSelectionInfo = {};
+    this.showSelectNewDateTimePopup = false;
+    this.handleEditRequestHelper(event, 5);
   }
 
   sendAppointmentReservationReq(event) {
@@ -457,9 +474,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
           this.isLoading = false;
           this.error = undefined;
 
-          this.showSelectNewDateTimePopup = false;
+          this.showSelectNewDateTimePopup = true;
 
-          this.navigateToThankYouPage(event);
+          //this.navigateToThankYouPage(event);
         } else {
           this.error =
             result !== undefined && result.exceptionMessage !== undefined

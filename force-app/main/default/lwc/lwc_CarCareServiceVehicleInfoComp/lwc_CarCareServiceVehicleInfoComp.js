@@ -16,6 +16,7 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
   @track isLoading = true;
   @track isModelLoading = false;
   @track error;
+  @track isVehicleInfoValidated = false;
 
   hasRendered = false;
 
@@ -48,6 +49,10 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
         if (this.vehicleInfoRec !== undefined && this.vehicleInfoRec !== {}) {
           this.vehicleInfoRec = JSON.parse(JSON.stringify(this.vehicleInfoRec));
           this.setVehicleInfoRecord(this.vehicleInfoRec);
+
+          if(this.isVehicleInfoValidated === true){
+            this.enableContinue(event);
+          }
         }
         this.hasRendered = true;
       }
@@ -99,7 +104,8 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
       _selectedYear: this.selectedYear,
       _selectedMake: this.selectedMake,
       _selectedModel: this.selectedModel,
-      _selectedMileage: this.selectedMileage
+      _selectedMileage: this.selectedMileage,
+      _isVehicleInfoValidated : this.isVehicleInfoValidated
     };
     //console.log("diff : " );
     //console.log('getVehicleDetailsInfo : '+JSON.parse(JSON.stringify(vehicleDetailsInfo)));
@@ -121,6 +127,8 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
     //console.log('   setVehicleInfoRecord vehicleInfoRec this.selectedModel '+ this.selectedModel);
     this.selectedMileage =
       Obj._selectedMileage !== undefined ? Obj._selectedMileage : "";
+
+    this.isVehicleInfoValidated = Obj._isVehicleInfoValidated !== undefined ? Obj._isVehicleInfoValidated : false;
   }
 
   @wire(getAllYears)
@@ -237,13 +245,21 @@ export default class lwc_CarCareServiceVehicleInfoComp extends LightningElement 
 
   checkEnableContinueButton(event) {
     if (this.selectedYear && this.selectedMake && this.selectedModel) {
+      this.isVehicleInfoValidated = true;
       this.enableContinue(event);
     }
+    else if(this.isVehicleInfoValidated === true){
+      this.isVehicleInfoValidated = false; 
+      this.enableContinue(event);
+    }
+
   }
 
   enableContinue(event) {
     // Creates the event to disable continue event.
-    const selectedEvent = new CustomEvent("enablecontinue", {});
+    const selectedEvent = new CustomEvent("enablecontinue", {
+      detail: this.isVehicleInfoValidated
+    });
     // Dispatches the event.
     this.dispatchEvent(selectedEvent);
   }
