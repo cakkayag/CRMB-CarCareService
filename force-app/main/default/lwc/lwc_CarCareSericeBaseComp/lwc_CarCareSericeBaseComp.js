@@ -21,8 +21,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   @track selectedStoreObjInfo = {};
   @track dateTimeInfo = {};
   @track appointmentSelectionInfo = {};
+  @track showSelectNewDateTimePopup = false;
 
-  appointmentId = '';
+  appointmentId = "";
   //@track hasUpdates = false;
   //@track isChildLoading = false;
 
@@ -75,12 +76,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   handleEnableContinue(event) {
     var continueBtn = this.template.querySelector(".continueBtn");
     continueBtn.classList.add("enableContinueBtn");
+    //continueBtn.disabled = false;
   }
 
   handleContinue(event) {
     //remove enable unless all validations complete
     var continueBtn = this.template.querySelector(".continueBtn");
     continueBtn.classList.remove("enableContinueBtn");
+    //continueBtn.disabled = true;
 
     const contactComp = this.template.querySelector(
       "c-lwc_-car-care-service-contact-info-comp"
@@ -120,9 +123,16 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         //console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
         //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
       } else if (this.CurrentPage === 2) {
+        //remove this later
+        continueBtn.disabled = false;
         const contactTemp = contactComp.getContactInfo();
         this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
         //console.log(JSON.parse(JSON.stringify(this.contactInfo)));
+
+        /*let state = { page_id: "ContactInfo", user_id: "select store" };
+        let title = "Contact Info";
+        let url = "contact.html";
+        history.pushState(state, title, url);*/
       } else if (this.CurrentPage === 3) {
         const vehicleTemp = vehicleInfoComp.getVehicleDetailsInfo();
         this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
@@ -158,6 +168,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   handlePrevious() {
     var continueBtn = this.template.querySelector(".continueBtn");
     continueBtn.classList.add("enableContinueBtn");
+    //continueBtn.disabled = false;
 
     if (this.CurrentPage === 2) {
       const contactComp = this.template.querySelector(
@@ -266,10 +277,10 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   get showConfirmation() {
-    
-    return this.CurrentPage == this.maxPages && 
-      (this.appointmentId === undefined || this.appointmentId === "" )
-      ? true : false;
+    return this.CurrentPage == this.maxPages &&
+      (this.appointmentId === undefined || this.appointmentId === "")
+      ? true
+      : false;
   }
 
   get showStoreChangeAlert() {
@@ -386,7 +397,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
           ? this.vehicleInfo._selectedMileage
           : "",
 
-      appointmentTime : _appointmentTime,
+      appointmentTime: _appointmentTime,
 
       storeResource:
         this.selectedStoreObjInfo != undefined &&
@@ -437,14 +448,18 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             "Success",
             "sticky"
           );
-          
-          this.appointmentId = result.id ; 
-          
+
+          this.appointmentId = result.id;
+
           //var reserveMyAppointmnetBtn = this.template.querySelector(".reserveMyAppointmnetBtn");
           //reserveMyAppointmnetBtn.classList.remove("enableContinueBtn");
 
           this.isLoading = false;
           this.error = undefined;
+
+          this.showSelectNewDateTimePopup = false;
+
+          this.navigateToThankYouPage(event);
         } else {
           this.error =
             result !== undefined && result.exceptionMessage !== undefined
@@ -459,6 +474,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
             "Error",
             "sticky"
           );
+          this.showSelectNewDateTimePopup = true;
         }
       })
       .catch(error => {
@@ -515,5 +531,14 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
       ":00.000Z";
     console.log("---retruning in format--" + stime);
     return stime;
+  }
+
+  startNewSearch(event) {
+    //Navigate to locator page
+    window.location.replace("https://locator.carolinas.aaa.com/search");
+  }
+
+  navigateToThankYouPage(event) {
+    window.location.replace("https://carolinas.aaa.com/carcare-thankyou/");
   }
 }

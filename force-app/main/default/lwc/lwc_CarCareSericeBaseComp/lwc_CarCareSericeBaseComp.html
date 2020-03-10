@@ -1,85 +1,137 @@
 <template>
     <div class="baseContainerDiv">
         <div if:true={showFirstPage}>
-            <c-lwc_-car-care-service-store-locator-comp 
-                branch-id={branchIdVal} store-wrapper-list={availableStoreList} 
-                selected-store-obj={selectedStoreObjInfo}
-                display-store-change-alert={showStoreChangeAlert}
-                onstorechange={handleStoreChange} 
-                onenablecontinue={handleEnableContinue}>
+            <c-lwc_-car-care-service-store-locator-comp branch-id={branchIdVal}
+                                                        store-wrapper-list={availableStoreList}
+                                                        selected-store-obj={selectedStoreObjInfo}
+                                                        display-store-change-alert={showStoreChangeAlert}
+                                                        onstorechange={handleStoreChange}
+                                                        onenablecontinue={handleEnableContinue}>
             </c-lwc_-car-care-service-store-locator-comp>
         </div>
         <div if:true={showSecondPage}>
-            <c-lwc_-car-care-service-contact-info-comp contact-rec={contactInfo}>
+            <c-lwc_-car-care-service-contact-info-comp contact-rec={contactInfo}
+                                                       onenablecontinue={handleEnableContinue}>
 
             </c-lwc_-car-care-service-contact-info-comp>
         </div>
         <div if:true={showThirdPage}>
-            <c-lwc_-car-care-service-vehicle-info-comp vehicle-info-rec={vehicleInfo} 
-            onenablecontinue={handleEnableContinue}>
+            <c-lwc_-car-care-service-vehicle-info-comp vehicle-info-rec={vehicleInfo}
+                                                       onenablecontinue={handleEnableContinue}>
 
             </c-lwc_-car-care-service-vehicle-info-comp>
         </div>
         <div if:true={showFourthPage}>
-            <c-lwc_-car-care-service-select-comp 
-                service-select={serviceSelectInfo} 
-                store-id={storeId} 
-                onenablecontinue={handleEnableContinue}>
+            <c-lwc_-car-care-service-select-comp service-select={serviceSelectInfo}
+                                                 store-id={storeId}
+                                                 onenablecontinue={handleEnableContinue}>
             </c-lwc_-car-care-service-select-comp>
         </div>
         <div if:true={showFifthPage}>
-            <c-lwc_-car-care-service-Appointment-comp 
-                store-id={storeId} 
-                selected-appointment-obj={appointmentSelectionInfo} 
-                onenablecontinue={handleEnableContinue}>
+            <c-lwc_-car-care-service-Appointment-comp store-id={storeId}
+                                                      selected-appointment-obj={appointmentSelectionInfo}
+                                                      onenablecontinue={handleEnableContinue}>
             </c-lwc_-car-care-service-Appointment-comp>
         </div>
         <div if:true={showSixthPage}>
             <c-lwc_-car-care-service-confirmation-comp store-location-review={selectedStoreObjInfo}
-            contact-info-review={contactInfo}
-            service-request-review={serviceSelectInfo}
-            date-time-review={appointmentSelectionInfo}
-            vehicle-info-review={vehicleInfo}
-            oneditinfo={handleEditRequest}>
+                                                       contact-info-review={contactInfo}
+                                                       service-request-review={serviceSelectInfo}
+                                                       date-time-review={appointmentSelectionInfo}
+                                                       vehicle-info-review={vehicleInfo}
+                                                       oneditinfo={handleEditRequest}>
             </c-lwc_-car-care-service-confirmation-comp>
         </div>
-        <lightning-layout horizontal-align="center" multiple-rows="true">
-            <lightning-layout-item size="12" class="slds-align_absolute-center">
+        <lightning-layout horizontal-align="center"
+                          multiple-rows="true">
+            <lightning-layout-item size="12"
+                                   class="slds-align_absolute-center">
                 <div class="slds-form slds-form_horizontal navButtons">
                     <div class="slds-form__row">
-                        <lightning-button label="CONTINUE" title="Continue" onclick={handleContinue}
-                            class="slds-m-left_x-small continueBtn" disabled={showContinue}>
+                        <lightning-button label="CONTINUE"
+                                          title="Continue"
+                                          onclick={handleContinue}
+                                          class="slds-m-left_x-small continueBtn"
+                                          disabled={showContinue}>
                         </lightning-button>
                     </div>
                 </div>
             </lightning-layout-item>
-            <lightning-layout-item size="12" class="slds-align_absolute-center">
+            <lightning-layout-item size="12"
+                                   class="slds-align_absolute-center">
                 <div class="slds-form slds-form_horizontal">
                     <div class="slds-form__row">
-                        <lightning-button variant="base" label="PREVIOUS" title="Previous" onclick={handlePrevious}
-                            class="slds-m-left_x-small previousBtn" disabled={showPrevious}>
+                        <lightning-button variant="base"
+                                          label="PREVIOUS"
+                                          title="Previous"
+                                          onclick={handlePrevious}
+                                          class="slds-m-left_x-small previousBtn"
+                                          disabled={showPrevious}>
                         </lightning-button>
                     </div>
                 </div>
             </lightning-layout-item>
-            <lightning-layout-item size="12" class="slds-align_absolute-center" if:true={showFirstPage}>
+            <lightning-layout-item size="12"
+                                   class="slds-align_absolute-center"
+                                   if:true={showFirstPage}>
                 <div class="slds-form slds-form_horizontal">
                     <div class="slds-form__row">
-                        <lightning-button variant="base" label="START NEW SEARCH" title="Start New Search"
-                            class="slds-m-left_x-small previousBtn">
+                        <lightning-button variant="base"
+                                          label="START NEW SEARCH"
+                                          title="Start New Search"
+                                          class="slds-m-left_x-small previousBtn"
+                                          onclick={startNewSearch}>
                         </lightning-button>
                     </div>
                 </div>
             </lightning-layout-item>
-            <lightning-layout-item size="12" class="slds-align_absolute-center" if:true={showConfirmation}>
+            <lightning-layout-item size="12"
+                                   class="slds-align_absolute-center"
+                                   if:true={showConfirmation}>
                 <div class="slds-form slds-form_horizontal navButtons">
                     <div class="slds-form__row">
-                        <lightning-button label="RESERVE MY APPOINTMENT" title="RESERVE MY APPOINTMENT" onclick={sendAppointmentReservationReq}
-                            class="slds-m-left_x-small reserveMyAppointmnetBtn" >
+                        <lightning-button label="RESERVE MY APPOINTMENT"
+                                          title="RESERVE MY APPOINTMENT"
+                                          onclick={sendAppointmentReservationReq}
+                                          class="slds-m-left_x-small reserveMyAppointmnetBtn">
                         </lightning-button>
                     </div>
                 </div>
             </lightning-layout-item>
         </lightning-layout>
+        <!-- Selected date not available popup-->
+        <template if:true={showSelectNewDateTimePopup}>
+            <div style="height: 500px;">
+                <section role="dialog"
+                         tabindex="-1"
+                         aria-labelledby="modal-heading-01"
+                         aria-modal="true"
+                         aria-describedby="modal-content-id-1"
+                         class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container storeCompModal">
+                        <header class="slds-modal__header">
+                            <lightning-icon icon-name="action:close"
+                                            alternative-text="Success!"
+                                            variant="error"
+                                            size="xx-small">
+                            </lightning-icon>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium"
+                             id="modal-content-id-3">
+                            <div class="slds-text-align_center">
+                                <span>The Appointment you selected is no longer available</span>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer storeFooter">
+                            <lightning-button variant="brand"
+                                              label="Ok"
+                                              class="slds-m-left_x-small storeCompBtn storeDetailBtn">
+                            </lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </div>
+        </template>
     </div>
 </template>

@@ -42,9 +42,8 @@ public with sharing class AppointmentObj {
             for(Object availableTime : availableTimeList){
                 day.availableTimes.add((String)availableTime);
             }
-
-            availableDayList.add(day);
-            
+            if(day.openTime != '00:00:00' && day.closeTime != '00:00:00') 
+                availableDayList.add(day);
         }
 
 		return availableDayList;

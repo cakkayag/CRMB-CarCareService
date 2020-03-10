@@ -172,7 +172,7 @@ public without sharing class AppointmentIntegrationServices {
         return availableAppointment;
     }
 
-    @AuraEnabled(cacheable=true)
+    @AuraEnabled
     public static AppointmentConfirmationServiceObj reserveAppointment(String payLoad){
         AppointmentConfirmationServiceObj confirmRes = new AppointmentConfirmationServiceObj();
         System.debug('confirmRes : '+confirmRes);
@@ -197,6 +197,8 @@ public without sharing class AppointmentIntegrationServices {
                 String jsonBody = res.getBody();
                 System.debug('jsonBody : '+jsonBody);
                 confirmRes = AppointmentConfirmationServiceObj.parse(jsonBody);
+                //save a record in appointment Object
+                createAppointmentRecord(payLoad);
             }
             else{
                 System.debug('res.getStatusCode()  : '+res.getStatusCode());
@@ -375,6 +377,31 @@ public without sharing class AppointmentIntegrationServices {
         return holidays;
     }
 
+    private static String createAppointmentRecord(String payLoad) {
+        try {
+            System.debug('--payLoad--'+payLoad);
+            ApptObjFromPayload apptObj = (ApptObjFromPayload) System.JSON.deserialize(payLoad, ApptObjFromPayload.class);
+            System.debug('--apptObj--'+apptObj);
+            Appointment__c appt = new Appointment__c();
+            appt.Date_Time__c = (DateTime) JSON.deserialize(JSON.serialize(apptObj.appointmentTime), DateTime.class);
+            appt.Email__c = apptObj.customerEmail;
+            appt.First_Name__c = apptObj.customerFirstName;
+            appt.Last_Name__c = apptObj.customerLastName;
+            appt.Make__c = apptObj.vehicleMake;
+            appt.Mileage__c = apptObj.vehicleMileage;
+            appt.Mobile__c = apptObj.customerPhone;
+            appt.Model__c = apptObj.vehicleModel;
+            appt.Service__c = apptObj.serviceDescription;
+            appt.Store_Number__c = String.valueOf(apptObj.storeId);
+            appt.Year__c = apptObj.vehicleYear;
+            appt.RecordTypeId = Schema.SObjectType.Appointment__c.getRecordTypeInfosByDeveloperName().get('Car_Care').getRecordTypeId();
+            insert appt;
+        } catch(Exception ex) {
+            system.debug('--Exception--'+ex.getMessage());
+        }
+        return '';
+    }
+
     public class ItemsWrap{
         @AuraEnabled public List<string> items;
         @AuraEnabled public boolean hasException;
@@ -385,5 +412,25 @@ public without sharing class AppointmentIntegrationServices {
             hasException = false;
             exceptionMessage = '';   
         }
+    }
+
+    class ApptObjFromPayload {
+        public Integer storeId;
+        public String customerFirstName;
+        public String customerLastName;
+        public String customerEmail;
+        public String customerPhone;
+        public String vehicleMake;
+        public String vehicleModel;
+        public String vehicleYear;
+        public String vehicleMileage;
+        public String appointmentTime;
+        public String storeResource;
+        public String storeResourceDescription;
+        public boolean stayingWithVehicle;
+        public boolean customerWantsPromos;
+        public boolean customerWantsSmsReminders;
+        public boolean customerNeedsTransportation;
+        public String serviceDescription;
     }
 }
