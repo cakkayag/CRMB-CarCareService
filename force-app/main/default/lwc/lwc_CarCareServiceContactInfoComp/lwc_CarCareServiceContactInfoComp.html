@@ -5,7 +5,7 @@
                 <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                     <label class="slds-form-element__label formElement">First Name*</label>
                     <div class="slds-form-element__control contactFormInput" >
-                        <lightning-input name="firstNameVar" type="text" required
+                        <lightning-input name="firstNameVar" value={firstNameVar} type="text" required
                             message-when-value-missing="Please Enter First Name" onchange={handleOnChange} ></lightning-input>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                 <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                     <label class="slds-form-element__label formElement">Last Name*</label>
                     <div class="slds-form-element__control contactFormInput">
-                        <lightning-input name="lastNameVar" type="text" required
+                        <lightning-input name="lastNameVar" value={lastNameVar} type="text" required
                             message-when-value-missing="Please Enter Last Name" onchange={handleOnChange}>
                         </lightning-input>
                     </div>
@@ -30,7 +30,7 @@
                 <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                     <label class="slds-form-element__label formElement" for="email">Email*</label>
                     <div class="slds-form-element__control contactFormInput">
-                        <lightning-input name="emailVar" type="email" required
+                        <lightning-input name="emailVar" value={emailVar} type="email" required
                             message-when-value-missing="Please Enter Email" onchange={handleOnChange}>
                         </lightning-input>
                     </div>
@@ -43,7 +43,7 @@
                 <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                     <label class="slds-form-element__label formElement" for="mobile">Mobile*</label>
                     <div class="slds-form-element__control contactFormInput">
-                        <lightning-input name="mobileVar" type="tel" required
+                        <lightning-input name="mobileVar" value={mobileVar} type="tel" required
                             message-when-value-missing="Please Enter Mobile Number" onchange={handleOnChange}>
                         </lightning-input>
                     </div>
