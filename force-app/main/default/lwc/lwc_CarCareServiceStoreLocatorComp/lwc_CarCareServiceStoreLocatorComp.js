@@ -28,6 +28,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
   @track showStoreDetail = false;
   @track isSelectedStoreClosed = false;
   @track storeInfoForDisplay = {};
+  @track isStoreValidated = false;
 
   label = {
     storeChangeMessage,
@@ -65,6 +66,8 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
           break;
         }
       }
+      this.isStoreValidated = true;
+      this.enableContinue(event);
     }
   }
 
@@ -112,8 +115,6 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                     element.storeHours[i].hours;
                   break;
                 }
-
-                //storeOpeningTimings = storeOpeningTimings + element.storeHours[i].day + ' open ' + element.storeHours[i].hours +' \n ';
               }
             }
 
@@ -157,6 +158,7 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
                 this.isSelectedStoreClosed = true;
                 this.displayStoreClosedModal = true;
               } else {
+                this.isStoreValidated = true;
                 this.enableContinue(event);
               }
               storeInfoTemp.push(selectOption);
@@ -231,7 +233,9 @@ export default class lwc_CarCareServiceStoreLocatorComp extends LightningElement
 
   enableContinue(event) {
     // Creates the event to disable continue event.
-    const selectedEvent = new CustomEvent("enablecontinue", {});
+    const selectedEvent = new CustomEvent("enablecontinue", {
+      detail: this.isStoreValidated
+    });
     // Dispatches the event.
     this.dispatchEvent(selectedEvent);
   }

@@ -20,25 +20,6 @@ export default class lwc_CarCareNavigationComp extends LightningElement {
   handleButtonPressedEvent(detail) {
     this.currentSelection = detail.CurrentPage;
   }
-  //TODO: We have already deveoped way to naigate around screens need to disccuss and remove these
-  /* navigateToScreen(event){
-        this.previousSelection = this.currentSelection
-        const targetId = event.currentTarget.dataset.targetId;
-        this.currentSelection = parseInt(targetId, 0);
-
-        let navWrap = {
-            cSelection : this.currentSelection ,
-            pSelection : this.previousSelection
-        };
-
-        if(this.currentSelection !== undefined && isNaN(this.currentSelection) === false ){
-            //fireEvent(this.pageRef, 'navigationClickedEvent', navWrap);
-        }
-        else{
-            //console.log("An error has Occured, please contact you Admin");
-        }
-    }*/
-    //TODO: We have already deveoped way to naigate around screens need to disccuss and remove these
 
   get showFirstPage_Normal() {
     return this.currentSelection < 1 ? true : false;

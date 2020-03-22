@@ -161,8 +161,6 @@ public without sharing class AppointmentIntegrationServices {
                 availableAppointment.days = AppointmentObj.parse(jsonBody);
             }
             else{
-                //String jsonBody =  '{"days":[{"date":"1/21/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/22/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/23/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/24/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/25/2020 12:00:00 AM","openTime":"08:00:00","closeTime":"16:00:00","availableTimes":["08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00"]},{"date":"1/27/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","09:30:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/28/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/29/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/30/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","10:00:00","10:30:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]},{"date":"1/31/2020 12:00:00 AM","openTime":"07:30:00","closeTime":"18:00:00","availableTimes":["07:30:00","08:00:00","08:30:00","09:00:00","11:00:00","11:30:00","12:00:00","12:30:00","13:00:00","13:30:00","14:00:00","14:30:00","15:00:00","15:30:00","16:00:00","16:30:00"]}]}';
-                //availableAppointment.days = AppointmentObj.parse(jsonBody);
                 availableAppointment.hasException = true;
                 availableAppointment.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
             }
@@ -177,16 +175,6 @@ public without sharing class AppointmentIntegrationServices {
         AppointmentConfirmationServiceObj confirmRes = new AppointmentConfirmationServiceObj();
         System.debug('confirmRes : '+confirmRes);
 
-        /*
-        Date Appointmentdate = String.isNotBlank(confirmRes.appointmentDateVal)  
-                                ? Date.valueOf(confirmRes.appointmentDateVal)
-                                : null ;
-        
-        String time = String.isNotBlank(confirmRes.appointmentTimeVal)  
-                        ? confirmRes.appointmentTimeVal.split(' ')
-                        : null ;
-        */
-
         Car_Care_Service_Setting__mdt setting = getCarCareServiceSettings();
         if(String.isNotBlank(payLoad) && setting != null && String.isNotBlank( setting.Confirmation_Endpoint__c)){
             
@@ -199,8 +187,11 @@ public without sharing class AppointmentIntegrationServices {
                 confirmRes = AppointmentConfirmationServiceObj.parse(jsonBody);
                 //save a record in appointment Object
                 createAppointmentRecord(payLoad);
-            }
-            else{
+            } else if (res != null && res.getStatusCode() == 404 && res.getBody() == 'The appointment time is no longer available') {
+                System.debug('res.getStatusCode()  : '+res.getStatusCode());
+                confirmRes.hasException = true;
+                confirmRes.exceptionMessage = 'The appointment time is no longer available';
+            } else{
                 System.debug('res.getStatusCode()  : '+res.getStatusCode());
                 confirmRes.hasException = true;
                 confirmRes.exceptionMessage = 'Callout Failed due to '+ (res != null ? 'Status code : '+res.getStatusCode() +' and Status :'+res.getStatus() : exceptionStr);
@@ -226,9 +217,7 @@ public without sharing class AppointmentIntegrationServices {
             
             // Create a new http object to send the request object
             // A response object is generated as a result of the request  
-
             Http http = new Http();
-            
             try{
                 system.debug('Started : '+System.now());
                 res = http.send(req);
@@ -253,7 +242,6 @@ public without sharing class AppointmentIntegrationServices {
             Decimal latitude = selectedLoc.Geocode__Latitude__s;  // This will be our selected store lat value
             Decimal longitude = selectedLoc.Geocode__Longitude__s; // This will be our selected store long value
 
-            
             //To get nearby locations within 10 miles…
             Locations = new List<AAA_Location__c >([SELECT Car_Care_Location_Number__c ,
                                                         Store_Image_URL__c,
@@ -267,7 +255,6 @@ public without sharing class AppointmentIntegrationServices {
                                                         ORDER BY
                                                         DISTANCE( Geocode__c, GEOLOCATION( :latitude, :longitude ), 'mi' )   
                                                         ]);
-            
             Locations.add(selectedLoc);
             }
         return Locations;

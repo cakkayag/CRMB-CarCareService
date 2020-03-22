@@ -3,16 +3,27 @@
         <!-- desktop version starts-->
         <div class="slds-form slds-align_absolute-center maxWidth600px desktopOnly">
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Year*</label>
                         <div class="slds-form-element__control">
-                            <input id="yearsInput" name="yearsInput" list="yearsValueList" placeholder="Years" required
-                                class="slds-input yearsInput vehicleInput" autocomplete="off" type="number"
-                                value={selectedYear} onchange={handleYearChange} />
-                            <datalist id="yearsValueList" class="yearsValueList">
-                                <template for:each={availableYearOptions} for:item='item'>
-                                    <option key={item.value} value={item.value}>{item.value}</option>
+                            <input id="yearsInput"
+                                   name="yearsInput"
+                                   list="yearsValueList"
+                                   placeholder="Years"
+                                   required
+                                   class="slds-input yearsInput vehicleInput"
+                                   autocomplete="off"
+                                   type="number"
+                                   value={selectedYear}
+                                   onchange={handleYearChange} />
+                            <datalist id="yearsValueList"
+                                      class="yearsValueList">
+                                <template for:each={availableYearOptions}
+                                          for:item='item'>
+                                    <option key={item.value}
+                                            value={item.value}>{item.value}</option>
                                 </template>
                             </datalist>
                         </div>
@@ -21,16 +32,27 @@
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Make*</label>
                         <div class="slds-form-element__control">
-                            <input id="makeInput" name="makeInput" list="makeValueList" placeholder="Makes" required
-                                class="slds-input makeInput vehicleInput" autocomplete="off" type="text"
-                                value={selectedMake} onchange={handleMakeChange} />
-                            <datalist id="makeValueList" class="makeValueList">
-                                <template for:each={availableMakeOptions} for:item='item'>
-                                    <option key={item.value} value={item.value}>{item.value}</option>
+                            <input id="makeInput"
+                                   name="makeInput"
+                                   list="makeValueList"
+                                   placeholder="Makes"
+                                   required
+                                   class="slds-input makeInput vehicleInput"
+                                   autocomplete="off"
+                                   type="text"
+                                   value={selectedMake}
+                                   onchange={handleMakeChange} />
+                            <datalist id="makeValueList"
+                                      class="makeValueList">
+                                <template for:each={availableMakeOptions}
+                                          for:item='item'>
+                                    <option key={item.value}
+                                            value={item.value}>{item.value}</option>
                                 </template>
                             </datalist>
                         </div>
@@ -39,36 +61,53 @@
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Model*</label>
                         <div class="slds-form-element__control">
-                        <!--<div if:true={isModelLoaded} class="slds-form-element__control">-->
-                            <input id="modelInput" name="modelInput" list="modelValueList" placeholder="Models" required
-                                class="slds-input modelInput vehicleInput" autocomplete="off" type="text"
-                                value={selectedModel} onchange={handleModelChange} />
-                            <datalist id="modelValueList" class="modelValueList">
-                                <template for:each={availableModelOptions} for:item='item'>
-                                    <option key={item.value} value={item.value}>{item.value}</option>
+                            <input id="modelInput"
+                                   name="modelInput"
+                                   list="modelValueList"
+                                   placeholder="Models"
+                                   required
+                                   class="slds-input modelInput vehicleInput"
+                                   autocomplete="off"
+                                   type="text"
+                                   value={selectedModel}
+                                   onchange={handleModelChange} />
+                            <datalist id="modelValueList"
+                                      class="modelValueList">
+                                <template for:each={availableModelOptions}
+                                          for:item='item'>
+                                    <option key={item.value}
+                                            value={item.value}>{item.value}</option>
                                 </template>
                             </datalist>
-                        <!--</div>-->
-                        </div>    
-                        <!--<div if:true={isModelLoading} class="maxWidth600px">
-                            <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
-                        </div>-->
+                        </div>
+                        <div if:true={isModelLoading}
+                             class="maxWidth600px">
+                            <lightning-spinner alternative-text="Loading"
+                                               class="spins"
+                                               size="small"></lightning-spinner>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Mileage</label>
                         <div class="slds-form-element__control">
-                            <input id="mileageInput" name="mileageInput" 
-                            class="slds-input modelInput vehicleInput" autocomplete="off" type="text"
-                                value={selectedMileage} onchange={handleMileageChange} />
+                            <input id="mileageInput"
+                                   name="mileageInput"
+                                   class="slds-input modelInput vehicleInput"
+                                   autocomplete="off"
+                                   type="number"
+                                   value={selectedMileage}
+                                   onchange={handleMileageChange} />
                         </div>
                     </div>
                 </div>
@@ -79,13 +118,17 @@
         <!-- mobile view starts-->
         <div class="slds-form slds-align_absolute-center maxWidth600px mobileOnly">
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Year*</label>
-                        <select class="slds-select" onchange={handleYearChange} >
-                            <option  value="">Select Year</option>
-                            <template for:each={availableYearOptions} for:item="year"> 
-                                <option key={year.label} value={year.value}>{year.value}</option>
+                        <select class="slds-select"
+                                onchange={handleYearChange}>
+                            <option value="">Select Year</option>
+                            <template for:each={availableYearOptions}
+                                      for:item="year">
+                                <option key={year.label}
+                                        value={year.value}>{year.value}</option>
                             </template>
                         </select>
                     </div>
@@ -93,13 +136,17 @@
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Make*</label>
-                        <select class="slds-select" onchange={handleMakeChange} >
-                            <option  value="">Select Make</option>
-                            <template for:each={availableMakeOptions} for:item="make"> 
-                                <option key={make.label} value={make.value}>{make.value}</option>
+                        <select class="slds-select"
+                                onchange={handleMakeChange}>
+                            <option value="">Select Make</option>
+                            <template for:each={availableMakeOptions}
+                                      for:item="make">
+                                <option key={make.label}
+                                        value={make.value}>{make.value}</option>
                             </template>
                         </select>
                     </div>
@@ -107,63 +154,50 @@
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
                         <label class="slds-form-element__label formElement">Model*</label>
-                        <select class="slds-select" onchange={handleModelChange} >
-                            <option  value="">Select model</option>
-                            <template for:each={availableModelOptions} for:item="model"> 
-                                <option key={model.label} value={model.value}>{model.value}</option>
+                        <select class="slds-select"
+                                onchange={handleModelChange}>
+                            <option value="">Select model</option>
+                            <template for:each={availableModelOptions}
+                                      for:item="model">
+                                <option key={model.label}
+                                        value={model.value}>{model.value}</option>
                             </template>
                         </select>
-                    </div>
-                </div>
-            </div>
-
-            
-
-            <!--<div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
-                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
-                        <label class="slds-form-element__label formElement">Year*</label>
-                        <div class="slds-form-element__control">
-                            <lightning-combobox name="years" value={selectedYear} placeholder="Years"
-                                options={availableYearOptions} onchange={handleYearChange}>
-                            </lightning-combobox>
+                        <div if:true={isModelLoading}
+                             class="maxWidth600px">
+                            <lightning-spinner alternative-text="Loading"
+                                               class="spins"
+                                               size="small"></lightning-spinner>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
+                <div class="slds-form__item"
+                     role="listitem">
                     <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
-                        <label class="slds-form-element__label formElement">Make*</label>
-                        <div class="slds-form-element__control">
-                            <lightning-combobox name="makes" value={selectedMake} placeholder="Makes"
-                                options={availableMakeOptions} onchange={handleMakeChange}>
-                            </lightning-combobox>
-                        </div>
+                        <label class="slds-form-element__label formElement">Mileage</label>
+                        <input name="mileageInput"
+                               class="slds-input modelInput"
+                               autocomplete="off"
+                               type="number"
+                               value={selectedMileage}
+                               onchange={handleMileageChange} />
                     </div>
                 </div>
             </div>
-
-            <div class="slds-form__row vehicleFormElement">
-                <div class="slds-form__item" role="listitem">
-                    <div class="slds-form-element slds-form-element_horizontal slds-is-editing slds-form-element_1-col">
-                        <label class="slds-form-element__label formElement">Model*</label>
-                        <div class="slds-form-element__control">
-                            <lightning-combobox name="models" value={selectedModel} placeholder="Models"
-                                options={availableModelOptions} onchange={handleModelChange}>
-                            </lightning-combobox>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
         </div>
         <!-- mobile view ends -->
     </div>
-    <div if:true={isLoading} class="maxWidth600px">
-        <lightning-spinner alternative-text="Loading" class="spins" size="small"></lightning-spinner>
+    <div if:true={isLoading}
+         class="maxWidth600px">
+        <lightning-spinner alternative-text="Loading"
+                           class="spins"
+                           size="small"></lightning-spinner>
     </div>
 </template>

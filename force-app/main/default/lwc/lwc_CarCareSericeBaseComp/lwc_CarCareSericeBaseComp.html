@@ -44,15 +44,16 @@
         </div>
         <lightning-layout horizontal-align="center"
                           multiple-rows="true">
-            <lightning-layout-item size="12" if:true={showContinue}
+            <lightning-layout-item size="12"
+                                   if:true={showContinue}
                                    class="slds-align_absolute-center">
                 <div class="slds-form slds-form_horizontal navButtons">
                     <div class="slds-form__row">
                         <lightning-button label="CONTINUE"
                                           title="Continue"
                                           onclick={handleContinue}
-                                          class="slds-m-left_x-small continueBtn">
-                                         <!-- disabled={showContinue}>-->
+                                          class="slds-m-left_x-small continueBtn"
+                                          disabled>
                         </lightning-button>
                     </div>
                 </div>
@@ -124,7 +125,8 @@
                         </div>
                         <footer class="slds-modal__footer storeFooter">
                             <lightning-button variant="brand"
-                                              label="Ok" onclick={navigateToAppointmentPage}
+                                              label="Ok"
+                                              onclick={navigateToAppointmentPage}
                                               class="slds-m-left_x-small storeCompBtn storeDetailBtn">
                             </lightning-button>
                         </footer>

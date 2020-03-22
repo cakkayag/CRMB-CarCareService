@@ -30,6 +30,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   @track currentPaginationColumnCount = 0;
   @track currentPaginationStartColumnCount = 0;
   @track totalColumnCount = 0;
+  @track isAppointmentValidated = false;
 
   @track hours = [
     "7:30 A.M.",
@@ -110,9 +111,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       JSON.stringify(this.selectedAppointmentObj) === JSON.stringify({})
     ) {
       this.getAvailableAppointmentsInfoMethod(0);
-      //TODO : Remove below 2 line
-      //this.getTestData();
-      //this.isLoading = false;
     } else {
       this.selectedDate =
         this.selectedAppointmentObj._selectedDate !== undefined
@@ -174,14 +172,11 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
           ? this.selectedAppointmentObj._daysArr
           : [];
 
-      /*this.currentPaginationStartColumnCount = this.currentPaginationStartColumnCount - this.numberOfColsToDisplay > 0 
-                  ? this.currentPaginationStartColumnCount - this.numberOfColsToDisplay
-                  : 0 ;*/
-      console.log("#####startCount " + this.currentPaginationStartColumnCount);
-      console.log(
-        "##### this.currentPaginationStartColumnCount " +
-          this.currentPaginationStartColumnCount
-      );
+      this.isAppointmentValidated =
+        this.selectedAppointmentObj._isAppointmentValidated !== undefined
+          ? this.selectedAppointmentObj._isAppointmentValidated
+          : false;
+
       if (this.showSelectedValueInPagination >= 0) {
         this.availableHoursWithDatesArr = [];
         this.getAvailableAppointmentsInfoMethod(
@@ -191,77 +186,14 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
         this.getAvailableAppointmentsInfoMethod(0);
       }
 
-      //this.getAvailableAppointmentsInfoMethod(
-      //   this.currentPaginationColumnCount
-      //);
-      //this.days = this.selectedAppointmentObj._days !== undefined ? this.selectedAppointmentObj._days : [];
-      //this.availableHoursWithDatesArr = this.selectedAppointmentObj._availableHoursWithDatesArr !== undefined ? this.selectedAppointmentObj._availableHoursWithDatesArr : [];
-      /*this.selectedDate =
-        this.selectedAppointmentObj._selectedDate !== undefined
-          ? this.selectedAppointmentObj._selectedDate
-          : "";
-      this.selectedHour =
-        this.selectedAppointmentObj._selectedHour !== undefined
-          ? this.selectedAppointmentObj._selectedHour
-          : "";*/
-      //this.isLoading = false;
-
-      //TODO : Comment below
-      //this.getAvailableAppointmentsInfoMethod(0);
-
-      /*console.log('availableHoursWithDatesArr :');
-      console.log(JSON.parse(JSON.stringify(this.availableHoursWithDatesArr)));
-      let indexVal = 0;
-      let finalIndex ;
-      this.availableHoursWithDatesArr.forEach(availableHour => {
-      console.log('availableHour.hour :');
-      console.log(JSON.parse(JSON.stringify(availableHour)));
-      console.log(availableHour.hour+"  ===  "+this.selectedHour );
-        if(availableHour.hour === this.selectedHour ){
-          finalIndex = indexVal;
-          availableHour.availableTimes.forEach(availableTime => {
-            console.log('availableHour.availableTimes :');
-            console.log(JSON.parse(JSON.stringify(availableTime.date)));
-            console.log(availableTime.date +"  ===  "+this.selectedDate );
-            if(availableTime.date === this.selectedDate){
-              availableTime.isSelected = true;
-              console.log('availableHour.isSelected ');
-            }
-          });
-        }
-        console.log('before indexVal :'+indexVal);
-        indexVal++;
-        console.log('After indexVal :'+indexVal);
-        
-      });
-      console.log('Has value :');
-      let availableSlots = this.template.querySelectorAll(".timeSlot");
-      console.log('JSON.parse(JSON.stringify(availableSlots'+JSON.parse(JSON.stringify(availableSlots)));
-      if (availableSlots !== undefined && availableSlots.length > 0) {
-        for(let i=0 ; i < availableSlots.length ; i++){
-          console.log('availableSlots :');
-          console.log(JSON.parse(JSON.stringify(availableSlots[i])));
-          console.log(availableSlots[i].dataset.date +"  ===  "+this.selectedDate );
-          console.log(availableSlots[i].dataset.hour +"  ===  "+this.selectedHour );
-          if(availableSlots[i].dataset.date === this.selectedDate && 
-            availableSlots[i].dataset.hour === this.selectedHour ){
-            availableSlots[i].classList.add("selectedTimeSlot");
-          }
-          else{
-            availableSlots[i].classList.remove("selectedTimeSlot");
-          }
-        }
-        
-      }*/
+      if (this.isAppointmentValidated === true) {
+        this.enableContinue(event);
+      }
     }
   }
 
   getAvailableAppointmentsInfoMethod(startCount) {
     this.isLoading = true;
-    console.log(
-      "##### this.currentPaginationColumnCount " +
-        this.currentPaginationColumnCount
-    );
     if (
       this.selectedAppointmentObj === undefined ||
       JSON.stringify(this.selectedAppointmentObj) === JSON.stringify({})
@@ -271,7 +203,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
         .then(result => {
           if (result !== undefined) {
             this.daysArr = result.days !== undefined ? result.days : [];
-            console.log("**** startCount : " + startCount);
             let startArrCount = startCount != null ? startCount : 0;
             let lastArrCount = 0;
             let daysArrCount = 0;
@@ -364,7 +295,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
             });
 
             this.getAvailableHoursWithDatesArr(this.bHours, this.holidaysList);
-
             this.isLoading = false;
             this.error = undefined;
           } else {
@@ -382,7 +312,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
         })
         .catch(error => {
           this.error = error;
-          //this.selectedStoreInfo = undefined;
           this.isLoading = false;
           this.showToast(
             "Error",
@@ -396,28 +325,21 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     } else {
       this.availableHoursWithDatesArr = [];
       this.days = [];
-      //TODO : MOVE IT TO COMMON UTIL
-      //let daysArr = this.daysArr ;
-      console.log("**** startCount : " + startCount);
 
       let startArrCount = startCount != null ? startCount : 0;
       let lastArrCount = 0;
       let daysArrCount = 0;
       this.totalColumnCount = 0;
-      console.log("**** startArrCount : " + startArrCount);
 
       lastArrCount = startArrCount + this.numberOfColsToDisplay;
       this.currentPaginationStartColumnCount = startArrCount;
       this.currentPaginationColumnCount = lastArrCount;
-
-      console.log("**** lastArrCount : " + lastArrCount);
       this.daysArr.forEach(daysElement => {
         this.totalColumnCount++;
       });
 
       this.daysArr.forEach(daysElement => {
         if (startArrCount <= daysArrCount && daysArrCount < lastArrCount) {
-          console.log("##### daysArrCount : " + daysArrCount);
           let daysObj = {};
           let myDate = new Date(daysElement.dateVal);
           daysObj._myDate = daysElement.dateVal;
@@ -429,7 +351,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
             this.monthStr[myDate.getMonth()];
           if (this.holidaysList.includes(daysObj.date)) {
             daysObj.openCloseTimings = "Holiday";
-            //daysObj.closeTime = "";
           } else {
             let openTime = this.strToTime(daysElement.openTime, "h:m:s");
             let closeTime = this.strToTime(daysElement.closeTime, "h:m:s");
@@ -442,7 +363,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       });
 
       this.getAvailableHoursWithDatesArr(this.bHours, this.holidaysList);
-
       this.isLoading = false;
       this.error = undefined;
     }
@@ -537,7 +457,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       let hours = dt.getHours(); // gives the value in 24 hours format
       let AmOrPm = hours >= 12 ? "P.M." : "A.M.";
       hours = hours % 12 || 12;
-      let minutes = (dt.getMinutes() < 10 ? "0" : "") + dt.getMinutes(); //dt.getMinutes() ;
+      let minutes = (dt.getMinutes() < 10 ? "0" : "") + dt.getMinutes();
       let finalTime = hours + ":" + minutes + " " + AmOrPm;
       return finalTime;
     }
@@ -588,9 +508,6 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       endTime !== undefined &&
       checkTime !== undefined
     ) {
-      /*console.log(
-        "stime--" + startTime + "--ctime--" + checkTime + "--etime--" + endTime
-      );*/
       let isNoon = startTime.substr(0, startTime.indexOf(":")) != 12;
       if (
         startTime.substr(startTime.indexOf(" ") + 1, 4) === "P.M." &&
@@ -650,12 +567,15 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
     this.selectedActualDate = event.currentTarget.dataset.actualDate;
     this.showSelectedValueInPagination = this.currentPaginationStartColumnCount;
     //enable continue button
+    this.isAppointmentValidated = true;
     this.enableContinue(event);
   }
 
   enableContinue(event) {
     // Creates the event to disable continue event.
-    const selectedEvent = new CustomEvent("enablecontinue", {});
+    const selectedEvent = new CustomEvent("enablecontinue", {
+      detail: this.isAppointmentValidated
+    });
     // Dispatches the event.
     this.dispatchEvent(selectedEvent);
   }
@@ -679,6 +599,7 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
       _holidaysList: this.holidaysList,
       _stayWithVehicle: this.stayWithVehicle,
       _needTransportationServices: this.needTransportationServices,
+      _isAppointmentValidated: this.isAppointmentValidated,
       _response:
         this.stayWithVehicle === true
           ? "I’m going to stay with the vehicle during service."
@@ -694,39 +615,14 @@ export default class lwc_CarCareServiceAppointmentComp extends LightningElement 
   }
 
   dateTimeCheckBoxToggle(event) {
-    console.log("dateTimeCheckBoxToggle " + event.target.name);
     if (event.target.name === "stayWithVehicle" && event.target.checked) {
-      //check the stay with vehicle
-      /*console.log("stayWithVehicle : check the stay with vehicle "+  event.target.name);
-      const stayWithVehicleChkBox = this.template.querySelector(
-        'lightning-input[data-name="' + event.target.name + '"]'
-      );
-      stayWithVehicleChkBox.checked = true;*/
       this.stayWithVehicle = true;
-      //uncheck need transportation
-      /*console.log("uncheck need transportation "+  event.target.name);
-      const needTransapotationChkBox = this.template.querySelector(
-        'lightning-input[data-name="' + event.target.name + '"]'
-      );
-      needTransapotationChkBox.checked = false;*/
       this.needTransportationServices = false;
     } else if (
       event.target.name === "needTransportationServices" &&
       event.target.checked
     ) {
-      //check need transportation
-      /*console.log("needTransportationServices : check need transportation "+  event.target.name);
-      const needTransapotationChkBox = this.template.querySelector(
-        'lightning-input[data-name="' + event.target.name + '"]'
-      );
-      needTransapotationChkBox.checked = true;*/
       this.needTransportationServices = true;
-      //uncheck stay with vehicle
-      /*console.log("needTransportationServices : uncheck stay with vehicle "+  event.target.name);
-      const stayWithVehicleChkBox = this.template.querySelector(
-        'lightning-input[data-name="' + event.target.name + '"]'
-      );
-      stayWithVehicleChkBox.checked = false;*/
       this.stayWithVehicle = false;
     }
   }

@@ -22,17 +22,11 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   @track dateTimeInfo = {};
   @track appointmentSelectionInfo = {};
   @track showSelectNewDateTimePopup = false;
+  @track disableContinue = true;
 
   appointmentId = "";
-  //@track hasUpdates = false;
-  //@track isChildLoading = false;
 
   connectedCallback() {
-    /*Handling Changes related to pages when clicked specific tile of Navigation  
-        registerListener('navigationClickedEvent', this.handleNavigationEvent, this);*/
-    //registerListener('storeChangeRequested', this.handleStoreChange, this);
-    //console.log(" this.storeIdUrlKey  : "+this.storeIdUrlKey);
-    //console.log(" this.storeIdVal : "+this.storeIdVal);
     this.branchIdVal = this.getUrlParamValue(
       window.location.href,
       this.uniqueUrlKey
@@ -55,13 +49,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
   disconnectedCallback() {
     // unsubscribe from searchKeyChange event
-    //unregisterAllListeners(this);
   }
 
   handleStoreChange(event) {
-    //console.log('###### handleStoreChange ########');
-    //console.log(JSON.parse(JSON.stringify(event)));
-    //console.log('handleStoreChange'+event.detail._branchId+'   detail._storeRecordId  '+event.detail._storeRecordId);
     this.branchIdVal = event.detail._branchId;
     this.storeId = event.detail._storeRecordId;
     const storeInfoComp = this.template.querySelector(
@@ -74,23 +64,21 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   handleEnableContinue(event) {
-    console.log("###### handleEnableContinue ########");
-    console.log(JSON.parse(JSON.stringify(event)));
     var continueBtn = this.template.querySelector(".continueBtn");
     if (event.detail) {
       continueBtn.classList.add("enableContinueBtn");
+      continueBtn.disabled = false;
     } else {
       continueBtn.classList.remove("enableContinueBtn");
+      continueBtn.disabled = true;
     }
-
-    //continueBtn.disabled = false;
   }
 
   handleContinue(event) {
     //remove enable unless all validations complete
     var continueBtn = this.template.querySelector(".continueBtn");
     continueBtn.classList.remove("enableContinueBtn");
-    //continueBtn.disabled = true;
+    continueBtn.disabled = true;
 
     const contactComp = this.template.querySelector(
       "c-lwc_-car-care-service-contact-info-comp"
@@ -112,9 +100,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     if (this.CurrentPage === 2) {
       validationStatus = contactComp.ValidateContactInfo(event);
     } else if (this.CurrentPage === 4) {
-      //validationStatus = sericeSelectComp.ValidateServiceSelection(event) ;
     }
-    //console.log(" validationStatus : "+validationStatus);
+
     if (validationStatus) {
       if (this.CurrentPage === 1) {
         const _availableStoreList = storeInfoComp.getSelectedStoreObjInfo(
@@ -125,49 +112,28 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         );
         this.storeId = storeInfoComp.getSelectedStoreId();
         this.selectedStoreObjInfo = storeInfoComp.getSelectedStoreObj();
-
-        //console.log("handleContinue this.CurrentPage === 1 ");
-        //console.log(JSON.parse(JSON.stringify(this.availableStoreList)));
-        //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
       } else if (this.CurrentPage === 2) {
-        //remove this later
-        continueBtn.disabled = false;
         const contactTemp = contactComp.getContactInfo();
         this.contactInfo = JSON.parse(JSON.stringify(contactTemp));
-        //console.log(JSON.parse(JSON.stringify(this.contactInfo)));
-
-        /*let state = { page_id: "ContactInfo", user_id: "select store" };
-        let title = "Contact Info";
-        let url = "contact.html";
-        history.pushState(state, title, url);*/
       } else if (this.CurrentPage === 3) {
         const vehicleTemp = vehicleInfoComp.getVehicleDetailsInfo();
         this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
-        //console.log(' this.vehicleInfo : '+JSON.parse(JSON.stringify(this.vehicleInfo)));
       } else if (this.CurrentPage === 4) {
-        //console.log("   ############# 4 Continue ################## ");
         const serviceSelectInfoTemp = sericeSelectComp.getServiceInfo();
         this.serviceSelectInfo = JSON.parse(
           JSON.stringify(serviceSelectInfoTemp)
         );
-        //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo)));
       } else if (this.CurrentPage === 5) {
-        //console.log("   ############# 5 Continue ################## ");
         const appointmentSelectionInfoTemp = appointmentSelectComp.getAppointmentInfo();
         this.appointmentSelectionInfo = JSON.parse(
           JSON.stringify(appointmentSelectionInfoTemp)
         );
-        console.log(JSON.parse(JSON.stringify(this.appointmentSelectionInfo)));
       }
 
       this.previousPage = this.CurrentPage;
       this.CurrentPage = this.nextPage;
       this.nextPage =
         this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage;
-
-      /*if(this.CurrentPage === 4){
-                this.isChildLoading = true;
-            }*/
       fireEvent(this.pageRef, "buttonClickedEvent", this);
     }
   }
@@ -175,7 +141,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   handlePrevious() {
     var continueBtn = this.template.querySelector(".continueBtn");
     continueBtn.classList.add("enableContinueBtn");
-    //continueBtn.disabled = false;
 
     if (this.CurrentPage === 2) {
       const contactComp = this.template.querySelector(
@@ -188,12 +153,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         "c-lwc_-car-care-service-vehicle-info-comp"
       );
       const vehicleTemp = vehicleInfoComp.getVehicleDetailsInfo();
-      //console.log(JSON.parse(JSON.stringify(vehicleTemp)));
       this.vehicleInfo = JSON.parse(JSON.stringify(vehicleTemp));
-      //console.log(' this.vehicleInfo : ');
-      //console.log(JSON.parse(JSON.stringify(this.vehicleInfo)));
     } else if (this.CurrentPage === 4) {
-      //console.log("   ############# 4 Preious ################## ");
       const sericeSelectComp = this.template.querySelector(
         "c-lwc_-car-care-service-select-comp"
       );
@@ -201,9 +162,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
       this.serviceSelectInfo = JSON.parse(
         JSON.stringify(serviceSelectInfoTemp)
       );
-      //console.log(JSON.parse(JSON.stringify(this.serviceSelectInfo)));
     } else if (this.CurrentPage === 5) {
-      console.log("   ############# 5 Previous ################## ");
       const appointmentSelectComp = this.template.querySelector(
         "c-lwc_-car-care-service-Appointment-comp"
       );
@@ -211,7 +170,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
       this.appointmentSelectionInfo = JSON.parse(
         JSON.stringify(appointmentSelectionInfoTemp)
       );
-      console.log(JSON.parse(JSON.stringify(this.appointmentSelectionInfo)));
     }
 
     this.nextPage = this.CurrentPage;
@@ -224,31 +182,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
     fireEvent(this.pageRef, "buttonClickedEvent", this);
   }
 
-  /*
-    handleNavigationEvent(navWrap){
-        const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-        let validationStatus =  true;
-        if(navWrap.pSelection === 2 && navWrap.cSelection > 2){
-            validationStatus = contactComp.ValidateContactInfo(null) ;
-        }
-        //console.log(" validationStatus : "+validationStatus);
-        if(validationStatus){
-            if(navWrap.pSelection === 2){
-                const contactComp = this.template.querySelector('c-lwc_-car-care-service-contact-info-comp');
-                const contactTemp = contactComp.getContactInfo();
-                this.contactInfo = JSON.parse(JSON.stringify(contactTemp))
-            }
-
-            this.CurrentPage = navWrap.cSelection;
-            this.previousPage = this.CurrentPage > this.minPages ? this.CurrentPage - 1 : this.CurrentPage ;
-            this.nextPage = this.CurrentPage < this.maxPages ? this.CurrentPage + 1 : this.CurrentPage ;
-        }
-        else{
-            fireEvent(this.pageRef, 'buttonClickedEvent', this);    
-        }
-
-    }
-    */
   get showFirstPage() {
     return this.CurrentPage === 1 ? true : false;
   }
@@ -291,9 +224,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   get showStoreChangeAlert() {
-    //console.log('##################### showStoreChangeAlert ############# ');
-    //console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
-    //console.log(JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}));
     return this.serviceSelectInfo === undefined ||
       JSON.stringify(this.serviceSelectInfo) === JSON.stringify({}) ||
       this.serviceSelectInfo._isUpdated === false
@@ -320,11 +250,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   handleEditRequestHelper(event, navigateId) {
-    //console.log('###### handleStoreChange ########');
-    //console.log(JSON.parse(JSON.stringify(event)));
-    //console.log('handleEditRequest'+event.detail);
     this.CurrentPage = parseInt(navigateId, 0);
-    //console.log('this.CurrentPage'+this.CurrentPage);
     this.previousPage = this.CurrentPage;
     this.nextPage = this.CurrentPage;
     this.previousPage =
@@ -333,9 +259,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         : this.previousPage;
     this.nextPage =
       this.nextPage < this.maxPages ? this.nextPage + 1 : this.nextPage;
-    //console.log('### handleEditRequest selectedStoreObjInfo: ');
     this.handleEnableContinue(event);
-    //console.log(JSON.parse(JSON.stringify(this.selectedStoreObjInfo)));
     fireEvent(this.pageRef, "buttonClickedEvent", this);
   }
 
@@ -346,7 +270,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   sendAppointmentReservationReq(event) {
-    console.log("### sendAppointmentReservationReq: ");
     const _appointmentTime =
       this.appointmentSelectionInfo._selectedActualDate !== undefined &&
       this.appointmentSelectionInfo._selectedHour !== undefined
@@ -356,22 +279,17 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
           )
         : "";
 
-    console.log("### _appointmentTime: " + _appointmentTime);
-
     let _serviceSelected = "";
     if (
       this.serviceSelectInfo !== undefined &&
       this.serviceSelectInfo._availableServices !== undefined
     ) {
       this.serviceSelectInfo._availableServices.forEach(element => {
-        console.log("### element: " + element);
         if (element.isSelected === true) {
           _serviceSelected = _serviceSelected + "" + element.name;
         }
       });
     }
-
-    console.log("### _serviceSelected: " + _serviceSelected);
 
     let reservationObj = {
       storeId: this.storeId,
@@ -400,8 +318,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
           : "",
       vehicleModel:
         this.vehicleInfo !== undefined &&
-        this.vehicleInfo.selectedModel !== undefined
-          ? this.vehicleInfo.selectedModel
+        this.vehicleInfo._selectedModel !== undefined
+          ? this.vehicleInfo._selectedModel
           : "",
       vehicleYear:
         this.vehicleInfo !== undefined &&
@@ -449,15 +367,9 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
       serviceDescription: _serviceSelected
     };
 
-    console.log("### reservationObj: " + reservationObj);
     let _reservationObj = JSON.stringify(reservationObj);
-    console.log("### reservationObj: ");
-    console.log(JSON.parse(JSON.stringify(reservationObj)));
-    console.log("### _reservationObj: ");
-    console.log(JSON.parse(_reservationObj));
     reserveAppointment({ payLoad: _reservationObj })
       .then(result => {
-        console.log("### result: " + result);
         if (result !== undefined && result.hasException !== true) {
           this.showToast(
             "SUCCESS",
@@ -468,15 +380,12 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
 
           this.appointmentId = result.id;
 
-          //var reserveMyAppointmnetBtn = this.template.querySelector(".reserveMyAppointmnetBtn");
-          //reserveMyAppointmnetBtn.classList.remove("enableContinueBtn");
-
           this.isLoading = false;
           this.error = undefined;
 
-          this.showSelectNewDateTimePopup = true;
+          this.showSelectNewDateTimePopup = false;
 
-          //this.navigateToThankYouPage(event);
+          this.navigateToThankYouPage(event);
         } else {
           this.error =
             result !== undefined && result.exceptionMessage !== undefined
@@ -495,10 +404,7 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
         }
       })
       .catch(error => {
-        console.log("### error: ");
-        console.log(JSON.parse(JSON.stringify(error)));
         this.error = error;
-        //this.selectedStoreInfo = undefined;
         this.isLoading = false;
         this.showToast(
           "Error",
@@ -512,14 +418,8 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
   }
 
   prepareTimeStampFromStr(actualDate, selectedHr) {
-    console.log("--actualDate--" + actualDate); //"2/27/2020 12:00:00 AM";
-    console.log("--selectedHr--" + selectedHr); //"1:30 P.M."
-
     var d = actualDate.substring(0, actualDate.indexOf(" "));
-    console.log(d);
-
     var dsplit = d.split("/");
-    console.log("---date splitted---" + dsplit[1]);
 
     var hoursToadd = 0;
     let isNoon = selectedHr.substr(0, selectedHr.indexOf(":")) != 12;
@@ -546,7 +446,6 @@ export default class lwc_CarCareSericeBaseComp extends LightningElement {
       ":" +
       selectedHr.substr(selectedHr.indexOf(":") + 1, 2) +
       ":00.000Z";
-    console.log("---retruning in format--" + stime);
     return stime;
   }
 

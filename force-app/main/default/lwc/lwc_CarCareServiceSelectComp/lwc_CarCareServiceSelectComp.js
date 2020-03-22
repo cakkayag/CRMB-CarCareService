@@ -10,7 +10,9 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
   @track isLoading = true;
   @track serviceAdditionalInfo = "";
   @track hasError = false;
+  @track isServiceValidated = true;
   isUpdated = false;
+
 
   connectedCallback() {
     this.getAvailableServicesByStore();
@@ -65,6 +67,8 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
       this.serviceAdditionalInfo = this.serviceSelect._serviceAdditionalInfo;
       this.isUpdated = this.serviceSelect._isUpdated;
       this.isLoading = false;
+      this.isServiceValidated = this.serviceSelect._isServiceValidated !== undefined ? this.serviceSelect._isServiceValidated : true;
+      this.enableContinue(event);
     } else {
       this.isLoading = false;
     }
@@ -99,7 +103,9 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
 
   enableContinue(event) {
     // Creates the event to disable continue event.
-    const selectedEvent = new CustomEvent("enablecontinue", {});
+    const selectedEvent = new CustomEvent("enablecontinue", {
+      detail: this.isServiceValidated
+    });
     // Dispatches the event.
     this.dispatchEvent(selectedEvent);
   }
@@ -109,7 +115,8 @@ export default class lwc_CarCareServiceSelectComp extends LightningElement {
     let serviceSelectInfo = {
       _availableServices: this.availableServices,
       _serviceAdditionalInfo: this.serviceAdditionalInfo,
-      _isUpdated: this.isUpdated
+      _isUpdated: this.isUpdated,
+      _isServiceValidated : this.isServiceValidated
     };
     return serviceSelectInfo;
   }

@@ -13,14 +13,15 @@
         <thead class="headerRowDateTime_Main">
           <tr>
             <td align="center">
-              <img
-                src={rightArrowURL}
-                class="dateTimeArrowImg dateTimeLeftArrowImg"
-                onclick={getPreviousList}
-              />
+              <lightning-avatar src={rightArrowURL}
+                                class="dateTimeArrowImg dateTimeLeftArrowImg"
+                                onclick={getPreviousList}>
+              </lightning-avatar>
             </td>
-            <template for:each={days} for:item="day">
-              <td key={day.date} class="headerRowDateTime">
+            <template for:each={days}
+                      for:item="day">
+              <td key={day.date}
+                  class="headerRowDateTime">
                 <span class="headerRowDate">{day.date}</span>
                 <span class="headerRowTime">
                   {day.openCloseTimings}
@@ -28,43 +29,43 @@
               </td>
             </template>
             <td align="center">
-              <img
-                src={rightArrowURL}
-                class="dateTimeArrowImg"
-                onclick={getNextList}
-              />
+              <lightning-avatar src={rightArrowURL}
+                                class="dateTimeArrowImg dateTimeRightArrowImg"
+                                onclick={getNextList}>
+              </lightning-avatar>
             </td>
           </tr>
         </thead>
         <tbody class="dateTimeBody">
-          <template for:each={availableHoursWithDatesArr} for:item="h">
+          <template for:each={availableHoursWithDatesArr}
+                    for:item="h">
             <tr key={h.hour}>
               <td></td>
-              <template for:each={h.availableTimes} for:item="slot">
-                <td align="center" key={slot.date} class="dateTimeBodytd">
+              <template for:each={h.availableTimes}
+                        for:item="slot">
+                <td align="center"
+                    key={slot.date}
+                    class="dateTimeBodytd">
                   <div if:true={slot.withInBusinessHours}>
                     <div if:true={slot.isAvailable}>
-                      <div
-                        if:true={slot.isSelected}
-                        class="timeSlot availableTimeSlot selectedTimeSlot"
-                        data-date={slot.date}
-                        data-actual-date={slot.actualDate}
-                        data-hour={h.hour}
-                      >
+                      <div if:true={slot.isSelected}
+                           class="timeSlot availableTimeSlot selectedTimeSlot"
+                           data-date={slot.date}
+                           data-actual-date={slot.actualDate}
+                           data-hour={h.hour}>
                         {h.hour}
                       </div>
-                      <div
-                        if:false={slot.isSelected}
-                        class="timeSlot availableTimeSlot"
-                        data-date={slot.date}
-                        data-actual-date={slot.actualDate}
-                        data-hour={h.hour}
-                        onclick={selectTimeSlot}
-                      >
+                      <div if:false={slot.isSelected}
+                           class="timeSlot availableTimeSlot"
+                           data-date={slot.date}
+                           data-actual-date={slot.actualDate}
+                           data-hour={h.hour}
+                           onclick={selectTimeSlot}>
                         {h.hour}
                       </div>
                     </div>
-                    <div if:false={slot.isAvailable} class="timeSlot">
+                    <div if:false={slot.isAvailable}
+                         class="timeSlot">
                       {h.hour}
                     </div>
                   </div>
@@ -80,35 +81,30 @@
     <div class="slds-align_absolute-center">
       <fieldset class="slds-form-element contactFormChckBoxes">
         <div class="slds-form-element__control">
-          <lightning-input
-            type="checkbox"
-            name="stayWithVehicle"
-            data-name="stayWithVehicle"
-            label="I’m going to stay with the vehicle during service."
-            onchange={dateTimeCheckBoxToggle}
-            checked={stayWithVehicle}
-          >
+          <lightning-input type="checkbox"
+                           name="stayWithVehicle"
+                           data-name="stayWithVehicle"
+                           label="I’m going to stay with the vehicle during service."
+                           onchange={dateTimeCheckBoxToggle}
+                           checked={stayWithVehicle}>
           </lightning-input>
         </div>
         <div class="slds-form-element__control">
-          <lightning-input
-            type="checkbox"
-            name="needTransportationServices"
-            data-name="needTransportationServices"
-            label="I need transportation services."
-            onchange={dateTimeCheckBoxToggle}
-            checked={needTransportationServices}
-          >
+          <lightning-input type="checkbox"
+                           name="needTransportationServices"
+                           data-name="needTransportationServices"
+                           label="I need transportation services."
+                           onchange={dateTimeCheckBoxToggle}
+                           checked={needTransportationServices}>
           </lightning-input>
         </div>
       </fieldset>
     </div>
   </div>
-  <div if:true={isLoading} class="maxWidth600px">
-    <lightning-spinner
-      alternative-text="Loading"
-      class="spins"
-      size="small"
-    ></lightning-spinner>
+  <div if:true={isLoading}
+       class="maxWidth600px">
+    <lightning-spinner alternative-text="Loading"
+                       class="spins"
+                       size="small"></lightning-spinner>
   </div>
 </template>
